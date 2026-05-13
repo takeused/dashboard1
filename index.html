@@ -283,8 +283,8 @@ body{
 <section class="hero-section">
   <div class="hero-inner container">
     <span class="hero-eyebrow">Project Timeline</span>
-    <h1>Claude Code와 함께한<br><em>작업 기록</em></h1>
-    <p class="hero-sub">3주간 18개 프로젝트 · 5개 분야 · 13개 세션</p>
+    <h1>Claude, CODEX와 함께한<br><em>작업 기록</em></h1>
+    <p class="hero-sub" id="heroSummary"></p>
   </div>
 </section>
 
@@ -293,19 +293,19 @@ body{
   <div class="container">
     <div class="stats-grid">
       <div class="stat-card">
-        <span class="stat-number">18</span>
+        <span class="stat-number" data-stat="projects">0</span>
         <span class="stat-label">총 프로젝트</span>
       </div>
       <div class="stat-card">
-        <span class="stat-number">19</span>
+        <span class="stat-number" data-stat="days">0</span>
         <span class="stat-label">활동 일수</span>
       </div>
       <div class="stat-card">
-        <span class="stat-number">5</span>
+        <span class="stat-number" data-stat="categories">0</span>
         <span class="stat-label">분야</span>
       </div>
       <div class="stat-card">
-        <span class="stat-number">13</span>
+        <span class="stat-number" data-stat="sessions">0</span>
         <span class="stat-label">세션 기록</span>
       </div>
     </div>
@@ -349,25 +349,49 @@ body{
 
 <script>
 const projects = [
-  {date:"2026-04-24",name:"RHWP Studio",desc:"HWP 문서 작업용 AI 스튜디오 — GUI 설치, GitHub 연동 및 LLM 응답 에러 수정",cat:"doc",status:"done",tags:["Python","HWP","AI Studio"],url:"http://127.0.0.1:8000"},
-  {date:"2026-04-26",name:"I am not AI",desc:"im-not-ai 리포지토리 초기 설정 및 구성",cat:"util",status:"done",tags:["GitHub"],url:"https://iamnotai.pages.dev"},
-  {date:"2026-04-26",name:"Slide-maker",desc:"AI 기반 슬라이드 자동 제작 도구",cat:"doc",status:"done",tags:["JavaScript","HTML"]},
-  {date:"2026-04-29",name:"Korean Law MCP",desc:"한국 법률 정보 조회를 위한 MCP 서버 설정",cat:"mcp",status:"done",tags:["MCP","Python","법률 API"]},
-  {date:"2026-04-29",name:"수학경시대회",desc:"초등 4학년 수학경시대회 모의고사 웹페이지 — PDF 기반 문제 / 해설",cat:"util",status:"done",tags:["HTML","JavaScript","PDF"]},
-  {date:"2026-04-30",name:"ChatGPT PPT",desc:"ChatGPT를 활용한 PPT 자동 생성 도구",cat:"doc",status:"done",tags:["ChatGPT","PowerPoint"]},
-  {date:"2026-04-30",name:"KISTI MCP",desc:"KISTI 과학기술 정보 MCP 서버 구축",cat:"mcp",status:"done",tags:["MCP","Python","KISTI"]},
-  {date:"2026-04-30",name:"Matt Pocock Skills",desc:"Claude Code 스킬 구조 분석 및 활용 방법 학습",cat:"util",status:"done",tags:["Claude Code","Skills"]},
-  {date:"2026-04-30",name:"Slide-maker v2",desc:"슬라이드 제작 도구 개선 — 디자인 및 기능 업그레이드",cat:"doc",status:"done",tags:["JavaScript","HTML"]},
-  {date:"2026-05-03",name:"KISTI MCP v2",desc:"KISTI MCP 서버 개선 버전 — 기능 확장",cat:"mcp",status:"done",tags:["MCP","Python","KISTI"]},
-  {date:"2026-05-07",name:"ScienceON / NTIS",desc:"과학기술 논문 및 국가R&D 과제 검색 · 트렌드 분석 도구",cat:"data",status:"done",tags:["Web Scraping","JavaScript","API"]},
-  {date:"2026-05-07",name:"교육이수현황",desc:"교육 이수 현황 관리 및 조회 도구",cat:"util",status:"done",tags:["HTML","데이터 관리"]},
-  {date:"2026-05-09",name:"네이버 주식 크롤러",desc:"네이버 금융 크롤링 — 증권사별 매매 동향 분석",cat:"data",status:"done",tags:["Python","Web Scraping","금융"]},
-  {date:"2026-05-09",name:"NVIDIA Nemotron",desc:"Nemotron Personas Korea 데이터셋 기반 가상 설문 시스템",cat:"ai",status:"wip",tags:["NVIDIA","LLM","HuggingFace","Ollama"]},
-  {date:"2026-05-11",name:"MiroFish",desc:"온톨로지 그래프 자동 생성 백엔드 서비스 — 네트워크 에러 수정",cat:"ai",status:"wip",tags:["Python","FastAPI","그래프 DB"],url:"http://172.30.24.141:3000"},
-  {date:"2026-05-11",name:"Ollama Gemma API",desc:"Ollama + Gemma4:26b 로컬 LLM API 설정 및 테스트",cat:"ai",status:"done",tags:["Ollama","Gemma","Python"],url:"http://localhost:11434"},
-  {date:"2026-05-12",name:"HP Style PPT",desc:"HP 디자인 시스템 기반 프레젠테이션 제작",cat:"doc",status:"wip",tags:["PowerPoint","디자인"]},
-  {date:"2026-05-12",name:"Dashboard",desc:"작업 결과 정리 타임라인 대시보드 — 현재 프로젝트",cat:"util",status:"wip",tags:["HTML","CSS","JavaScript"]},
+  {date:"2026-04-24",session:1,name:"RHWP Studio",desc:"HWP 문서 작업용 AI 스튜디오 — GUI 설치, GitHub 연동 및 LLM 응답 에러 수정",cat:"doc",status:"done",tags:["Python","HWP","AI Studio"],url:"http://127.0.0.1:8000"},
+  {date:"2026-04-26",session:2,name:"I am not AI",desc:"im-not-ai 리포지토리 초기 설정 및 구성",cat:"util",status:"done",tags:["GitHub"],url:"https://iamnotai.pages.dev"},
+  {date:"2026-04-26",session:3,name:"Slide-maker",desc:"AI 기반 슬라이드 자동 제작 도구",cat:"doc",status:"done",tags:["JavaScript","HTML"]},
+  {date:"2026-04-29",session:4,name:"Korean Law MCP",desc:"한국 법률 정보 조회를 위한 MCP 서버 설정",cat:"mcp",status:"done",tags:["MCP","Python","법률 API"]},
+  {date:"2026-04-29",session:5,name:"수학경시대회",desc:"초등 4학년 수학경시대회 모의고사 웹페이지 — PDF 기반 문제 / 해설",cat:"util",status:"done",tags:["HTML","JavaScript","PDF"]},
+  {date:"2026-04-30",session:6,name:"ChatGPT PPT",desc:"ChatGPT를 활용한 PPT 자동 생성 도구",cat:"doc",status:"done",tags:["ChatGPT","PowerPoint"]},
+  {date:"2026-04-30",session:7,name:"KISTI MCP",desc:"KISTI 과학기술 정보 MCP 서버 구축",cat:"mcp",status:"done",tags:["MCP","Python","KISTI"]},
+  {date:"2026-04-30",session:8,name:"Matt Pocock Skills",desc:"Claude Code 스킬 구조 분석 및 활용 방법 학습",cat:"util",status:"done",tags:["Claude Code","Skills"]},
+  {date:"2026-04-30",session:8,name:"Slide-maker v2",desc:"슬라이드 제작 도구 개선 — 디자인 및 기능 업그레이드",cat:"doc",status:"done",tags:["JavaScript","HTML"]},
+  {date:"2026-05-03",session:9,name:"KISTI MCP v2",desc:"KISTI MCP 서버 개선 버전 — 기능 확장",cat:"mcp",status:"done",tags:["MCP","Python","KISTI"]},
+  {date:"2026-05-07",session:10,name:"ScienceON / NTIS",desc:"과학기술 논문 및 국가R&D 과제 검색 · 트렌드 분석 도구",cat:"data",status:"done",tags:["Web Scraping","JavaScript","API"]},
+  {date:"2026-05-07",session:10,name:"교육이수현황",desc:"교육 이수 현황 관리 및 조회 도구",cat:"util",status:"done",tags:["HTML","데이터 관리"]},
+  {date:"2026-05-09",session:11,name:"네이버 주식 크롤러",desc:"네이버 금융 크롤링 — 증권사별 매매 동향 분석",cat:"data",status:"done",tags:["Python","Web Scraping","금융"]},
+  {date:"2026-05-09",session:11,name:"NVIDIA Nemotron",desc:"Nemotron Personas Korea 데이터셋 기반 가상 설문 시스템",cat:"ai",status:"wip",tags:["NVIDIA","LLM","HuggingFace","Ollama"]},
+  {date:"2026-05-11",session:12,name:"MiroFish",desc:"온톨로지 그래프 자동 생성 백엔드 서비스 — 네트워크 에러 수정",cat:"ai",status:"wip",tags:["Python","FastAPI","그래프 DB"],url:"http://172.30.24.141:3000"},
+  {date:"2026-05-11",session:12,name:"Ollama Gemma API",desc:"Ollama + Gemma4:26b 로컬 LLM API 설정 및 테스트",cat:"ai",status:"done",tags:["Ollama","Gemma","Python"],url:"http://localhost:11434"},
+  {date:"2026-05-12",session:13,name:"HP Style PPT",desc:"HP 디자인 시스템 기반 프레젠테이션 제작",cat:"doc",status:"wip",tags:["PowerPoint","디자인"]},
+  {date:"2026-05-12",session:13,name:"Dashboard",desc:"작업 결과 정리 타임라인 대시보드 — 현재 프로젝트",cat:"util",status:"wip",tags:["HTML","CSS","JavaScript"]},
 ];
+
+function getDashboardStats(items){
+  const dates=items.map(p=>new Date(p.date+'T00:00:00'));
+  const firstDate=new Date(Math.min(...dates));
+  const lastDate=new Date(Math.max(...dates));
+  const activeDays=Math.round((lastDate-firstDate)/86400000)+1;
+  return {
+    projects:items.length,
+    days:activeDays,
+    weeks:Math.ceil(activeDays/7),
+    categories:new Set(items.map(p=>p.cat)).size,
+    sessions:new Set(items.map(p=>p.session)).size
+  };
+}
+
+function renderSummary(){
+  const stats=getDashboardStats(projects);
+  document.getElementById('heroSummary').textContent=
+    `${stats.weeks}주간 ${stats.projects}개 프로젝트 · ${stats.categories}개 분야 · ${stats.sessions}개 세션`;
+  document.querySelector('[data-stat="projects"]').textContent=stats.projects;
+  document.querySelector('[data-stat="days"]').textContent=stats.days;
+  document.querySelector('[data-stat="categories"]').textContent=stats.categories;
+  document.querySelector('[data-stat="sessions"]').textContent=stats.sessions;
+}
 
 function render(filter){
   const tl=document.getElementById('timeline');
@@ -427,6 +451,7 @@ document.querySelectorAll('.filter-tab').forEach(btn=>{
   });
 });
 
+renderSummary();
 render('all');
 </script>
 </body>
