@@ -17,6 +17,9 @@
   --primary:#024ad8;
   --primary-bright:#296ef9;
   --primary-deep:#0e3191;
+  /* Home accent */
+  --home-accent:#ea580c;
+  --home-accent-deep:#c2410c;
   /* Surface */
   --canvas:#ffffff;
   --cloud:#f7f7f7;
@@ -33,6 +36,7 @@
   --cat-doc:#15803d;
   --cat-mcp:#b45309;
   --cat-util:#525252;
+  --cat-finance:#0d9488;
   /* Shadows */
   --shadow-soft:0 2px 8px rgba(26,26,26,.08);
   --shadow-float:0 8px 24px rgba(26,26,26,.12);
@@ -65,7 +69,6 @@ body{
   padding:64px 0 72px;
   position:relative;overflow:hidden;
 }
-/* Chevron decorations — HP wordmark slash motif */
 .hero-section::before,
 .hero-section::after{
   content:'';position:absolute;top:0;bottom:0;
@@ -111,12 +114,36 @@ body{
   display:block;font-size:44px;font-weight:500;line-height:1.0;
   color:var(--primary);margin-bottom:8px;
 }
+.stat-number.home-color{color:var(--home-accent)}
 .stat-label{
   font-size:14px;font-weight:400;color:var(--charcoal);
 }
 
 /* ── Timeline Section (white) ────────────────────────────── */
 .timeline-section{background:var(--canvas);padding:64px 0 80px}
+
+/* Group selector */
+.group-row{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:16px;
+}
+.group-row-label{
+  font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+  color:var(--graphite);margin-right:4px;white-space:nowrap;
+}
+.group-tab{
+  background:var(--canvas);
+  border:1px solid var(--fog);
+  border-radius:var(--r-pill);
+  padding:8px 20px;
+  font-family:'Manrope',Arial,sans-serif;
+  font-size:14px;font-weight:600;color:var(--ink);
+  cursor:pointer;transition:all .18s;white-space:nowrap;
+}
+.group-tab:hover{border-color:var(--steel)}
+.group-tab.active[data-group="all"]{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.group-tab.active[data-group="work"]{background:var(--primary);color:var(--on-ink);border-color:var(--primary)}
+.group-tab.active[data-group="home"]{background:var(--home-accent);color:var(--on-ink);border-color:var(--home-accent)}
 
 /* Filter tabs — pill sub-nav */
 .filter-row{
@@ -140,6 +167,16 @@ body{
   display:inline-block;width:8px;height:8px;border-radius:50%;
   margin-right:7px;vertical-align:middle;
 }
+
+/* Group indicator on cards */
+.group-indicator{
+  display:inline-flex;align-items:center;
+  font-size:11px;font-weight:600;letter-spacing:.3px;
+  padding:2px 9px;border-radius:var(--r-pill);
+  flex-shrink:0;
+}
+.group-indicator.work{background:rgba(2,74,216,.09);color:var(--primary)}
+.group-indicator.home{background:rgba(234,88,12,.09);color:var(--home-accent)}
 
 /* Timeline structure */
 .timeline{position:relative;padding-left:36px}
@@ -176,11 +213,12 @@ body{
   content:'';position:absolute;left:0;top:0;bottom:0;
   width:4px;border-radius:var(--r-xl) 0 0 var(--r-xl);
 }
-.card[data-cat="ai"]::before   {background:var(--cat-ai)}
-.card[data-cat="data"]::before {background:var(--cat-data)}
-.card[data-cat="doc"]::before  {background:var(--cat-doc)}
-.card[data-cat="mcp"]::before  {background:var(--cat-mcp)}
-.card[data-cat="util"]::before {background:var(--cat-util)}
+.card[data-cat="ai"]::before      {background:var(--cat-ai)}
+.card[data-cat="data"]::before    {background:var(--cat-data)}
+.card[data-cat="doc"]::before     {background:var(--cat-doc)}
+.card[data-cat="mcp"]::before     {background:var(--cat-mcp)}
+.card[data-cat="util"]::before    {background:var(--cat-util)}
+.card[data-cat="finance"]::before {background:var(--cat-finance)}
 
 .card:hover{box-shadow:var(--shadow-float);transform:translateY(-2px)}
 .card.has-url{cursor:pointer}
@@ -191,6 +229,7 @@ body{
 }
 .card-title{font-size:20px;font-weight:500;line-height:1.0;color:var(--ink)}
 .card.has-url:hover .card-title{color:var(--primary)}
+.card-badges{display:flex;align-items:center;gap:8px;flex-shrink:0}
 
 /* Status badges */
 .badge{
@@ -216,7 +255,7 @@ body{
   border:1px solid var(--fog);
 }
 
-/* Open button — button-primary style */
+/* Open button */
 .open-btn{
   display:inline-flex;align-items:center;gap:6px;
   margin-top:14px;
@@ -276,7 +315,7 @@ body{
 <!-- Utility Strip -->
 <div class="utility-strip">
   <span>Claude Code Dashboard</span>
-  <span>2026.04.24 — 2026.05.12</span>
+  <span id="dateRange">—</span>
 </div>
 
 <!-- Hero -->
@@ -293,20 +332,20 @@ body{
   <div class="container">
     <div class="stats-grid">
       <div class="stat-card">
-        <span class="stat-number" data-stat="projects">0</span>
+        <span class="stat-number" data-stat="total">0</span>
         <span class="stat-label">총 프로젝트</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number" data-stat="work">0</span>
+        <span class="stat-label">회사 프로젝트</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number home-color" data-stat="home">0</span>
+        <span class="stat-label">집 프로젝트</span>
       </div>
       <div class="stat-card">
         <span class="stat-number" data-stat="days">0</span>
         <span class="stat-label">활동 일수</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-number" data-stat="categories">0</span>
-        <span class="stat-label">분야</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-number" data-stat="sessions">0</span>
-        <span class="stat-label">세션 기록</span>
       </div>
     </div>
   </div>
@@ -316,6 +355,15 @@ body{
 <section class="timeline-section">
   <div class="container">
 
+    <!-- Group selector -->
+    <div class="group-row">
+      <span class="group-row-label">그룹</span>
+      <button class="group-tab active" data-group="all">전체</button>
+      <button class="group-tab" data-group="work">회사</button>
+      <button class="group-tab" data-group="home">집</button>
+    </div>
+
+    <!-- Category filter -->
     <div class="filter-row">
       <button class="filter-tab active" data-filter="all">전체</button>
       <button class="filter-tab" data-filter="ai">
@@ -325,13 +373,16 @@ body{
         <span class="cat-dot" style="background:var(--cat-data)"></span>데이터 수집 / 분석
       </button>
       <button class="filter-tab" data-filter="doc">
-        <span class="cat-dot" style="background:var(--cat-doc)"></span>문서 / 프레젠테이션
+        <span class="cat-dot" style="background:var(--cat-doc)"></span>문서 / 보고서
       </button>
       <button class="filter-tab" data-filter="mcp">
         <span class="cat-dot" style="background:var(--cat-mcp)"></span>MCP 서버
       </button>
       <button class="filter-tab" data-filter="util">
         <span class="cat-dot" style="background:var(--cat-util)"></span>교육 / 유틸
+      </button>
+      <button class="filter-tab" data-filter="finance">
+        <span class="cat-dot" style="background:var(--cat-finance)"></span>재테크 / 투자
       </button>
     </div>
 
@@ -343,99 +394,147 @@ body{
 <!-- Footer Ink Slab -->
 <footer class="footer-slab">
   <h2>Built with Claude Code</h2>
-  <p>Anthropic Claude Opus 4.6 · Visual Design inspired by HP Design System</p>
-  <div class="footer-meta">© 2026 · D:\01 WORK\260512 dashboard</div>
+  <p>Anthropic Claude Sonnet 4.6 · Visual Design inspired by HP Design System</p>
+  <div class="footer-meta">© 2026 · D:\01 WORK\260515 dashboard1</div>
 </footer>
 
 <script>
 const projects = [
-  {date:"2026-04-24",session:1,name:"RHWP Studio",desc:"HWP 문서 작업용 AI 스튜디오 — GUI 설치, GitHub 연동 및 LLM 응답 에러 수정",cat:"doc",status:"done",tags:["Python","HWP","AI Studio"],url:"http://127.0.0.1:8000"},
-  {date:"2026-04-26",session:2,name:"I am not AI",desc:"im-not-ai 리포지토리 초기 설정 및 구성",cat:"util",status:"done",tags:["GitHub"],url:"https://iamnotai.pages.dev"},
-  {date:"2026-04-26",session:3,name:"Slide-maker",desc:"AI 기반 슬라이드 자동 제작 도구",cat:"doc",status:"done",tags:["JavaScript","HTML"]},
-  {date:"2026-04-29",session:4,name:"Korean Law MCP",desc:"한국 법률 정보 조회를 위한 MCP 서버 설정",cat:"mcp",status:"done",tags:["MCP","Python","법률 API"]},
-  {date:"2026-04-29",session:5,name:"수학경시대회",desc:"초등 4학년 수학경시대회 모의고사 웹페이지 — PDF 기반 문제 / 해설",cat:"util",status:"done",tags:["HTML","JavaScript","PDF"]},
-  {date:"2026-04-30",session:6,name:"ChatGPT PPT",desc:"ChatGPT를 활용한 PPT 자동 생성 도구",cat:"doc",status:"done",tags:["ChatGPT","PowerPoint"]},
-  {date:"2026-04-30",session:7,name:"KISTI MCP",desc:"KISTI 과학기술 정보 MCP 서버 구축",cat:"mcp",status:"done",tags:["MCP","Python","KISTI"]},
-  {date:"2026-04-30",session:8,name:"Matt Pocock Skills",desc:"Claude Code 스킬 구조 분석 및 활용 방법 학습",cat:"util",status:"done",tags:["Claude Code","Skills"]},
-  {date:"2026-04-30",session:8,name:"Slide-maker v2",desc:"슬라이드 제작 도구 개선 — 디자인 및 기능 업그레이드",cat:"doc",status:"done",tags:["JavaScript","HTML"]},
-  {date:"2026-05-03",session:9,name:"KISTI MCP v2",desc:"KISTI MCP 서버 개선 버전 — 기능 확장",cat:"mcp",status:"done",tags:["MCP","Python","KISTI"]},
-  {date:"2026-05-07",session:10,name:"ScienceON / NTIS",desc:"과학기술 논문 및 국가R&D 과제 검색 · 트렌드 분석 도구",cat:"data",status:"done",tags:["Web Scraping","JavaScript","API"]},
-  {date:"2026-05-07",session:10,name:"교육이수현황",desc:"교육 이수 현황 관리 및 조회 도구",cat:"util",status:"done",tags:["HTML","데이터 관리"]},
-  {date:"2026-05-09",session:11,name:"네이버 주식 크롤러",desc:"네이버 금융 크롤링 — 증권사별 매매 동향 분석",cat:"data",status:"done",tags:["Python","Web Scraping","금융"]},
-  {date:"2026-05-09",session:11,name:"NVIDIA Nemotron",desc:"Nemotron Personas Korea 데이터셋 기반 가상 설문 시스템",cat:"ai",status:"wip",tags:["NVIDIA","LLM","HuggingFace","Ollama"]},
-  {date:"2026-05-11",session:12,name:"MiroFish",desc:"온톨로지 그래프 자동 생성 백엔드 서비스 — 네트워크 에러 수정",cat:"ai",status:"wip",tags:["Python","FastAPI","그래프 DB"],url:"http://172.30.24.141:3000"},
-  {date:"2026-05-11",session:12,name:"Ollama Gemma API",desc:"Ollama + Gemma4:26b 로컬 LLM API 설정 및 테스트",cat:"ai",status:"done",tags:["Ollama","Gemma","Python"],url:"http://localhost:11434"},
-  {date:"2026-05-12",session:13,name:"HP Style PPT",desc:"HP 디자인 시스템 기반 프레젠테이션 제작",cat:"doc",status:"wip",tags:["PowerPoint","디자인"]},
-  {date:"2026-05-12",session:13,name:"Dashboard",desc:"작업 결과 정리 타임라인 대시보드 — 현재 프로젝트",cat:"util",status:"wip",tags:["HTML","CSS","JavaScript"]},
+
+  /* ── 회사 프로젝트 (기존) ─────────────────────────────── */
+  {date:"2026-04-24",group:"work",name:"RHWP Studio",desc:"HWP 문서 작업용 AI 스튜디오 — GUI 설치, GitHub 연동 및 LLM 응답 에러 수정",cat:"doc",status:"done",tags:["Python","HWP","AI Studio"],url:"http://127.0.0.1:8000"},
+  {date:"2026-04-26",group:"work",name:"I am not AI",desc:"im-not-ai 리포지토리 초기 설정 및 구성",cat:"util",status:"done",tags:["GitHub"],url:"https://iamnotai.pages.dev"},
+  {date:"2026-04-26",group:"work",name:"Slide-maker",desc:"AI 기반 슬라이드 자동 제작 도구",cat:"doc",status:"done",tags:["JavaScript","HTML"]},
+  {date:"2026-04-29",group:"work",name:"Korean Law MCP",desc:"한국 법률 정보 조회를 위한 MCP 서버 설정",cat:"mcp",status:"done",tags:["MCP","Python","법률 API"]},
+  {date:"2026-04-29",group:"work",name:"수학경시대회",desc:"초등 4학년 수학경시대회 모의고사 웹페이지 — PDF 기반 문제 / 해설",cat:"util",status:"done",tags:["HTML","JavaScript","PDF"]},
+  {date:"2026-04-30",group:"work",name:"ChatGPT PPT",desc:"ChatGPT를 활용한 PPT 자동 생성 도구",cat:"doc",status:"done",tags:["ChatGPT","PowerPoint"]},
+  {date:"2026-04-30",group:"work",name:"KISTI MCP",desc:"KISTI 과학기술 정보 MCP 서버 구축",cat:"mcp",status:"done",tags:["MCP","Python","KISTI"]},
+  {date:"2026-04-30",group:"work",name:"Matt Pocock Skills",desc:"Claude Code 스킬 구조 분석 및 활용 방법 학습",cat:"util",status:"done",tags:["Claude Code","Skills"]},
+  {date:"2026-04-30",group:"work",name:"Slide-maker v2",desc:"슬라이드 제작 도구 개선 — 디자인 및 기능 업그레이드",cat:"doc",status:"done",tags:["JavaScript","HTML"]},
+  {date:"2026-05-03",group:"work",name:"KISTI MCP v2",desc:"KISTI MCP 서버 개선 버전 — 기능 확장",cat:"mcp",status:"done",tags:["MCP","Python","KISTI"]},
+  {date:"2026-05-07",group:"work",name:"ScienceON / NTIS",desc:"과학기술 논문 및 국가R&D 과제 검색 · 트렌드 분석 도구",cat:"data",status:"done",tags:["Web Scraping","JavaScript","API"]},
+  {date:"2026-05-07",group:"work",name:"교육이수현황",desc:"교육 이수 현황 관리 및 조회 도구",cat:"util",status:"done",tags:["HTML","데이터 관리"]},
+  {date:"2026-05-09",group:"work",name:"네이버 주식 크롤러",desc:"네이버 금융 크롤링 — 증권사별 매매 동향 분석",cat:"data",status:"done",tags:["Python","Web Scraping","금융"]},
+  {date:"2026-05-09",group:"work",name:"NVIDIA Nemotron",desc:"Nemotron Personas Korea 데이터셋 기반 가상 설문 시스템",cat:"ai",status:"wip",tags:["NVIDIA","LLM","HuggingFace","Ollama"]},
+  {date:"2026-05-11",group:"work",name:"MiroFish",desc:"온톨로지 그래프 자동 생성 백엔드 서비스 — 네트워크 에러 수정",cat:"ai",status:"wip",tags:["Python","FastAPI","그래프 DB"],url:"http://172.30.24.141:3000"},
+  {date:"2026-05-11",group:"work",name:"Ollama Gemma API",desc:"Ollama + Gemma4:26b 로컬 LLM API 설정 및 테스트",cat:"ai",status:"done",tags:["Ollama","Gemma","Python"],url:"http://localhost:11434"},
+  {date:"2026-05-12",group:"work",name:"HP Style PPT",desc:"HP 디자인 시스템 기반 프레젠테이션 제작",cat:"doc",status:"wip",tags:["PowerPoint","디자인"]},
+  {date:"2026-05-12",group:"work",name:"Dashboard",desc:"작업 결과 정리 타임라인 대시보드 — 현재 프로젝트",cat:"util",status:"wip",tags:["HTML","CSS","JavaScript"]},
+
+  /* ── 회사 프로젝트 (추가) ─────────────────────────────── */
+  {date:"2025-08-29",group:"work",name:"행안부 R&D 예타 공모전",desc:"재난안전 R&D 예비타당성조사 기획 및 서비스혁신 내부공모전 자료 작성",cat:"doc",status:"done",tags:["HWP","보고서","행안부","예타"]},
+  {date:"2025-11-02",group:"work",name:"올포랜드 재난안전 자문",desc:"군중밀집·화재 시나리오 기반 재난안전관리 시스템 자문 — 역전지하상가 센서 시나리오 포함",cat:"doc",status:"done",tags:["HWP","PowerPoint","재난안전","시나리오"]},
+  {date:"2026-01-11",group:"work",name:"KR-SBERT 과제 분류",desc:"한국어 SBERT로 연구과제·논문 4단계 자동 유사도 분류 파이프라인",cat:"ai",status:"done",tags:["Python","KR-SBERT","NLP","Excel"]},
+  {date:"2026-02-13",group:"work",name:"기획보고서 자동화",desc:"재난안전 R&D 기획보고서 전 과정 자동화 — 딥리서치·목차·경제분석·RFP 10회 이상 반복 고도화",cat:"doc",status:"done",tags:["Python","LLM","Gemini","Notion","자동화"]},
+  {date:"2026-02-16",group:"work",name:"원격탐사 NDVI 분석",desc:"Google Earth Engine + Sentinel-2 위성영상 기반 NDVI 산정 및 재난안전 공간정보 분석",cat:"data",status:"done",tags:["Python","GEE","Sentinel-2","공간정보"]},
+  {date:"2026-02-17",group:"work",name:"HWP 공공기관 보고서 스킬",desc:"공공기관 보고서 양식 기반 Claude Code 스킬 패키지 (gonggong_hwpxskills)",cat:"ai",status:"done",tags:["Claude Code","HWP","Skills","공공기관"]},
+  {date:"2026-02-20",group:"work",name:"재난 피난 시뮬레이터",desc:"ABM 기반 지하철 화재 피난 시뮬레이션 + Docker·Celery 고도화 — RSET 분석 및 GIF 출력",cat:"data",status:"done",tags:["Python","ABM","FastAPI","Docker","재난안전"]},
+  {date:"2026-03-09",group:"work",name:"재난안전 C4I 시스템",desc:"Flutter 기반 재난안전 지휘통제통신컴퓨터정보(C4I) 시스템 — NTIS 연동",cat:"data",status:"done",tags:["Flutter","Dart","NTIS","재난안전"]},
+  {date:"2026-03-17",group:"work",name:"정부과제 공고 자동화",desc:"Flutter + NTIS API 기반 정부 R&D 공고 자동 수집·분류 앱",cat:"mcp",status:"done",tags:["Flutter","Python","NTIS","API"]},
+  {date:"2026-03-24",group:"work",name:"회의 AI 요약 시스템",desc:"FastAPI + MCP + Notion 연동으로 회의록 자동 요약 — SQLite DB 포함",cat:"mcp",status:"done",tags:["Python","FastAPI","MCP","Notion"]},
+  {date:"2026-04-04",group:"work",name:"하네스 엔지니어링 도구",desc:"Excel 기반 업무 자동화 하네스 엔지니어링 도구 (한국어 버전 포함)",cat:"util",status:"done",tags:["Excel","자동화"]},
+  {date:"2026-04-23",group:"work",name:"발표자료 자동화",desc:"AI 공간정보·AX·투자 분야 HTML 프레젠테이션 자동 생성",cat:"doc",status:"done",tags:["HTML","JavaScript","발표","자동화"]},
+
+  /* ── 집 프로젝트 ──────────────────────────────────────── */
+  {date:"2026-01-11",group:"home",name:"Antigravity 웹앱",desc:"Vite+React 기반 랜딩·여행 일정·식단 계획·풀스택 웹앱 + kStartup 크롤러까지 다양한 실험",cat:"util",status:"done",tags:["React","Next.js","TypeScript","Expo","Vite"]},
+  {date:"2026-02-01",group:"home",name:"NotebookLM MCP",desc:"Chrome 확장·CLI·Next.js 앱 등 NotebookLM 연동 MCP 서버 다양한 방식으로 반복 구현 (v1~v6)",cat:"mcp",status:"done",tags:["MCP","Next.js","Chrome Extension","CLI","Obsidian"]},
+  {date:"2026-02-01",group:"home",name:"직장인 AI 오피스 어시스턴트",desc:"Vite+Tailwind 기반 직장인 대상 AI 오피스 어시스턴트 웹앱",cat:"util",status:"done",tags:["Vite","Tailwind","HTML","AI"]},
+  {date:"2026-02-08",group:"home",name:"N8N 자동화 워크플로우",desc:"N8N으로 GeekNews·주식뉴스 구독 → Gmail 자동 발송 파이프라인 구축",cat:"util",status:"done",tags:["N8N","Gmail","Google OAuth","자동화"]},
+  {date:"2026-02-19",group:"home",name:"Healify 수면 관리 앱",desc:"Vite+React 기반 개인 수면 건강 관리 웹앱",cat:"util",status:"done",tags:["React","Vite","건강","수면"]},
+  {date:"2026-02-25",group:"home",name:"Blender MCP 연동",desc:"Blender Python addon으로 MCP 서버 연동 — 3D 렌더링 자동화",cat:"mcp",status:"done",tags:["Blender","Python","MCP","3D"]},
+  {date:"2026-03-09",group:"home",name:"경제적 자유 시뮬레이션",desc:"개인 자산·투자 수익 기반 경제적 자유 달성 시뮬레이터 (단일 HTML)",cat:"finance",status:"done",tags:["JavaScript","HTML","투자","FIRE"]},
+  {date:"2026-03-15",group:"home",name:"NotebookLM + Claude PPT",desc:"Apple 환경보고서·OECD AI 보고서 PDF를 NotebookLM+Claude로 PPT 자동 변환",cat:"doc",status:"done",tags:["NotebookLM","Claude","PowerPoint","PDF"]},
+  {date:"2026-03-20",group:"home",name:"Kiwoom 자동매매 봇",desc:"Kiwoom Open API+ 챕터별 학습부터 텔레그램 명령어 기반 실전 자동매매 봇 완성",cat:"finance",status:"done",tags:["Python","Kiwoom","텔레그램","자동매매"]},
+  {date:"2026-04-26",group:"home",name:"Humanize KR 랜딩페이지",desc:"한국어 AI 텍스트 인간화(humanize) 서비스 랜딩페이지",cat:"util",status:"done",tags:["HTML","CSS","랜딩페이지"]},
+  {date:"2026-05-01",group:"home",name:"Karpathy LLM 학습",desc:"Andrej Karpathy 강의 기반 LLM·딥러닝 개인 학습 + Remotion 강의 영상 제작",cat:"ai",status:"done",tags:["LLM","딥러닝","Remotion","학습"]},
+  {date:"2026-05-01",group:"home",name:"Claude Code 영상 자동화",desc:"Claude Code + Remotion으로 영상·나레이션·자막 자동 생성 파이프라인",cat:"ai",status:"done",tags:["Remotion","Claude Code","영상","자막"]},
+  {date:"2026-05-01",group:"home",name:"혜윤 사진 자동 찾기",desc:"OpenCV YuNet+SFace 얼굴인식으로 특정 인물 사진 자동 검색 도구",cat:"ai",status:"done",tags:["Python","OpenCV","얼굴인식","ONNX"]},
+  {date:"2026-05-02",group:"home",name:"Claude PPT 자동화",desc:"pptxgenjs로 Physical AI Trends PPT 자동 생성 (Apple 스타일)",cat:"doc",status:"done",tags:["JavaScript","pptxgenjs","PowerPoint"]},
+  {date:"2026-05-05",group:"home",name:"Investment Test",desc:"Claude로 국내외 종목 공시자료(PDF) 분석 — 웨이비스·휴메딕스·TSLA",cat:"finance",status:"done",tags:["Claude","투자분석","PDF","공시"]},
+  {date:"2026-05-09",group:"home",name:"힉슬필드 웹페이지",desc:"힉슬필드 서비스 웹페이지 제작",cat:"util",status:"done",tags:["HTML","CSS","웹사이트"]},
+  {date:"2026-05-10",group:"home",name:"Claude Trading Skills",desc:"Claude Code 기반 포지션 사이징·매매 전략 스킬 패키지",cat:"finance",status:"wip",tags:["Claude Code","Skills","트레이딩","주식"]},
+  {date:"2026-05-11",group:"home",name:"Flutter Skills 패키지",desc:"Flutter 아키텍처 스킬 모음 — MVI·Go Router·GetIt DI·테스팅 등 8종",cat:"ai",status:"done",tags:["Flutter","Dart","Skills","MVI"]},
+  {date:"2026-05-14",group:"home",name:"오빠두엑셀 Claude 디자인",desc:"Claude 디자인 실습 — 포트폴리오·리조트·레스토랑·청첩장·PPT 등 7종",cat:"doc",status:"done",tags:["HTML","CSS","디자인","실습"]},
 ];
 
+let currentGroup = 'all';
+let currentFilter = 'all';
+
 function getDashboardStats(items){
-  const dates=items.map(p=>new Date(p.date+'T00:00:00'));
-  const firstDate=new Date(Math.min(...dates));
-  const lastDate=new Date(Math.max(...dates));
-  const activeDays=Math.round((lastDate-firstDate)/86400000)+1;
+  const dates = items.map(p => new Date(p.date + 'T00:00:00'));
+  const firstDate = new Date(Math.min(...dates));
+  const lastDate = new Date(Math.max(...dates));
+  const activeDays = Math.round((lastDate - firstDate) / 86400000) + 1;
+  const fmt = d => `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
   return {
-    projects:items.length,
-    days:activeDays,
-    weeks:Math.ceil(activeDays/7),
-    categories:new Set(items.map(p=>p.cat)).size,
-    sessions:new Set(items.map(p=>p.session)).size
+    total: items.length,
+    work: items.filter(p => p.group === 'work').length,
+    home: items.filter(p => p.group === 'home').length,
+    days: activeDays,
+    firstLabel: fmt(firstDate),
+    lastLabel: fmt(lastDate),
   };
 }
 
 function renderSummary(){
-  const stats=getDashboardStats(projects);
-  document.getElementById('heroSummary').textContent=
-    `${stats.weeks}주간 ${stats.projects}개 프로젝트 · ${stats.categories}개 분야 · ${stats.sessions}개 세션`;
-  document.querySelector('[data-stat="projects"]').textContent=stats.projects;
-  document.querySelector('[data-stat="days"]').textContent=stats.days;
-  document.querySelector('[data-stat="categories"]').textContent=stats.categories;
-  document.querySelector('[data-stat="sessions"]').textContent=stats.sessions;
+  const stats = getDashboardStats(projects);
+  document.getElementById('heroSummary').textContent =
+    `회사 ${stats.work}개 · 집 ${stats.home}개 · 총 ${stats.total}개 프로젝트`;
+  document.querySelector('[data-stat="total"]').textContent = stats.total;
+  document.querySelector('[data-stat="work"]').textContent = stats.work;
+  document.querySelector('[data-stat="home"]').textContent = stats.home;
+  document.querySelector('[data-stat="days"]').textContent = stats.days;
+  document.getElementById('dateRange').textContent = `${stats.firstLabel} — ${stats.lastLabel}`;
 }
 
-function render(filter){
-  const tl=document.getElementById('timeline');
-  tl.innerHTML='';
-  const grouped={};
-  projects.forEach(p=>{
-    if(filter!=='all'&&p.cat!==filter) return;
-    if(!grouped[p.date]) grouped[p.date]=[];
+function render(groupFilter, catFilter){
+  const tl = document.getElementById('timeline');
+  tl.innerHTML = '';
+  const grouped = {};
+  projects.forEach(p => {
+    if(groupFilter !== 'all' && p.group !== groupFilter) return;
+    if(catFilter !== 'all' && p.cat !== catFilter) return;
+    if(!grouped[p.date]) grouped[p.date] = [];
     grouped[p.date].push(p);
   });
-  const dates=Object.keys(grouped).sort((a,b)=>new Date(b)-new Date(a));
-  if(dates.length===0){
-    tl.innerHTML='<p style="color:var(--graphite);padding:32px 0">해당 카테고리의 프로젝트가 없습니다.</p>';
+  const dates = Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a));
+  if(dates.length === 0){
+    tl.innerHTML = '<p style="color:var(--graphite);padding:32px 0">해당 조건의 프로젝트가 없습니다.</p>';
     return;
   }
-  dates.forEach(d=>{
-    const g=document.createElement('div');
-    g.className='date-group';
-    const dt=new Date(d+'T00:00:00');
-    const label=`${dt.getFullYear()}.${String(dt.getMonth()+1).padStart(2,'0')}.${String(dt.getDate()).padStart(2,'0')}`;
-    g.innerHTML=`<div class="date-label">${label}</div>`;
-    grouped[d].forEach(p=>{
-      const c=document.createElement('div');
-      c.className='card'+(p.url?' has-url':'');
-      c.dataset.cat=p.cat;
-      const urlBtn=p.url
-        ?`<a class="open-btn" href="${p.url}" target="_blank" rel="noopener"
+  dates.forEach(d => {
+    const g = document.createElement('div');
+    g.className = 'date-group';
+    const dt = new Date(d + 'T00:00:00');
+    const label = `${dt.getFullYear()}.${String(dt.getMonth()+1).padStart(2,'0')}.${String(dt.getDate()).padStart(2,'0')}`;
+    g.innerHTML = `<div class="date-label">${label}</div>`;
+    grouped[d].forEach(p => {
+      const c = document.createElement('div');
+      c.className = 'card' + (p.url ? ' has-url' : '');
+      c.dataset.cat = p.cat;
+      const urlBtn = p.url
+        ? `<a class="open-btn" href="${p.url}" target="_blank" rel="noopener"
             onclick="event.stopPropagation()">
             ↗ 결과 열기
             <span class="url-hint">${p.url}</span>
           </a>`
-        :'';
-      c.innerHTML=`
+        : '';
+      const groupLabel = p.group === 'work' ? '회사' : '집';
+      c.innerHTML = `
         <div class="card-header">
           <span class="card-title">${p.name}</span>
-          <span class="badge ${p.status}">${p.status==='done'?'완료':'진행중'}</span>
+          <div class="card-badges">
+            <span class="group-indicator ${p.group}">${groupLabel}</span>
+            <span class="badge ${p.status}">${p.status === 'done' ? '완료' : '진행중'}</span>
+          </div>
         </div>
         <div class="card-desc">${p.desc}</div>
-        <div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        <div class="tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
         ${urlBtn}
       `;
-      if(p.url) c.addEventListener('click',e=>{
+      if(p.url) c.addEventListener('click', e => {
         if(e.target.closest('.open-btn')) return;
-        window.open(p.url,'_blank','noopener');
+        window.open(p.url, '_blank', 'noopener');
       });
       g.appendChild(c);
     });
@@ -443,16 +542,26 @@ function render(filter){
   });
 }
 
-document.querySelectorAll('.filter-tab').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.filter-tab').forEach(b=>b.classList.remove('active'));
+document.querySelectorAll('.group-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.group-tab').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    render(btn.dataset.filter);
+    currentGroup = btn.dataset.group;
+    render(currentGroup, currentFilter);
+  });
+});
+
+document.querySelectorAll('.filter-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    render(currentGroup, currentFilter);
   });
 });
 
 renderSummary();
-render('all');
+render('all', 'all');
 </script>
 </body>
 </html>
