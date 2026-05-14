@@ -458,6 +458,8 @@ const projects = [
   {date:"2026-05-14",group:"home",name:"오빠두엑셀 Claude 디자인",desc:"Claude 디자인 실습 — 포트폴리오·리조트·레스토랑·청첩장·PPT 등 7종",cat:"doc",status:"done",tags:["HTML","CSS","디자인","실습"]},
 ];
 
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
 let currentGroup = 'all';
 let currentFilter = 'all';
 
@@ -514,23 +516,23 @@ function render(groupFilter, catFilter){
       c.className = 'card' + (p.url ? ' has-url' : '');
       c.dataset.cat = p.cat;
       const urlBtn = p.url
-        ? `<a class="open-btn" href="${p.url}" target="_blank" rel="noopener"
+        ? `<a class="open-btn" href="${esc(p.url)}" target="_blank" rel="noopener"
             onclick="event.stopPropagation()">
             ↗ 결과 열기
-            <span class="url-hint">${p.url}</span>
+            <span class="url-hint">${esc(p.url)}</span>
           </a>`
         : '';
       const groupLabel = p.group === 'work' ? '회사' : '집';
       c.innerHTML = `
         <div class="card-header">
-          <span class="card-title">${p.name}</span>
+          <span class="card-title">${esc(p.name)}</span>
           <div class="card-badges">
-            <span class="group-indicator ${p.group}">${groupLabel}</span>
-            <span class="badge ${p.status}">${p.status === 'done' ? '완료' : '진행중'}</span>
+            <span class="group-indicator ${esc(p.group)}">${groupLabel}</span>
+            <span class="badge ${esc(p.status)}">${p.status === 'done' ? '완료' : '진행중'}</span>
           </div>
         </div>
-        <div class="card-desc">${p.desc}</div>
-        <div class="tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+        <div class="card-desc">${esc(p.desc)}</div>
+        <div class="tags">${p.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
         ${urlBtn}
       `;
       if(p.url) c.addEventListener('click', e => {
