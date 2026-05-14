@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <style>
 /* ── Reset ─────────────────────────────────────────────── */
 *{margin:0;padding:0;box-sizing:border-box}
@@ -49,7 +50,7 @@
 
 /* ── Base ────────────────────────────────────────────────── */
 body{
-  font-family:'Manrope',Arial,sans-serif;
+  font-family:'Manrope','Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',Arial,sans-serif;
   font-size:16px;font-weight:400;line-height:1.38;
   background:var(--canvas);color:var(--ink);
 }
@@ -136,7 +137,7 @@ body{
   border:1px solid var(--fog);
   border-radius:var(--r-pill);
   padding:8px 20px;
-  font-family:'Manrope',Arial,sans-serif;
+  font-family:inherit;
   font-size:14px;font-weight:600;color:var(--ink);
   cursor:pointer;transition:all .18s;white-space:nowrap;
 }
@@ -155,7 +156,7 @@ body{
   border:1px solid var(--fog);
   border-radius:var(--r-pill);
   padding:8px 20px;
-  font-family:'Manrope',Arial,sans-serif;
+  font-family:inherit;
   font-size:14px;font-weight:500;color:var(--ink);
   cursor:pointer;transition:all .18s;white-space:nowrap;
 }
@@ -259,7 +260,7 @@ body{
 .open-btn{
   display:inline-flex;align-items:center;gap:6px;
   margin-top:14px;
-  font-family:'Manrope',Arial,sans-serif;
+  font-family:inherit;
   font-size:14px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;
   color:var(--on-ink);background:var(--primary);
   border:none;border-radius:var(--r-md);
@@ -395,14 +396,14 @@ body{
 <footer class="footer-slab">
   <h2>Built with Claude Code</h2>
   <p>Anthropic Claude Sonnet 4.6 · Visual Design inspired by HP Design System</p>
-  <div class="footer-meta">© 2026 · D:\01 WORK\260515 dashboard1</div>
+  <div class="footer-meta">© 2026 · takeused/dashboard1</div>
 </footer>
 
 <script>
 const projects = [
 
   /* ── 회사 프로젝트 (기존) ─────────────────────────────── */
-  {date:"2026-04-24",group:"work",name:"RHWP Studio",desc:"HWP 문서 작업용 AI 스튜디오 — GUI 설치, GitHub 연동 및 LLM 응답 에러 수정",cat:"doc",status:"done",tags:["Python","HWP","AI Studio"],url:"http://127.0.0.1:8000"},
+  {date:"2026-04-24",group:"work",name:"RHWP Studio",desc:"HWP 문서 작업용 AI 스튜디오 — GUI 설치, GitHub 연동 및 LLM 응답 에러 수정",cat:"doc",status:"done",tags:["Python","HWP","AI Studio"]},
   {date:"2026-04-26",group:"work",name:"I am not AI",desc:"im-not-ai 리포지토리 초기 설정 및 구성",cat:"util",status:"done",tags:["GitHub"],url:"https://iamnotai.pages.dev"},
   {date:"2026-04-26",group:"work",name:"Slide-maker",desc:"AI 기반 슬라이드 자동 제작 도구",cat:"doc",status:"done",tags:["JavaScript","HTML"]},
   {date:"2026-04-29",group:"work",name:"Korean Law MCP",desc:"한국 법률 정보 조회를 위한 MCP 서버 설정",cat:"mcp",status:"done",tags:["MCP","Python","법률 API"]},
@@ -416,8 +417,8 @@ const projects = [
   {date:"2026-05-07",group:"work",name:"교육이수현황",desc:"교육 이수 현황 관리 및 조회 도구",cat:"util",status:"done",tags:["HTML","데이터 관리"]},
   {date:"2026-05-09",group:"work",name:"네이버 주식 크롤러",desc:"네이버 금융 크롤링 — 증권사별 매매 동향 분석",cat:"data",status:"done",tags:["Python","Web Scraping","금융"]},
   {date:"2026-05-09",group:"work",name:"NVIDIA Nemotron",desc:"Nemotron Personas Korea 데이터셋 기반 가상 설문 시스템",cat:"ai",status:"wip",tags:["NVIDIA","LLM","HuggingFace","Ollama"]},
-  {date:"2026-05-11",group:"work",name:"MiroFish",desc:"온톨로지 그래프 자동 생성 백엔드 서비스 — 네트워크 에러 수정",cat:"ai",status:"wip",tags:["Python","FastAPI","그래프 DB"],url:"http://172.30.24.141:3000"},
-  {date:"2026-05-11",group:"work",name:"Ollama Gemma API",desc:"Ollama + Gemma4:26b 로컬 LLM API 설정 및 테스트",cat:"ai",status:"done",tags:["Ollama","Gemma","Python"],url:"http://localhost:11434"},
+  {date:"2026-05-11",group:"work",name:"MiroFish",desc:"온톨로지 그래프 자동 생성 백엔드 서비스 — 네트워크 에러 수정",cat:"ai",status:"wip",tags:["Python","FastAPI","그래프 DB"]},
+  {date:"2026-05-11",group:"work",name:"Ollama Gemma API",desc:"Ollama + Gemma4:26b 로컬 LLM API 설정 및 테스트",cat:"ai",status:"done",tags:["Ollama","Gemma","Python"]},
   {date:"2026-05-12",group:"work",name:"HP Style PPT",desc:"HP 디자인 시스템 기반 프레젠테이션 제작",cat:"doc",status:"wip",tags:["PowerPoint","디자인"]},
   {date:"2026-05-12",group:"work",name:"Dashboard",desc:"작업 결과 정리 타임라인 대시보드 — 현재 프로젝트",cat:"util",status:"wip",tags:["HTML","CSS","JavaScript"]},
 
