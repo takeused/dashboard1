@@ -235,6 +235,7 @@ body{
 }
 .card-title{font-size:20px;font-weight:500;line-height:1.0;color:var(--ink)}
 .card.has-url:hover .card-title{color:var(--primary)}
+.card[data-group="home"].has-url:hover .card-title{color:var(--home-accent)}
 .card-badges{display:flex;align-items:center;gap:8px;flex-shrink:0}
 
 /* Status badges */
@@ -362,32 +363,32 @@ body{
   <div class="container">
 
     <!-- Group selector -->
-    <div class="group-row">
+    <div class="group-row" role="group" aria-label="그룹 필터">
       <span class="group-row-label">그룹</span>
-      <button class="group-tab active" data-group="all">전체</button>
-      <button class="group-tab" data-group="work">회사</button>
-      <button class="group-tab" data-group="home">집</button>
+      <button class="group-tab active" data-group="all" aria-pressed="true">전체</button>
+      <button class="group-tab" data-group="work" aria-pressed="false">회사</button>
+      <button class="group-tab" data-group="home" aria-pressed="false">집</button>
     </div>
 
     <!-- Category filter -->
-    <div class="filter-row">
-      <button class="filter-tab active" data-filter="all">전체</button>
-      <button class="filter-tab" data-filter="ai">
+    <div class="filter-row" role="group" aria-label="카테고리 필터">
+      <button class="filter-tab active" data-filter="all" aria-pressed="true">전체</button>
+      <button class="filter-tab" data-filter="ai" aria-pressed="false">
         <span class="cat-dot" style="background:var(--cat-ai)"></span>AI / LLM
       </button>
-      <button class="filter-tab" data-filter="data">
+      <button class="filter-tab" data-filter="data" aria-pressed="false">
         <span class="cat-dot" style="background:var(--cat-data)"></span>데이터 수집 / 분석
       </button>
-      <button class="filter-tab" data-filter="doc">
+      <button class="filter-tab" data-filter="doc" aria-pressed="false">
         <span class="cat-dot" style="background:var(--cat-doc)"></span>문서 / 보고서
       </button>
-      <button class="filter-tab" data-filter="mcp">
+      <button class="filter-tab" data-filter="mcp" aria-pressed="false">
         <span class="cat-dot" style="background:var(--cat-mcp)"></span>MCP 서버
       </button>
-      <button class="filter-tab" data-filter="util">
+      <button class="filter-tab" data-filter="util" aria-pressed="false">
         <span class="cat-dot" style="background:var(--cat-util)"></span>교육 / 유틸
       </button>
-      <button class="filter-tab" data-filter="finance">
+      <button class="filter-tab" data-filter="finance" aria-pressed="false">
         <span class="cat-dot" style="background:var(--cat-finance)"></span>재테크 / 투자
       </button>
     </div>
@@ -442,8 +443,8 @@ const projects = [
   {date:"2026-04-23",group:"work",name:"발표자료 자동화",desc:"AI 공간정보·AX·투자 분야 HTML 프레젠테이션 자동 생성",cat:"doc",status:"done",tags:["HTML","JavaScript","발표","자동화"]},
 
   /* ── 집 프로젝트 ──────────────────────────────────────── */
-  {date:"2026-01-11",group:"home",name:"Antigravity 웹앱",desc:"Vite+React 기반 랜딩·여행 일정·식단 계획·풀스택 웹앱 + kStartup 크롤러까지 다양한 실험",cat:"util",status:"done",tags:["React","Next.js","TypeScript","Expo","Vite"]},
-  {date:"2026-02-01",group:"home",name:"NotebookLM MCP",desc:"Chrome 확장·CLI·Next.js 앱 등 NotebookLM 연동 MCP 서버 다양한 방식으로 반복 구현 (v1~v6)",cat:"mcp",status:"done",tags:["MCP","Next.js","Chrome Extension","CLI","Obsidian"]},
+  {date:"2026-01-25",group:"home",name:"Antigravity 웹앱",desc:"Vite+React 기반 랜딩·여행 일정·식단 계획·풀스택 웹앱 + kStartup 크롤러까지 다양한 실험",cat:"util",status:"done",tags:["React","Next.js","TypeScript","Expo","Vite"]},
+  {date:"2026-04-26",group:"home",name:"NotebookLM MCP",desc:"Chrome 확장·CLI·Next.js 앱 등 NotebookLM 연동 MCP 서버 다양한 방식으로 반복 구현 (v1~v6)",cat:"mcp",status:"done",tags:["MCP","Next.js","Chrome Extension","CLI","Obsidian"]},
   {date:"2026-02-01",group:"home",name:"직장인 AI 오피스 어시스턴트",desc:"Vite+Tailwind 기반 직장인 대상 AI 오피스 어시스턴트 웹앱",cat:"util",status:"done",tags:["Vite","Tailwind","HTML","AI"]},
   {date:"2026-02-08",group:"home",name:"N8N 자동화 워크플로우",desc:"N8N으로 GeekNews·주식뉴스 구독 → Gmail 자동 발송 파이프라인 구축",cat:"util",status:"done",tags:["N8N","Gmail","Google OAuth","자동화"]},
   {date:"2026-02-19",group:"home",name:"Healify 수면 관리 앱",desc:"Vite+React 기반 개인 수면 건강 관리 웹앱",cat:"util",status:"done",tags:["React","Vite","건강","수면"]},
@@ -539,6 +540,7 @@ function render(groupFilter, catFilter){
       const c = document.createElement('div');
       c.className = 'card' + (p.url ? ' has-url' : '');
       c.dataset.cat = p.cat;
+      c.dataset.group = p.group;
       const urlBtn = p.url
         ? `<a class="open-btn" href="${esc(p.url)}" target="_blank" rel="noopener"
             onclick="event.stopPropagation()">
@@ -559,10 +561,20 @@ function render(groupFilter, catFilter){
         <div class="tags">${p.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
         ${urlBtn}
       `;
-      if(p.url) c.addEventListener('click', e => {
-        if(e.target.closest('.open-btn')) return;
-        window.open(p.url, '_blank', 'noopener');
-      });
+      if(p.url){
+        c.setAttribute('tabindex', '0');
+        c.setAttribute('aria-label', esc(p.name) + ' — 결과 열기');
+        c.addEventListener('click', e => {
+          if(e.target.closest('.open-btn')) return;
+          window.open(p.url, '_blank', 'noopener');
+        });
+        c.addEventListener('keydown', e => {
+          if(e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            window.open(p.url, '_blank', 'noopener');
+          }
+        });
+      }
       g.appendChild(c);
     });
     tl.appendChild(g);
@@ -571,8 +583,12 @@ function render(groupFilter, catFilter){
 
 document.querySelectorAll('.group-tab').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.group-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.group-tab').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    });
     btn.classList.add('active');
+    btn.setAttribute('aria-pressed', 'true');
     currentGroup = btn.dataset.group;
     render(currentGroup, currentFilter);
   });
@@ -580,8 +596,12 @@ document.querySelectorAll('.group-tab').forEach(btn => {
 
 document.querySelectorAll('.filter-tab').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.filter-tab').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    });
     btn.classList.add('active');
+    btn.setAttribute('aria-pressed', 'true');
     currentFilter = btn.dataset.filter;
     render(currentGroup, currentFilter);
   });
