@@ -197,6 +197,11 @@ body{
   width:10px;height:10px;border-radius:50%;
   background:var(--primary);border:2px solid var(--canvas);
   box-shadow:0 0 0 2px var(--primary);
+  transition:background .18s,box-shadow .18s;
+}
+.timeline[data-group="home"] .date-label::before{
+  background:var(--home-accent);
+  box-shadow:0 0 0 2px var(--home-accent);
 }
 
 /* Project card */
@@ -490,19 +495,38 @@ function renderSummary(){
   document.getElementById('dateRange').textContent = `${stats.firstLabel} — ${stats.lastLabel}`;
 }
 
+const CAT_LABELS = {all:'전체',ai:'AI / LLM',data:'데이터 수집/분석',doc:'문서 / 보고서',mcp:'MCP 서버',util:'교육 / 유틸',finance:'재테크 / 투자'};
+const GROUP_LABELS = {all:'전체',work:'회사',home:'집'};
+
 function render(groupFilter, catFilter){
   const tl = document.getElementById('timeline');
   tl.innerHTML = '';
+  tl.dataset.group = groupFilter;
+
+  const filtered = projects.filter(p => {
+    if(groupFilter !== 'all' && p.group !== groupFilter) return false;
+    if(catFilter !== 'all' && p.cat !== catFilter) return false;
+    return true;
+  });
+
+  // 5번: 필터 결과를 Stats Band에 반영
+  document.querySelector('[data-stat="total"]').textContent = filtered.length;
+  document.querySelector('[data-stat="work"]').textContent = filtered.filter(p => p.group === 'work').length;
+  document.querySelector('[data-stat="home"]').textContent = filtered.filter(p => p.group === 'home').length;
+
   const grouped = {};
-  projects.forEach(p => {
-    if(groupFilter !== 'all' && p.group !== groupFilter) return;
-    if(catFilter !== 'all' && p.cat !== catFilter) return;
+  filtered.forEach(p => {
     if(!grouped[p.date]) grouped[p.date] = [];
     grouped[p.date].push(p);
   });
   const dates = Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a));
   if(dates.length === 0){
-    tl.innerHTML = '<p style="color:var(--graphite);padding:32px 0">해당 조건의 프로젝트가 없습니다.</p>';
+    // 6번: 현재 필터 상태를 메시지에 표시
+    const gLabel = GROUP_LABELS[groupFilter] || groupFilter;
+    const cLabel = CAT_LABELS[catFilter] || catFilter;
+    tl.innerHTML = `<p style="color:var(--graphite);padding:32px 0">
+      <strong>${gLabel}</strong> 그룹 · <strong>${cLabel}</strong> 카테고리에 해당하는 프로젝트가 없습니다.
+    </p>`;
     return;
   }
   dates.forEach(d => {
