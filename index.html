@@ -6,218 +6,212 @@
 <title>Claude Code Project Timeline</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 /* ── Reset ─────────────────────────────────────────────── */
 *{margin:0;padding:0;box-sizing:border-box}
 
-/* ── Tokens ─────────────────────────────────────────────── */
+/* ── Carbon Design System Tokens ────────────────────────── */
 :root{
-  /* Brand */
-  --primary:#024ad8;
-  --primary-bright:#296ef9;
-  --primary-deep:#0e3191;
-  /* Home accent */
-  --home-accent:#ea580c;
-  --home-accent-deep:#c2410c;
-  /* Surface */
   --canvas:#ffffff;
-  --cloud:#f7f7f7;
-  --fog:#e8e8e8;
-  --steel:#c2c2c2;
-  /* Text */
-  --ink:#1a1a1a;
-  --on-ink:#ffffff;
-  --charcoal:#3d3d3d;
-  --graphite:#636363;
-  /* Category accents */
+  --surface-1:#f4f4f4;
+  --surface-2:#e0e0e0;
+  --hairline:#e0e0e0;
+  --inverse-canvas:#161616;
+  --inverse-surface-1:#262626;
+  --ink:#161616;
+  --ink-muted:#525252;
+  --ink-subtle:#8c8c8c;
+  --inverse-ink:#ffffff;
+  --inverse-ink-muted:#c6c6c6;
+  --primary:#0f62fe;
+  --primary-hover:#0043ce;
+  --primary-active:#002d9c;
+  --on-primary:#ffffff;
   --cat-ai:#7c3aed;
   --cat-data:#0369a1;
   --cat-doc:#15803d;
   --cat-mcp:#b45309;
   --cat-util:#525252;
   --cat-finance:#0d9488;
-  /* Shadows */
-  --shadow-soft:0 2px 8px rgba(26,26,26,.08);
-  --shadow-float:0 8px 24px rgba(26,26,26,.12);
-  /* Radius */
-  --r-md:4px;
-  --r-lg:8px;
-  --r-xl:16px;
-  --r-pill:9999px;
 }
 
 /* ── Base ────────────────────────────────────────────────── */
 body{
-  font-family:'Manrope','Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',Arial,sans-serif;
-  font-size:16px;font-weight:400;line-height:1.38;
+  font-family:'IBM Plex Sans','Helvetica Neue',Arial,sans-serif;
+  font-size:16px;font-weight:400;line-height:1.50;letter-spacing:0.16px;
   background:var(--canvas);color:var(--ink);
+  -webkit-font-smoothing:antialiased;
 }
-.container{max-width:1080px;margin:0 auto;padding:0 32px}
+body.palette-open{overflow:hidden}
+.container{max-width:1312px;margin:0 auto;padding:0 32px}
+
+/* Carbon focus ring — 모든 인터랙티브 요소 공통 */
+button:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible{
+  outline:2px solid var(--primary);
+  outline-offset:-2px;
+}
+.tab-btn:focus-visible{outline-offset:0}
+
+/* 카드 outline transition (jumpToProject 강조용) */
+.card{transition:background .12s,outline-color .25s}
 
 /* ── Utility Strip ───────────────────────────────────────── */
 .utility-strip{
-  background:var(--ink);color:var(--on-ink);
-  height:36px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 32px;font-size:13px;font-weight:400;
+  background:var(--surface-1);color:var(--ink-muted);
+  height:32px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;font-size:12px;font-weight:400;letter-spacing:0.32px;
+  border-bottom:1px solid var(--hairline);
 }
-.utility-strip a{color:var(--steel);text-decoration:none}
 
-/* ── Hero Section ────────────────────────────────────────── */
+/* ── Hero ────────────────────────────────────────────────── */
 .hero-section{
   background:var(--canvas);
-  padding:64px 0 72px;
-  position:relative;overflow:hidden;
+  padding:80px 0 72px;
+  border-bottom:1px solid var(--hairline);
 }
-.hero-section::before,
-.hero-section::after{
-  content:'';position:absolute;top:0;bottom:0;
-  width:110px;background:var(--primary);
-}
-.hero-section::before{
-  left:-24px;
-  clip-path:polygon(22% 0%,100% 0%,78% 100%,0% 100%);
-}
-.hero-section::after{
-  right:-24px;
-  clip-path:polygon(22% 0%,100% 0%,78% 100%,0% 100%);
-}
-.hero-inner{position:relative;z-index:1;text-align:center}
 .hero-eyebrow{
-  display:inline-block;
-  font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
-  color:var(--primary);margin-bottom:20px;
+  display:block;font-size:14px;font-weight:400;letter-spacing:0.16px;
+  color:var(--ink-muted);margin-bottom:16px;
 }
+.hero-inner{text-align:center}
 .hero-inner h1{
-  font-size:56px;font-weight:500;line-height:1.0;
-  color:var(--ink);margin-bottom:16px;
+  font-size:60px;font-weight:300;line-height:1.17;letter-spacing:-0.4px;
+  color:var(--ink);margin-bottom:20px;
 }
 .hero-inner h1 em{font-style:normal;color:var(--primary)}
 .hero-sub{
-  font-size:18px;font-weight:400;line-height:1.33;
-  color:var(--charcoal);
+  font-size:18px;font-weight:400;line-height:1.50;letter-spacing:0;
+  color:var(--ink-muted);
 }
 
-/* ── Stats Band (cloud) ──────────────────────────────────── */
+/* ── Stats Band ──────────────────────────────────────────── */
 .stats-band{
-  background:var(--cloud);padding:48px 0;
+  background:var(--surface-1);padding:48px 0;
+  border-bottom:1px solid var(--hairline);
 }
 .stats-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  background:var(--hairline);gap:1px;
+  border:1px solid var(--hairline);
 }
 .stat-card{
-  background:var(--canvas);border-radius:var(--r-xl);
-  padding:28px 24px;text-align:center;
-  box-shadow:var(--shadow-soft);
+  background:var(--canvas);
+  padding:32px 24px;text-align:center;
 }
 .stat-number{
-  display:block;font-size:44px;font-weight:500;line-height:1.0;
-  color:var(--primary);margin-bottom:8px;
+  display:block;font-size:48px;font-weight:300;line-height:1.17;letter-spacing:-0.4px;
+  color:var(--ink);margin-bottom:8px;
 }
-.stat-number.home-color{color:var(--home-accent)}
 .stat-label{
-  font-size:14px;font-weight:400;color:var(--charcoal);
+  font-size:14px;font-weight:400;letter-spacing:0.16px;color:var(--ink-muted);
 }
 
-/* ── Timeline Section (white) ────────────────────────────── */
-.timeline-section{background:var(--canvas);padding:64px 0 80px}
+/* ── Timeline Section ────────────────────────────────────── */
+.timeline-section{background:var(--canvas);padding:48px 0 80px}
 
-/* Group selector */
-.group-row{
-  display:flex;align-items:center;gap:8px;
-  margin-bottom:16px;
+/* Search — Carbon text-input */
+.search-row{margin-bottom:32px}
+.search-wrap{position:relative}
+.search-icon{
+  position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  width:16px;height:16px;color:var(--ink-subtle);pointer-events:none;
 }
-.group-row-label{
-  font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
-  color:var(--graphite);margin-right:4px;white-space:nowrap;
+#searchInput{
+  width:100%;
+  font-family:inherit;font-size:16px;font-weight:400;letter-spacing:0.16px;
+  color:var(--ink);background:var(--surface-1);
+  border:none;border-bottom:1px solid var(--ink-subtle);
+  padding:11px 44px;
+  outline:none;
 }
-.group-tab{
+#searchInput::placeholder{color:var(--ink-subtle)}
+#searchInput:focus{border-bottom:2px solid var(--primary)}
+.search-clear{
+  position:absolute;right:0;top:0;bottom:0;
+  background:none;border:none;cursor:pointer;
+  color:var(--ink-muted);font-size:20px;padding:0 16px;
+  display:none;align-items:center;line-height:1;
+}
+.search-clear.visible{display:flex}
+.search-clear:hover{background:var(--surface-2);color:var(--ink)}
+
+/* Content Switcher — group + status */
+.filter-controls{
+  display:flex;flex-wrap:wrap;align-items:center;gap:24px;
+}
+.switcher-group{display:flex;align-items:center;gap:12px}
+.switcher-label{
+  font-size:12px;font-weight:400;letter-spacing:0.32px;
+  color:var(--ink-muted);text-transform:uppercase;white-space:nowrap;
+}
+.switcher{display:inline-flex;border:1px solid var(--hairline)}
+.switcher-btn{
   background:var(--canvas);
-  border:1px solid var(--fog);
-  border-radius:var(--r-pill);
-  padding:8px 20px;
-  font-family:inherit;
-  font-size:14px;font-weight:600;color:var(--ink);
-  cursor:pointer;transition:all .18s;white-space:nowrap;
+  border:none;border-right:1px solid var(--hairline);
+  padding:9px 20px;
+  font-family:inherit;font-size:14px;font-weight:400;letter-spacing:0.16px;
+  color:var(--ink-muted);cursor:pointer;white-space:nowrap;
+  transition:background .1s,color .1s;
 }
-.group-tab:hover{border-color:var(--steel)}
-.group-tab.active[data-group="all"]{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
-.group-tab.active[data-group="work"]{background:var(--primary);color:var(--on-ink);border-color:var(--primary)}
-.group-tab.active[data-group="home"]{background:var(--home-accent);color:var(--on-ink);border-color:var(--home-accent)}
+.switcher-btn:last-child{border-right:none}
+.switcher-btn:hover{background:var(--surface-2);color:var(--ink)}
+.switcher-btn.active{background:var(--ink);color:var(--inverse-ink)}
 
-/* Filter tabs — pill sub-nav */
-.filter-row{
-  display:flex;flex-wrap:wrap;gap:8px;
-  margin-bottom:48px;
+/* Category tabs — Carbon tab strip */
+.tabs-row{
+  border-bottom:1px solid var(--hairline);
+  display:flex;overflow-x:auto;
+  margin:24px 0 40px;
+  -ms-overflow-style:none;scrollbar-width:none;
 }
-.filter-tab{
-  background:var(--canvas);
-  border:1px solid var(--fog);
-  border-radius:var(--r-pill);
-  padding:8px 20px;
-  font-family:inherit;
-  font-size:14px;font-weight:500;color:var(--ink);
-  cursor:pointer;transition:all .18s;white-space:nowrap;
+.tabs-row::-webkit-scrollbar{display:none}
+.tab-btn{
+  background:none;border:none;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  padding:12px 16px;
+  font-family:inherit;font-size:14px;font-weight:400;letter-spacing:0.16px;
+  color:var(--ink-muted);cursor:pointer;white-space:nowrap;
+  transition:color .1s,background .1s;
 }
-.filter-tab:hover{border-color:var(--steel)}
-.filter-tab.active{
-  background:var(--ink);color:var(--on-ink);border-color:var(--ink);
-}
+.tab-btn:hover{color:var(--ink);background:var(--surface-1)}
+.tab-btn.active{color:var(--ink);font-weight:600;border-bottom-color:var(--primary)}
 .cat-dot{
-  display:inline-block;width:8px;height:8px;border-radius:50%;
-  margin-right:7px;vertical-align:middle;
+  display:inline-block;width:8px;height:8px;
+  margin-right:6px;vertical-align:middle;
 }
 
-/* Group indicator on cards */
-.group-indicator{
-  display:inline-flex;align-items:center;
-  font-size:11px;font-weight:600;letter-spacing:.3px;
-  padding:2px 9px;border-radius:var(--r-pill);
-  flex-shrink:0;
-}
-.group-indicator.work{background:rgba(2,74,216,.09);color:var(--primary)}
-.group-indicator.home{background:rgba(234,88,12,.09);color:var(--home-accent)}
-
-/* Timeline structure */
-.timeline{position:relative;padding-left:36px}
+/* Timeline */
+.timeline{position:relative;padding-left:24px}
 .timeline::before{
-  content:'';position:absolute;left:12px;top:4px;bottom:0;
-  width:1px;background:var(--fog);
+  content:'';position:absolute;left:0;top:8px;bottom:0;
+  width:1px;background:var(--hairline);
 }
-
-.date-group{margin-bottom:32px}
+.date-group{margin-bottom:24px}
 .date-label{
-  position:relative;
-  font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
-  color:var(--graphite);margin-bottom:14px;
+  position:relative;padding-left:16px;
+  font-size:12px;font-weight:400;letter-spacing:0.32px;
+  color:var(--ink-muted);margin-bottom:0;text-transform:uppercase;
+  padding-top:4px;padding-bottom:12px;
 }
 .date-label::before{
-  content:'';position:absolute;left:-28px;top:3px;
-  width:10px;height:10px;border-radius:50%;
-  background:var(--primary);border:2px solid var(--canvas);
-  box-shadow:0 0 0 2px var(--primary);
-  transition:background .18s,box-shadow .18s;
-}
-.timeline[data-group="home"] .date-label::before{
-  background:var(--home-accent);
-  box-shadow:0 0 0 2px var(--home-accent);
+  content:'';position:absolute;left:-4px;top:6px;
+  width:8px;height:8px;background:var(--primary);
 }
 
-/* Project card */
+/* Cards — stacked list, shared borders */
 .card{
   background:var(--canvas);
-  border:1px solid var(--fog);
-  border-radius:var(--r-xl);
+  border:1px solid var(--hairline);
   padding:20px 24px;
-  margin-bottom:12px;
-  box-shadow:var(--shadow-soft);
-  transition:box-shadow .2s,transform .2s;
   position:relative;overflow:hidden;
+  transition:background .1s;
 }
+.card+.card{border-top:none}
 .card::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;
-  width:4px;border-radius:var(--r-xl) 0 0 var(--r-xl);
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
 }
 .card[data-cat="ai"]::before      {background:var(--cat-ai)}
 .card[data-cat="data"]::before    {background:var(--cat-data)}
@@ -226,94 +220,286 @@ body{
 .card[data-cat="util"]::before    {background:var(--cat-util)}
 .card[data-cat="finance"]::before {background:var(--cat-finance)}
 
-.card:hover{box-shadow:var(--shadow-float);transform:translateY(-2px)}
+.card:hover{background:var(--surface-1)}
 .card.has-url{cursor:pointer}
 
 .card-header{
-  display:flex;align-items:center;justify-content:space-between;
+  display:flex;align-items:flex-start;justify-content:space-between;
   gap:12px;margin-bottom:6px;
 }
-.card-title{font-size:20px;font-weight:500;line-height:1.0;color:var(--ink)}
+.card-title{
+  font-size:18px;font-weight:400;line-height:1.33;color:var(--ink);
+}
 .card.has-url:hover .card-title{color:var(--primary)}
-.card[data-group="home"].has-url:hover .card-title{color:var(--home-accent)}
-.card-badges{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.card-badges{display:flex;align-items:center;gap:6px;flex-shrink:0;flex-wrap:wrap}
 
-/* Status badges */
+/* Group indicator */
+.group-indicator{
+  font-size:12px;font-weight:400;letter-spacing:0.16px;
+  padding:1px 8px;flex-shrink:0;border:1px solid;
+}
+.group-indicator.work{color:var(--primary);border-color:var(--primary)}
+.group-indicator.home{color:var(--ink-muted);border-color:var(--hairline)}
+
+/* Status badge */
 .badge{
-  flex-shrink:0;
-  font-size:12px;font-weight:700;letter-spacing:.3px;
-  padding:4px 12px;border-radius:var(--r-lg);
-  border:1px solid;white-space:nowrap;
+  flex-shrink:0;font-size:12px;font-weight:400;letter-spacing:0.16px;
+  padding:1px 8px;border:1px solid;white-space:nowrap;
 }
-.badge.done{
-  background:rgba(21,128,61,.08);color:#15803d;border-color:rgba(21,128,61,.25);
-}
-.badge.wip{
-  background:rgba(180,83,9,.08);color:#b45309;border-color:rgba(180,83,9,.25);
-}
+.badge.done{color:#166534;border-color:#166534;background:rgba(22,101,52,.06)}
+.badge.wip{color:#92400e;border-color:#92400e;background:rgba(146,64,14,.06)}
 
-.card-desc{font-size:14px;font-weight:400;color:var(--charcoal);margin-bottom:12px;line-height:1.5}
-
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.card-desc{
+  font-size:14px;font-weight:400;letter-spacing:0.16px;
+  color:var(--ink-muted);margin-bottom:12px;line-height:1.50;
+}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px}
 .tag{
-  font-size:12px;font-weight:500;
-  padding:3px 10px;border-radius:var(--r-lg);
-  background:var(--cloud);color:var(--charcoal);
-  border:1px solid var(--fog);
+  font-size:12px;font-weight:400;letter-spacing:0.16px;
+  padding:1px 8px;
+  background:var(--surface-1);color:var(--ink-muted);
+  border:1px solid var(--hairline);
 }
 
-/* Open button */
+/* Open button — Carbon primary */
 .open-btn{
-  display:inline-flex;align-items:center;gap:6px;
+  display:inline-flex;align-items:center;gap:8px;
   margin-top:14px;
-  font-family:inherit;
-  font-size:14px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;
-  color:var(--on-ink);background:var(--primary);
-  border:none;border-radius:var(--r-md);
-  padding:10px 20px;height:40px;
+  font-family:inherit;font-size:14px;font-weight:400;letter-spacing:0.16px;
+  color:var(--on-primary);background:var(--primary);
+  border:none;padding:11px 16px;
   text-decoration:none;cursor:pointer;
-  transition:background .18s;
+  transition:background .1s;
 }
-.open-btn:hover{background:var(--primary-deep)}
-.open-btn .url-hint{
-  font-size:11px;font-weight:400;letter-spacing:0;text-transform:none;
-  opacity:.7;
-}
+.open-btn:hover{background:var(--primary-hover)}
+.open-btn .url-hint{font-size:11px;letter-spacing:0;opacity:.65}
 
-/* ── Ink Footer Slab ─────────────────────────────────────── */
+/* ── Footer ──────────────────────────────────────────────── */
 .footer-slab{
-  background:var(--ink);color:var(--on-ink);
+  background:var(--inverse-canvas);color:var(--inverse-ink);
   padding:64px 32px;text-align:center;
 }
 .footer-slab h2{
-  font-size:32px;font-weight:500;line-height:1.0;
+  font-size:42px;font-weight:300;line-height:1.20;letter-spacing:0;
   margin-bottom:12px;
 }
 .footer-slab p{
-  font-size:14px;font-weight:400;color:var(--steel);
-  margin-bottom:32px;
+  font-size:14px;font-weight:400;letter-spacing:0.16px;
+  color:var(--inverse-ink-muted);margin-bottom:32px;
 }
 .footer-meta{
-  font-size:12px;color:var(--graphite);
-  border-top:1px solid #2e2e2e;padding-top:24px;margin-top:12px;
+  font-size:12px;letter-spacing:0.32px;color:var(--ink-subtle);
+  border-top:1px solid var(--inverse-surface-1);padding-top:24px;margin-top:12px;
 }
 
+/* ── Heatmap ─────────────────────────────────────────────── */
+.heatmap-section{
+  background:var(--canvas);padding:48px 0;
+  border-bottom:1px solid var(--hairline);
+}
+.heatmap-header{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:16px;margin-bottom:24px;flex-wrap:wrap;
+}
+.heatmap-title{
+  font-size:12px;font-weight:400;letter-spacing:0.32px;
+  color:var(--ink-muted);text-transform:uppercase;
+}
+.heatmap-legend{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;letter-spacing:0.32px;color:var(--ink-subtle);
+}
+.legend-cell{display:inline-block;width:11px;height:11px}
+.heatmap-wrap{overflow-x:auto;padding-bottom:4px}
+#heatmap svg{display:block;min-width:600px}
+
+/* ── View Toolbar ────────────────────────────────────────── */
+.view-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin:24px 0;flex-wrap:wrap;gap:12px;
+}
+.view-toggle{display:inline-flex;border:1px solid var(--hairline)}
+.view-btn{
+  background:var(--canvas);border:none;
+  border-right:1px solid var(--hairline);
+  padding:9px 20px;
+  font-family:inherit;font-size:14px;font-weight:400;letter-spacing:0.16px;
+  color:var(--ink-muted);cursor:pointer;white-space:nowrap;
+  transition:background .1s,color .1s;
+}
+.view-btn:last-child{border-right:none}
+.view-btn:hover{background:var(--surface-2);color:var(--ink)}
+.view-btn.active{background:var(--ink);color:var(--inverse-ink)}
+.play-btn{
+  background:var(--canvas);
+  border:1px solid var(--primary);color:var(--primary);
+  padding:9px 16px;display:inline-flex;align-items:center;gap:8px;
+  font-family:inherit;font-size:14px;font-weight:400;letter-spacing:0.16px;
+  cursor:pointer;white-space:nowrap;transition:all .1s;
+}
+.play-btn:hover,.play-btn.playing{background:var(--primary);color:var(--on-primary)}
+.play-progress{
+  height:2px;background:var(--surface-2);margin-bottom:16px;display:none;
+}
+.play-progress.visible{display:block}
+.play-progress-bar{
+  height:100%;background:var(--primary);width:0;transition:width .25s linear;
+}
+.timeline.play-mode .card{opacity:0}
+.timeline.play-mode .card.revealed{
+  opacity:1;animation:revealUp .35s ease-out;
+}
+@keyframes revealUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Network View ────────────────────────────────────────── */
+.network-view{
+  border:1px solid var(--hairline);
+  background:var(--canvas);
+  position:relative;height:600px;overflow:hidden;
+}
+#networkSvg{display:block;width:100%;height:100%;cursor:grab}
+.network-edge{stroke:var(--hairline);stroke-width:1;pointer-events:none;transition:stroke .18s,stroke-opacity .18s,stroke-width .18s}
+.network-edge.dim{stroke-opacity:0.05 !important}
+.network-edge.highlight{stroke:var(--primary) !important;stroke-opacity:0.85 !important;stroke-width:2}
+.network-node{cursor:pointer;transition:opacity .18s,transform .12s;transform-origin:center;transform-box:fill-box}
+.network-node:hover{transform:scale(1.25)}
+.network-node.dim{opacity:0.15}
+.network-node.active{stroke:#161616 !important;stroke-width:2 !important}
+.network-label{
+  font-family:'IBM Plex Sans',sans-serif;font-size:10px;font-weight:400;
+  fill:var(--ink);pointer-events:none;letter-spacing:0.16px;
+  paint-order:stroke;stroke:#ffffff;stroke-width:3;stroke-linejoin:round;
+  opacity:0.78;transition:opacity .18s,font-weight .15s;
+}
+.network-label.dim{opacity:0.12}
+.network-label.active{opacity:1;font-weight:600;font-size:11px}
+.network-info{
+  position:absolute;top:16px;right:16px;
+  background:var(--canvas);border:1px solid var(--hairline);
+  padding:16px;max-width:280px;display:none;
+}
+.network-info.visible{display:block}
+.network-info-title{
+  font-size:16px;font-weight:400;color:var(--ink);margin-bottom:8px;
+}
+.network-info-meta{
+  font-size:12px;color:var(--ink-muted);letter-spacing:0.16px;
+  margin-bottom:8px;line-height:1.5;
+}
+.network-info-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.network-info-close{
+  position:absolute;top:8px;right:8px;
+  background:none;border:none;color:var(--ink-muted);
+  cursor:pointer;font-size:16px;line-height:1;padding:4px 8px;
+}
+.network-info-close:hover{color:var(--ink)}
+.network-legend{
+  position:absolute;bottom:0;left:0;right:0;
+  background:rgba(255,255,255,0.96);
+  border-top:1px solid var(--hairline);
+  display:flex;gap:16px;flex-wrap:wrap;padding:10px 16px;
+  font-size:11px;letter-spacing:0.32px;color:var(--ink-muted);
+  text-transform:uppercase;
+}
+.network-legend-item{display:inline-flex;align-items:center;gap:6px}
+.network-legend-swatch{width:10px;height:10px;display:inline-block}
+.network-empty{
+  display:flex;align-items:center;justify-content:center;
+  height:100%;color:var(--ink-subtle);
+  font-size:14px;letter-spacing:0.16px;
+}
+
+/* ── Command Palette ─────────────────────────────────────── */
+.palette-overlay{
+  position:fixed;inset:0;
+  background:rgba(22,22,22,0.55);
+  display:none;align-items:flex-start;justify-content:center;
+  padding-top:12vh;z-index:1000;
+  animation:fadeIn .12s;
+}
+.palette-overlay.visible{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.palette{
+  width:92%;max-width:640px;
+  background:var(--canvas);border:1px solid var(--hairline);
+  display:flex;flex-direction:column;max-height:70vh;
+}
+.palette-input{
+  width:100%;border:none;outline:none;
+  border-bottom:1px solid var(--hairline);
+  font-family:inherit;font-size:16px;font-weight:400;letter-spacing:0.16px;
+  color:var(--ink);background:var(--canvas);padding:16px 20px;
+}
+.palette-input::placeholder{color:var(--ink-subtle)}
+.palette-results{overflow-y:auto;flex:1}
+.palette-item{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 20px;cursor:pointer;
+  border-bottom:1px solid var(--surface-1);
+  font-size:14px;letter-spacing:0.16px;
+}
+.palette-item.active{background:var(--surface-1)}
+.palette-item-icon{
+  width:24px;height:24px;flex-shrink:0;
+  color:var(--ink-muted);
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--hairline);background:var(--canvas);
+}
+.palette-item-icon svg{width:14px;height:14px}
+.palette-item.active .palette-item-icon{border-color:var(--ink);color:var(--ink);background:var(--canvas)}
+.palette-item-icon.cmd{color:var(--primary);border-color:var(--primary)}
+.palette-item-icon.proj{color:var(--ink-subtle)}
+.palette-section{
+  padding:8px 20px 6px;
+  font-size:11px;font-weight:600;letter-spacing:0.32px;
+  color:var(--ink-subtle);text-transform:uppercase;
+  background:var(--canvas);border-bottom:1px solid var(--surface-1);
+}
+.palette-section:not(:first-child){border-top:1px solid var(--surface-1)}
+.palette-item-label{flex:1;color:var(--ink);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.palette-item-meta{color:var(--ink-subtle);font-size:12px;white-space:nowrap;flex-shrink:0}
+.palette-empty{
+  padding:24px 20px;color:var(--ink-subtle);
+  font-size:13px;text-align:center;letter-spacing:0.16px;
+}
+.palette-footer{
+  display:flex;gap:16px;padding:10px 20px;
+  border-top:1px solid var(--hairline);
+  background:var(--surface-1);
+  font-size:11px;letter-spacing:0.32px;color:var(--ink-muted);
+}
+.palette-footer kbd{
+  background:var(--canvas);border:1px solid var(--hairline);
+  padding:1px 6px;font-family:inherit;font-size:11px;margin-right:4px;
+}
+
+/* ⌘K hint inside search */
+.search-hint{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  color:var(--ink-subtle);font-size:11px;letter-spacing:0.16px;
+  border:1px solid var(--hairline);
+  padding:2px 6px;background:var(--canvas);
+  pointer-events:none;font-family:inherit;
+}
+#searchInput:focus ~ .search-hint{display:none}
+.search-clear.visible ~ .search-hint{display:none}
+
 /* ── Responsive ──────────────────────────────────────────── */
-@media(max-width:1023px){
+@media(max-width:1055px){
   .stats-grid{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:767px){
-  .hero-inner h1{font-size:36px}
-  .hero-section::before,.hero-section::after{width:70px}
-  .container{padding:0 20px}
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
-  .card-header{flex-direction:column;align-items:flex-start;gap:8px}
-  .footer-slab h2{font-size:24px}
+  .hero-inner h1{font-size:42px}
+  .container{padding:0 16px}
+  .utility-strip{padding:0 16px}
+  .card-header{flex-direction:column;align-items:flex-start;gap:6px}
+  .footer-slab h2{font-size:32px}
+  .footer-slab{padding:48px 16px}
 }
 @media(max-width:479px){
-  .hero-section::before,.hero-section::after{display:none}
+  .hero-inner h1{font-size:32px;letter-spacing:0}
   .stats-grid{grid-template-columns:1fr 1fr}
-  .stat-number{font-size:32px}
+  .stat-number{font-size:36px}
 }
 </style>
 </head>
@@ -347,7 +533,7 @@ body{
         <span class="stat-label">회사 프로젝트</span>
       </div>
       <div class="stat-card">
-        <span class="stat-number home-color" data-stat="home">0</span>
+        <span class="stat-number" data-stat="home">0</span>
         <span class="stat-label">집 프로젝트</span>
       </div>
       <div class="stat-card">
@@ -358,54 +544,126 @@ body{
   </div>
 </section>
 
+<!-- Heatmap -->
+<section class="heatmap-section">
+  <div class="container">
+    <div class="heatmap-header">
+      <span class="heatmap-title">일별 활동 히트맵</span>
+      <div class="heatmap-legend">
+        <span>적음</span>
+        <span class="legend-cell" style="background:var(--surface-1);border:1px solid var(--hairline)"></span>
+        <span class="legend-cell" style="background:rgba(15,98,254,0.25)"></span>
+        <span class="legend-cell" style="background:rgba(15,98,254,0.5)"></span>
+        <span class="legend-cell" style="background:rgba(15,98,254,0.75)"></span>
+        <span class="legend-cell" style="background:var(--primary)"></span>
+        <span>많음</span>
+      </div>
+    </div>
+    <div class="heatmap-wrap"><div id="heatmap"></div></div>
+  </div>
+</section>
+
 <!-- Timeline -->
 <section class="timeline-section">
   <div class="container">
 
-    <!-- Group selector -->
-    <div class="group-row" role="group" aria-label="그룹 필터">
-      <span class="group-row-label">그룹</span>
-      <button class="group-tab active" data-group="all" aria-pressed="true">전체</button>
-      <button class="group-tab" data-group="work" aria-pressed="false">회사</button>
-      <button class="group-tab" data-group="home" aria-pressed="false">집</button>
+    <!-- Search -->
+    <div class="search-row">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="9" cy="9" r="6"/><path d="M15 15l3 3"/>
+        </svg>
+        <input id="searchInput" type="search" placeholder="프로젝트 이름, 설명, 태그 검색…" autocomplete="off" aria-label="프로젝트 검색">
+        <button class="search-clear" id="searchClear" aria-label="검색어 지우기">×</button>
+        <span class="search-hint">⌘K</span>
+      </div>
     </div>
 
-    <!-- Category filter -->
-    <div class="filter-row" role="group" aria-label="카테고리 필터">
-      <button class="filter-tab active" data-filter="all" aria-pressed="true">전체</button>
-      <button class="filter-tab" data-filter="ai" aria-pressed="false">
+    <!-- Group + Status content switchers -->
+    <div class="filter-controls">
+      <div class="switcher-group">
+        <span class="switcher-label">그룹</span>
+        <div class="switcher" role="group" aria-label="그룹 필터">
+          <button class="switcher-btn active" data-group="all" aria-pressed="true">전체</button>
+          <button class="switcher-btn" data-group="work" aria-pressed="false">회사</button>
+          <button class="switcher-btn" data-group="home" aria-pressed="false">집</button>
+        </div>
+      </div>
+      <div class="switcher-group">
+        <span class="switcher-label">상태</span>
+        <div class="switcher" role="group" aria-label="상태 필터">
+          <button class="switcher-btn active" data-status="all" aria-pressed="true">전체</button>
+          <button class="switcher-btn" data-status="done" aria-pressed="false">완료</button>
+          <button class="switcher-btn" data-status="wip" aria-pressed="false">진행중</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category tab strip -->
+    <div class="tabs-row" role="group" aria-label="카테고리 필터">
+      <button class="tab-btn active" data-filter="all" aria-pressed="true">전체</button>
+      <button class="tab-btn" data-filter="ai" aria-pressed="false">
         <span class="cat-dot" style="background:var(--cat-ai)"></span>AI / LLM
       </button>
-      <button class="filter-tab" data-filter="data" aria-pressed="false">
+      <button class="tab-btn" data-filter="data" aria-pressed="false">
         <span class="cat-dot" style="background:var(--cat-data)"></span>데이터 수집 / 분석
       </button>
-      <button class="filter-tab" data-filter="doc" aria-pressed="false">
+      <button class="tab-btn" data-filter="doc" aria-pressed="false">
         <span class="cat-dot" style="background:var(--cat-doc)"></span>문서 / 보고서
       </button>
-      <button class="filter-tab" data-filter="mcp" aria-pressed="false">
+      <button class="tab-btn" data-filter="mcp" aria-pressed="false">
         <span class="cat-dot" style="background:var(--cat-mcp)"></span>MCP 서버
       </button>
-      <button class="filter-tab" data-filter="util" aria-pressed="false">
+      <button class="tab-btn" data-filter="util" aria-pressed="false">
         <span class="cat-dot" style="background:var(--cat-util)"></span>교육 / 유틸
       </button>
-      <button class="filter-tab" data-filter="finance" aria-pressed="false">
+      <button class="tab-btn" data-filter="finance" aria-pressed="false">
         <span class="cat-dot" style="background:var(--cat-finance)"></span>재테크 / 투자
       </button>
     </div>
 
+    <!-- View toolbar -->
+    <div class="view-toolbar">
+      <div class="view-toggle" role="group" aria-label="뷰 전환">
+        <button class="view-btn active" data-view="timeline" aria-pressed="true">타임라인</button>
+        <button class="view-btn" data-view="network" aria-pressed="false">네트워크</button>
+      </div>
+      <button class="play-btn" id="playBtn" aria-label="타임라인 재생">▶ 재생</button>
+    </div>
+    <div class="play-progress" id="playProgress"><div class="play-progress-bar" id="playProgressBar"></div></div>
+
     <div class="timeline" id="timeline"></div>
+    <div class="network-view" id="networkView" hidden>
+      <svg id="networkSvg" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="network-info" id="networkInfo"></div>
+      <div class="network-legend" id="networkLegend"></div>
+    </div>
 
   </div>
 </section>
 
-<!-- Footer Ink Slab -->
+<!-- Footer -->
 <footer class="footer-slab">
   <h2>Built with Claude Code</h2>
-  <p>Anthropic Claude Sonnet 4.6 · Visual Design inspired by HP Design System</p>
+  <p>Anthropic Claude Sonnet 4.6 · Visual Design inspired by IBM Carbon Design System</p>
   <div class="footer-meta">© 2026 · takeused/dashboard1</div>
 </footer>
 
+<!-- Command Palette -->
+<div class="palette-overlay" id="paletteOverlay" hidden>
+  <div class="palette" role="dialog" aria-modal="true" aria-label="명령 팔레트">
+    <input class="palette-input" id="paletteInput" placeholder="명령 실행, 프로젝트 점프, 필터 전환…" autocomplete="off">
+    <div class="palette-results" id="paletteResults"></div>
+    <div class="palette-footer">
+      <span><kbd>↑↓</kbd>이동</span>
+      <span><kbd>Enter</kbd>실행</span>
+      <span><kbd>Esc</kbd>닫기</span>
+    </div>
+  </div>
+</div>
+
 <script>
+// 프로젝트 타임라인 데이터 및 필터·검색·차트·URL 동기화 로직
 const projects = [
 
   /* ── 회사 프로젝트 (기존) ─────────────────────────────── */
@@ -466,22 +724,78 @@ const projects = [
 
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-let currentGroup = 'all';
+let currentGroup  = 'all';
 let currentFilter = 'all';
+let currentStatus = 'all';
+let currentSearch = '';
+let currentView   = 'timeline';  // 'timeline' | 'network'
+let playState     = { timer:null, idx:0, cards:[] };
+let paletteActive = 0;
+let paletteItems  = [];
 
+/* ── URL 동기화 ─────────────────────────────────────────── */
+function syncURL(){
+  const p = new URLSearchParams();
+  if(currentGroup  !== 'all')      p.set('group',  currentGroup);
+  if(currentFilter !== 'all')      p.set('cat',    currentFilter);
+  if(currentStatus !== 'all')      p.set('status', currentStatus);
+  if(currentSearch)                p.set('q',      currentSearch);
+  if(currentView !== 'timeline')   p.set('view',   currentView);
+  const qs = p.toString();
+  history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+}
+
+function loadURL(){
+  const p = new URLSearchParams(location.search);
+  currentGroup  = p.get('group')  || 'all';
+  currentFilter = p.get('cat')    || 'all';
+  currentStatus = p.get('status') || 'all';
+  currentSearch = p.get('q')      || '';
+  currentView   = p.get('view')   || 'timeline';
+  document.querySelectorAll('.view-btn').forEach(b => {
+    const on = b.dataset.view === currentView;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+
+  document.querySelectorAll('.switcher-btn[data-group]').forEach(b => {
+    const on = b.dataset.group === currentGroup;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    const on = b.dataset.filter === currentFilter;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  document.querySelectorAll('.switcher-btn[data-status]').forEach(b => {
+    const on = b.dataset.status === currentStatus;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  const inp = document.getElementById('searchInput');
+  if(inp) inp.value = currentSearch;
+  updateClearBtn();
+}
+
+function updateClearBtn(){
+  document.getElementById('searchClear').classList.toggle('visible', currentSearch.length > 0);
+}
+
+/* ── 통계 ───────────────────────────────────────────────── */
 function getDashboardStats(items){
   const dates = items.map(p => new Date(p.date + 'T00:00:00'));
   const firstDate = new Date(Math.min(...dates));
-  const lastDate = new Date(Math.max(...dates));
+  const lastDate  = new Date(Math.max(...dates));
   const activeDays = Math.round((lastDate - firstDate) / 86400000) + 1;
   const fmt = d => `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
   return {
     total: items.length,
-    work: items.filter(p => p.group === 'work').length,
-    home: items.filter(p => p.group === 'home').length,
-    days: activeDays,
+    work:  items.filter(p => p.group === 'work').length,
+    home:  items.filter(p => p.group === 'home').length,
+    days:  activeDays,
     firstLabel: fmt(firstDate),
-    lastLabel: fmt(lastDate),
+    lastLabel:  fmt(lastDate),
   };
 }
 
@@ -490,90 +804,117 @@ function renderSummary(){
   document.getElementById('heroSummary').textContent =
     `회사 ${stats.work}개 · 집 ${stats.home}개 · 총 ${stats.total}개 프로젝트`;
   document.querySelector('[data-stat="total"]').textContent = stats.total;
-  document.querySelector('[data-stat="work"]').textContent = stats.work;
-  document.querySelector('[data-stat="home"]').textContent = stats.home;
-  document.querySelector('[data-stat="days"]').textContent = stats.days;
+  document.querySelector('[data-stat="work"]').textContent  = stats.work;
+  document.querySelector('[data-stat="home"]').textContent  = stats.home;
+  document.querySelector('[data-stat="days"]').textContent  = stats.days;
   document.getElementById('dateRange').textContent = `${stats.firstLabel} — ${stats.lastLabel}`;
 }
 
-const CAT_LABELS = {all:'전체',ai:'AI / LLM',data:'데이터 수집/분석',doc:'문서 / 보고서',mcp:'MCP 서버',util:'교육 / 유틸',finance:'재테크 / 투자'};
-const GROUP_LABELS = {all:'전체',work:'회사',home:'집'};
+/* ── 필터 적용 ──────────────────────────────────────────── */
+const CAT_LABELS    = {all:'전체',ai:'AI / LLM',data:'데이터 수집/분석',doc:'문서 / 보고서',mcp:'MCP 서버',util:'교육 / 유틸',finance:'재테크 / 투자'};
+const GROUP_LABELS  = {all:'전체',work:'회사',home:'집'};
+const STATUS_LABELS = {all:'전체',done:'완료',wip:'진행중'};
 
-function render(groupFilter, catFilter){
-  const tl = document.getElementById('timeline');
-  tl.innerHTML = '';
-  tl.dataset.group = groupFilter;
-
-  const filtered = projects.filter(p => {
-    if(groupFilter !== 'all' && p.group !== groupFilter) return false;
-    if(catFilter !== 'all' && p.cat !== catFilter) return false;
+function applyFilters(){
+  const q = currentSearch.trim().toLowerCase();
+  return projects.filter(p => {
+    if(currentGroup  !== 'all' && p.group  !== currentGroup)  return false;
+    if(currentFilter !== 'all' && p.cat    !== currentFilter) return false;
+    if(currentStatus !== 'all' && p.status !== currentStatus) return false;
+    if(q){
+      const hay = [p.name, p.desc, ...p.tags].join(' ').toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
     return true;
   });
+}
 
-  // 5번: 필터 결과를 Stats Band에 반영
+/* ── 메인 render dispatcher ─────────────────────────────── */
+function render(){
+  const filtered = applyFilters();
+
   document.querySelector('[data-stat="total"]').textContent = filtered.length;
-  document.querySelector('[data-stat="work"]').textContent = filtered.filter(p => p.group === 'work').length;
-  document.querySelector('[data-stat="home"]').textContent = filtered.filter(p => p.group === 'home').length;
+  document.querySelector('[data-stat="work"]').textContent  = filtered.filter(p => p.group === 'work').length;
+  document.querySelector('[data-stat="home"]').textContent  = filtered.filter(p => p.group === 'home').length;
+
+  syncURL();
+  renderHeatmap(filtered);
+
+  const tl  = document.getElementById('timeline');
+  const nv  = document.getElementById('networkView');
+  const pb  = document.getElementById('playBtn');
+
+  if(currentView === 'network'){
+    tl.hidden = true;
+    nv.hidden = false;
+    pb.hidden = true;
+    renderNetwork(filtered);
+  } else {
+    tl.hidden = false;
+    nv.hidden = true;
+    pb.hidden = false;
+    renderTimeline(filtered);
+  }
+}
+
+/* ── 타임라인 렌더 ──────────────────────────────────────── */
+function renderTimeline(filtered){
+  const tl = document.getElementById('timeline');
+  tl.innerHTML = '';
+  tl.classList.remove('play-mode');
+
+  if(filtered.length === 0){
+    const qPart = currentSearch ? ` · 검색: "<strong>${esc(currentSearch)}</strong>"` : '';
+    tl.innerHTML = `<p style="color:var(--ink-muted);padding:32px 0;font-size:14px;letter-spacing:0.16px">
+      <strong>${GROUP_LABELS[currentGroup]}</strong> 그룹 ·
+      <strong>${CAT_LABELS[currentFilter]}</strong> 카테고리 ·
+      <strong>${STATUS_LABELS[currentStatus]}</strong>${qPart}에 해당하는 프로젝트가 없습니다.
+    </p>`;
+    return;
+  }
 
   const grouped = {};
   filtered.forEach(p => {
     if(!grouped[p.date]) grouped[p.date] = [];
     grouped[p.date].push(p);
   });
-  const dates = Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a));
-  if(dates.length === 0){
-    // 6번: 현재 필터 상태를 메시지에 표시
-    const gLabel = GROUP_LABELS[groupFilter] || groupFilter;
-    const cLabel = CAT_LABELS[catFilter] || catFilter;
-    tl.innerHTML = `<p style="color:var(--graphite);padding:32px 0">
-      <strong>${gLabel}</strong> 그룹 · <strong>${cLabel}</strong> 카테고리에 해당하는 프로젝트가 없습니다.
-    </p>`;
-    return;
-  }
-  dates.forEach(d => {
-    const g = document.createElement('div');
+
+  Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a)).forEach(d => {
+    const g  = document.createElement('div');
     g.className = 'date-group';
     const dt = new Date(d + 'T00:00:00');
-    const label = `${dt.getFullYear()}.${String(dt.getMonth()+1).padStart(2,'0')}.${String(dt.getDate()).padStart(2,'0')}`;
-    g.innerHTML = `<div class="date-label">${label}</div>`;
+    const lbl = `${dt.getFullYear()}.${String(dt.getMonth()+1).padStart(2,'0')}.${String(dt.getDate()).padStart(2,'0')}`;
+    g.innerHTML = `<div class="date-label">${lbl}</div>`;
+
     grouped[d].forEach(p => {
       const c = document.createElement('div');
       c.className = 'card' + (p.url ? ' has-url' : '');
-      c.dataset.cat = p.cat;
+      c.dataset.cat   = p.cat;
       c.dataset.group = p.group;
+      c.dataset.name  = p.name;
+
       const urlBtn = p.url
-        ? `<a class="open-btn" href="${esc(p.url)}" target="_blank" rel="noopener"
-            onclick="event.stopPropagation()">
-            ↗ 결과 열기
-            <span class="url-hint">${esc(p.url)}</span>
-          </a>`
+        ? `<a class="open-btn" href="${esc(p.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+            ↗ 결과 열기 <span class="url-hint">${esc(p.url)}</span></a>`
         : '';
-      const groupLabel = p.group === 'work' ? '회사' : '집';
+
       c.innerHTML = `
         <div class="card-header">
           <span class="card-title">${esc(p.name)}</span>
           <div class="card-badges">
-            <span class="group-indicator ${esc(p.group)}">${groupLabel}</span>
+            <span class="group-indicator ${esc(p.group)}">${p.group === 'work' ? '회사' : '집'}</span>
             <span class="badge ${esc(p.status)}">${p.status === 'done' ? '완료' : '진행중'}</span>
           </div>
         </div>
         <div class="card-desc">${esc(p.desc)}</div>
         <div class="tags">${p.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
-        ${urlBtn}
-      `;
+        ${urlBtn}`;
+
       if(p.url){
         c.setAttribute('tabindex', '0');
         c.setAttribute('aria-label', esc(p.name) + ' — 결과 열기');
-        c.addEventListener('click', e => {
-          if(e.target.closest('.open-btn')) return;
-          window.open(p.url, '_blank', 'noopener');
-        });
-        c.addEventListener('keydown', e => {
-          if(e.key === 'Enter' || e.key === ' '){
-            e.preventDefault();
-            window.open(p.url, '_blank', 'noopener');
-          }
-        });
+        c.addEventListener('click', e => { if(!e.target.closest('.open-btn')) window.open(p.url,'_blank','noopener'); });
+        c.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); window.open(p.url,'_blank','noopener'); }});
       }
       g.appendChild(c);
     });
@@ -581,34 +922,573 @@ function render(groupFilter, catFilter){
   });
 }
 
-document.querySelectorAll('.group-tab').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.group-tab').forEach(b => {
-      b.classList.remove('active');
-      b.setAttribute('aria-pressed', 'false');
+/* ── 히트맵 렌더 ────────────────────────────────────────── */
+function renderHeatmap(filtered){
+  const dayMap = {};
+  filtered.forEach(p => { dayMap[p.date] = (dayMap[p.date]||0)+1; });
+
+  const allDates = projects.map(p => new Date(p.date+'T00:00:00'));
+  const minDate = new Date(Math.min(...allDates));
+  const maxDate = new Date(Math.max(...allDates));
+  const start = new Date(minDate);
+  start.setDate(start.getDate() - start.getDay()); // 일요일 정렬
+
+  const CELL = 13, GAP = 3, LEFT = 32, TOP = 22;
+  const weeks = Math.ceil((maxDate - start) / (7*86400000)) + 1;
+  const W = LEFT + weeks * (CELL+GAP) + 4;
+  const H = TOP + 7 * (CELL+GAP) + 4;
+
+  const intensity = c => {
+    if(!c)        return { fill:'var(--surface-1)', stroke:'#e0e0e0' };
+    if(c === 1)   return { fill:'rgba(15,98,254,0.28)', stroke:'rgba(15,98,254,0.35)' };
+    if(c === 2)   return { fill:'rgba(15,98,254,0.5)',  stroke:'rgba(15,98,254,0.55)' };
+    if(c <= 4)    return { fill:'rgba(15,98,254,0.78)', stroke:'rgba(15,98,254,0.8)'  };
+    return            { fill:'var(--primary)', stroke:'var(--primary)' };
+  };
+
+  let cells = '', monthLabels = '', dayLabels = '';
+
+  // 요일 라벨
+  ['','월','','수','','금',''].forEach((d, i) => {
+    if(!d) return;
+    dayLabels += `<text x="0" y="${TOP + i*(CELL+GAP) + CELL - 2}" `
+              + `font-size="10" fill="#8c8c8c" font-family="IBM Plex Sans,sans-serif" letter-spacing="0.32">${d}</text>`;
+  });
+
+  // 셀 + 월 라벨
+  let lastMonth = -1;
+  for(let w=0; w<weeks; w++){
+    let monthInWeek = -1;
+    for(let d=0; d<7; d++){
+      const dt = new Date(start);
+      dt.setDate(dt.getDate() + w*7 + d);
+      if(dt < minDate || dt > maxDate) continue;
+      const ymd = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+      const count = dayMap[ymd] || 0;
+      const x = LEFT + w*(CELL+GAP);
+      const y = TOP + d*(CELL+GAP);
+      const { fill, stroke } = intensity(count);
+      cells += `<rect x="${x}" y="${y}" width="${CELL}" height="${CELL}" `
+            + `fill="${fill}" stroke="${stroke}" stroke-width="0.5">`
+            + `<title>${ymd} · ${count}개</title></rect>`;
+      if(monthInWeek === -1) monthInWeek = dt.getMonth();
+    }
+    // 월 라벨 — 주의 첫 유효 셀의 월이 직전 라벨과 다를 때
+    if(monthInWeek !== -1 && monthInWeek !== lastMonth){
+      lastMonth = monthInWeek;
+      const x = LEFT + w*(CELL+GAP);
+      monthLabels += `<text x="${x}" y="${TOP - 7}" font-size="10" fill="#8c8c8c" `
+                  + `font-family="IBM Plex Sans,sans-serif" letter-spacing="0.32">${String(monthInWeek+1).padStart(2,'0')}월</text>`;
+    }
+  }
+
+  const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" `
+            + `style="width:${W}px;height:${H}px;display:block">`
+            + monthLabels + dayLabels + cells + `</svg>`;
+  document.getElementById('heatmap').innerHTML = svg;
+}
+
+/* ── 네트워크 렌더 (force-directed) ─────────────────────── */
+const CAT_COLORS = {
+  ai:'#7c3aed', data:'#0369a1', doc:'#15803d',
+  mcp:'#b45309', util:'#525252', finance:'#0d9488'
+};
+
+function renderNetwork(filtered){
+  const svgEl  = document.getElementById('networkSvg');
+  const info   = document.getElementById('networkInfo');
+  const legend = document.getElementById('networkLegend');
+
+  info.classList.remove('visible');
+
+  const W = 1100, H = 600;
+  svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+
+  if(filtered.length === 0){
+    svgEl.innerHTML = `<foreignObject x="0" y="0" width="${W}" height="${H}">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="network-empty">표시할 프로젝트가 없습니다.</div>
+    </foreignObject>`;
+    legend.innerHTML = '';
+    return;
+  }
+
+  // 노드와 엣지 구성: 태그 ≥2개 공유 시 연결
+  // 초기 배치는 동심원 분산 — 시뮬레이션 안정성 향상
+  const nodes = filtered.map((p,i) => {
+    const a = (i / filtered.length) * Math.PI * 2;
+    const r = 180 + (i % 3) * 50;
+    return { id:i, p, x: W/2 + Math.cos(a) * r, y: H/2 + Math.sin(a) * r, vx:0, vy:0 };
+  });
+  const links = [];
+  for(let a=0; a<nodes.length; a++){
+    for(let b=a+1; b<nodes.length; b++){
+      const ta = new Set(nodes[a].p.tags);
+      const shared = nodes[b].p.tags.filter(t => ta.has(t)).length;
+      if(shared >= 2) links.push({ source:a, target:b, w:shared });
+    }
+  }
+
+  // Force simulation (200 iter)
+  const REPEL = 1800, SPRING_K = 0.025, SPRING_LEN = 90, CENTER = 0.006, DAMP = 0.82;
+  for(let it=0; it<240; it++){
+    // 반발력
+    for(let a=0; a<nodes.length; a++){
+      for(let b=a+1; b<nodes.length; b++){
+        const na = nodes[a], nb = nodes[b];
+        const dx = nb.x - na.x, dy = nb.y - na.y;
+        const d2 = dx*dx + dy*dy + 1;
+        const d = Math.sqrt(d2);
+        const f = REPEL / d2;
+        na.vx -= (dx/d) * f;
+        na.vy -= (dy/d) * f;
+        nb.vx += (dx/d) * f;
+        nb.vy += (dy/d) * f;
+      }
+    }
+    // 스프링 (엣지)
+    links.forEach(l => {
+      const a = nodes[l.source], b = nodes[l.target];
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const d = Math.sqrt(dx*dx + dy*dy) + 0.1;
+      const f = (d - SPRING_LEN) * SPRING_K;
+      a.vx += (dx/d) * f;
+      a.vy += (dy/d) * f;
+      b.vx -= (dx/d) * f;
+      b.vy -= (dy/d) * f;
     });
-    btn.classList.add('active');
-    btn.setAttribute('aria-pressed', 'true');
+    // 중심 끌림 + damping + 위치 업데이트
+    nodes.forEach(n => {
+      n.vx += (W/2 - n.x) * CENTER;
+      n.vy += (H/2 - n.y) * CENTER;
+      n.vx *= DAMP;
+      n.vy *= DAMP;
+      n.x += n.vx;
+      n.y += n.vy;
+      // 경계 clamp
+      n.x = Math.max(30, Math.min(W-30, n.x));
+      n.y = Math.max(30, Math.min(H-50, n.y));
+    });
+  }
+
+  // SVG 렌더 — 엣지 → 라벨 → 노드 순 (노드가 항상 최상위)
+  let edgeSvg = '', nodeSvg = '', labelSvg = '';
+  links.forEach((l, idx) => {
+    const a = nodes[l.source], b = nodes[l.target];
+    const op = Math.min(0.18 + l.w*0.12, 0.55);
+    edgeSvg += `<line class="network-edge" data-link="${idx}" data-a="${l.source}" data-b="${l.target}" `
+         + `x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" `
+         + `stroke="#8c8c8c" stroke-opacity="${op}" stroke-width="${Math.min(l.w*0.7, 3)}"/>`;
+  });
+  nodes.forEach(n => {
+    const c = CAT_COLORS[n.p.cat] || '#525252';
+    const sz = 14;
+    nodeSvg += `<rect class="network-node" data-id="${n.id}" `
+         + `x="${(n.x-sz/2).toFixed(1)}" y="${(n.y-sz/2).toFixed(1)}" width="${sz}" height="${sz}" `
+         + `fill="${c}" stroke="#161616" stroke-width="0.5">`
+         + `<title>${esc(n.p.name)}</title></rect>`;
+    const lbl = n.p.name.length > 14 ? n.p.name.slice(0,13)+'…' : n.p.name;
+    labelSvg += `<text class="network-label" data-id="${n.id}" `
+         + `x="${n.x.toFixed(1)}" y="${(n.y + sz + 2).toFixed(1)}" text-anchor="middle">${esc(lbl)}</text>`;
+  });
+
+  svgEl.innerHTML =
+    `<g class="edges">${edgeSvg}</g>` +
+    `<g class="labels">${labelSvg}</g>` +
+    `<g class="nodes">${nodeSvg}</g>`;
+
+  // 레전드
+  const legendItems = [
+    ['ai','AI / LLM'],['data','데이터'],['doc','문서'],
+    ['mcp','MCP'],['util','유틸'],['finance','재테크']
+  ];
+  legend.innerHTML = legendItems.map(([k,v]) =>
+    `<span class="network-legend-item"><span class="network-legend-swatch" style="background:${CAT_COLORS[k]}"></span>${v}</span>`
+  ).join('') + `<span class="network-legend-item" style="margin-left:auto">노드 ${nodes.length} · 연결 ${links.length}</span>`;
+
+  function clearHighlight(){
+    svgEl.querySelectorAll('.network-node, .network-edge, .network-label').forEach(n => {
+      n.classList.remove('dim','highlight','active');
+    });
+    info.classList.remove('visible');
+  }
+
+  function focusNode(id){
+    const neighbors = new Set();
+    links.forEach(l => {
+      if(l.source === id) neighbors.add(l.target);
+      if(l.target === id) neighbors.add(l.source);
+    });
+    svgEl.querySelectorAll('.network-node').forEach(n => {
+      const nid = +n.dataset.id;
+      n.classList.toggle('active', nid === id);
+      n.classList.toggle('dim',    nid !== id && !neighbors.has(nid));
+    });
+    svgEl.querySelectorAll('.network-label').forEach(n => {
+      const nid = +n.dataset.id;
+      n.classList.toggle('active', nid === id || neighbors.has(nid));
+      n.classList.toggle('dim',    nid !== id && !neighbors.has(nid));
+    });
+    svgEl.querySelectorAll('.network-edge').forEach(ln => {
+      const isHi = +ln.dataset.a === id || +ln.dataset.b === id;
+      ln.classList.toggle('highlight', isHi);
+      ln.classList.toggle('dim', !isHi);
+    });
+    const p = nodes[id].p;
+    info.innerHTML = `<button class="network-info-close" aria-label="닫기">×</button>
+      <div class="network-info-title">${esc(p.name)}</div>
+      <div class="network-info-meta">${p.date} · ${GROUP_LABELS[p.group]} · ${CAT_LABELS[p.cat]} · ${p.status === 'done' ? '완료' : '진행중'}</div>
+      <div class="network-info-meta">${esc(p.desc)}</div>
+      <div class="network-info-tags">${p.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
+      <div class="network-info-meta" style="margin-top:8px">연결된 프로젝트: <strong>${neighbors.size}개</strong></div>`;
+    info.classList.add('visible');
+    info.querySelector('.network-info-close').addEventListener('click', clearHighlight);
+  }
+
+  // 노드 클릭 → 포커스
+  svgEl.querySelectorAll('.network-node').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      focusNode(+el.dataset.id);
+    });
+  });
+  // 배경 클릭 → 해제
+  svgEl.addEventListener('click', clearHighlight);
+}
+
+/* ── 뷰 토글 + 재생 모드 ────────────────────────────────── */
+function setView(v){
+  currentView = v;
+  document.querySelectorAll('.view-btn').forEach(b => {
+    const on = b.dataset.view === v;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  if(playState.timer) stopPlay();
+  render();
+}
+
+function playTimeline(){
+  if(playState.timer || playState.idx > 0){ stopPlay(); return; }
+  if(currentView !== 'timeline') setView('timeline');
+  const tl = document.getElementById('timeline');
+  const cards = Array.from(tl.querySelectorAll('.card')).reverse();  // 오래된 것부터
+  if(cards.length === 0) return;
+  tl.classList.add('play-mode');
+  document.getElementById('playProgress').classList.add('visible');
+  const btn = document.getElementById('playBtn');
+  btn.classList.add('playing');
+  btn.textContent = '⏸ 정지';
+  playState = { timer:null, idx:0, cards };
+  playStep();
+}
+
+function playStep(){
+  if(playState.idx >= playState.cards.length){ finishPlay(); return; }
+  const c = playState.cards[playState.idx];
+  c.classList.add('revealed');
+  c.scrollIntoView({behavior:'smooth', block:'center'});
+  const bar = document.getElementById('playProgressBar');
+  if(bar) bar.style.width = ((playState.idx+1)/playState.cards.length*100) + '%';
+  playState.idx++;
+  playState.timer = setTimeout(playStep, 420);
+}
+
+function stopPlay(){
+  if(playState.timer) clearTimeout(playState.timer);
+  playState.cards.forEach(c => c.classList.remove('revealed'));
+  document.getElementById('timeline').classList.remove('play-mode');
+  document.getElementById('playProgress').classList.remove('visible');
+  const bar = document.getElementById('playProgressBar');
+  if(bar) bar.style.width = '0';
+  const btn = document.getElementById('playBtn');
+  btn.classList.remove('playing');
+  btn.textContent = '▶ 재생';
+  playState = { timer:null, idx:0, cards:[] };
+}
+
+function finishPlay(){
+  const btn = document.getElementById('playBtn');
+  btn.classList.remove('playing');
+  btn.textContent = '▶ 재생';
+  document.getElementById('playProgress').classList.remove('visible');
+  setTimeout(() => {
+    const bar = document.getElementById('playProgressBar');
+    if(bar) bar.style.width = '0';
+  }, 600);
+  playState = { timer:null, idx:0, cards:[] };
+}
+
+/* ── 커맨드 팔레트 ──────────────────────────────────────── */
+const ICONS = {
+  view:    `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10"/><line x1="2" y1="7" x2="14" y2="7"/></svg>`,
+  play:    `<svg viewBox="0 0 16 16" fill="currentColor"><polygon points="4,3 13,8 4,13"/></svg>`,
+  reset:   `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8a5 5 0 1 0 1.5-3.5"/><polyline points="3,3 3,5 5,5"/></svg>`,
+  group:   `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5" cy="6" r="2.2"/><circle cx="11" cy="6" r="2.2"/><path d="M2 13c.5-2 2-3 3-3M14 13c-.5-2-2-3-3-3"/></svg>`,
+  cat:     `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="2.5" width="5" height="5"/><rect x="8.5" y="2.5" width="5" height="5"/><rect x="2.5" y="8.5" width="5" height="5"/><rect x="8.5" y="8.5" width="5" height="5"/></svg>`,
+  status:  `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5"/><polyline points="5.5,8 7.5,10 10.5,6"/></svg>`,
+  project: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l2-2h4l1 2h5v8H2z"/></svg>`,
+  search:  `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M11 11l3 3"/></svg>`,
+};
+
+function buildPaletteAll(){
+  const items = [];
+  items.push({icon:ICONS.view,   section:'view',   cmd:true, label:'타임라인 보기',  meta:'View',   fn:()=>setView('timeline')});
+  items.push({icon:ICONS.view,   section:'view',   cmd:true, label:'네트워크 보기',  meta:'View',   fn:()=>setView('network')});
+  items.push({icon:ICONS.play,   section:'action', cmd:true, label:'타임라인 재생',  meta:'Action', fn:()=>{ closePalette(); playTimeline(); }});
+  items.push({icon:ICONS.reset,  section:'action', cmd:true, label:'필터 초기화',    meta:'Action', fn:resetFilters});
+  Object.entries(GROUP_LABELS).forEach(([k,v])  => items.push({icon:ICONS.group,  section:'filter', cmd:true, label:`그룹: ${v}`,     meta:'Filter', fn:()=>setGroup(k)}));
+  Object.entries(CAT_LABELS).forEach(([k,v])    => items.push({icon:ICONS.cat,    section:'filter', cmd:true, label:`카테고리: ${v}`, meta:'Filter', fn:()=>setCat(k)}));
+  Object.entries(STATUS_LABELS).forEach(([k,v]) => items.push({icon:ICONS.status, section:'filter', cmd:true, label:`상태: ${v}`,     meta:'Filter', fn:()=>setStatus(k)}));
+  projects.forEach(p => items.push({
+    icon:ICONS.project, section:'project', proj:true, label:p.name,
+    meta:`${p.date} · ${GROUP_LABELS[p.group]} · ${CAT_LABELS[p.cat]}`,
+    haystack:`${p.name} ${p.desc} ${p.tags.join(' ')}`,
+    fn:()=>jumpToProject(p)
+  }));
+  return items;
+}
+
+const SECTION_LABELS = { view:'View', action:'Action', filter:'Filter', project:'Project' };
+
+function scoreMatch(item, q){
+  if(!q) return 0;
+  const label = item.label.toLowerCase();
+  const hay = (item.haystack || (item.label + ' ' + (item.meta||''))).toLowerCase();
+  if(label.startsWith(q)) return 3;
+  if(label.includes(' ' + q) || label.includes(': ' + q)) return 2;
+  if(hay.includes(q)) return 1;
+  return 0;
+}
+
+function setGroup(g){
+  currentGroup = g;
+  syncUIFromState();
+  render();
+}
+function setCat(c){
+  currentFilter = c;
+  syncUIFromState();
+  render();
+}
+function setStatus(s){
+  currentStatus = s;
+  syncUIFromState();
+  render();
+}
+function resetFilters(){
+  currentGroup='all'; currentFilter='all'; currentStatus='all'; currentSearch='';
+  document.getElementById('searchInput').value = '';
+  updateClearBtn();
+  syncUIFromState();
+  render();
+}
+
+function jumpToProject(p){
+  currentGroup = 'all'; currentFilter = 'all'; currentStatus = 'all'; currentSearch = '';
+  document.getElementById('searchInput').value = '';
+  updateClearBtn();
+  if(currentView !== 'timeline') setView('timeline');
+  else { syncUIFromState(); render(); }
+  setTimeout(() => {
+    const target = Array.from(document.querySelectorAll('.card')).find(c => c.dataset.name === p.name);
+    if(!target) return;
+    target.scrollIntoView({behavior:'smooth', block:'center'});
+    target.style.outline = '2px solid var(--primary)';
+    target.style.outlineOffset = '-2px';
+    setTimeout(() => { target.style.outline = ''; target.style.outlineOffset = ''; }, 2400);
+  }, 100);
+}
+
+function syncUIFromState(){
+  document.querySelectorAll('.switcher-btn[data-group]').forEach(b => {
+    const on = b.dataset.group === currentGroup;
+    b.classList.toggle('active', on); b.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    const on = b.dataset.filter === currentFilter;
+    b.classList.toggle('active', on); b.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+  document.querySelectorAll('.switcher-btn[data-status]').forEach(b => {
+    const on = b.dataset.status === currentStatus;
+    b.classList.toggle('active', on); b.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+}
+
+function openPalette(){
+  const overlay = document.getElementById('paletteOverlay');
+  overlay.hidden = false;
+  overlay.classList.add('visible');
+  document.body.classList.add('palette-open');
+  const input = document.getElementById('paletteInput');
+  input.value = '';
+  paletteActive = 0;
+  renderPalette('');
+  setTimeout(() => input.focus(), 10);
+}
+
+function closePalette(){
+  const overlay = document.getElementById('paletteOverlay');
+  overlay.classList.remove('visible');
+  overlay.hidden = true;
+  document.body.classList.remove('palette-open');
+}
+
+function renderPalette(q){
+  const all = buildPaletteAll();
+  const ql = q.trim().toLowerCase();
+
+  if(ql){
+    paletteItems = all
+      .map(it => ({ it, s: scoreMatch(it, ql) }))
+      .filter(x => x.s > 0)
+      .sort((a, b) => b.s - a.s)
+      .slice(0, 60)
+      .map(x => x.it);
+  } else {
+    // 기본: 명령부터, 프로젝트는 최근 8개만
+    paletteItems = all.filter(it => it.section !== 'project')
+      .concat(all.filter(it => it.section === 'project').slice(0, 8));
+  }
+
+  if(paletteActive >= paletteItems.length) paletteActive = 0;
+  const box = document.getElementById('paletteResults');
+
+  if(paletteItems.length === 0){
+    box.innerHTML =
+      `<div class="palette-empty">"<strong>${esc(q)}</strong>"에 일치하는 항목이 없습니다.<br>` +
+      `<span style="font-size:11px;letter-spacing:0.32px;color:var(--ink-subtle)">다른 키워드를 시도해 보세요</span></div>`;
+    return;
+  }
+
+  // 섹션별 그룹화 (검색 시 결과는 점수순이지만 그래도 시각적 구분을 위해 섹션 헤더 유지)
+  let html = '';
+  let lastSection = null;
+  paletteItems.forEach((it, i) => {
+    if(it.section !== lastSection){
+      html += `<div class="palette-section">${SECTION_LABELS[it.section] || it.section}</div>`;
+      lastSection = it.section;
+    }
+    const iconCls = it.cmd ? 'cmd' : (it.proj ? 'proj' : '');
+    html += `<div class="palette-item ${i===paletteActive?'active':''}" data-idx="${i}">
+      <span class="palette-item-icon ${iconCls}">${it.icon}</span>
+      <span class="palette-item-label">${esc(it.label)}</span>
+      <span class="palette-item-meta">${esc(it.meta||'')}</span>
+    </div>`;
+  });
+  box.innerHTML = html;
+
+  box.querySelectorAll('.palette-item').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      paletteActive = +el.dataset.idx;
+      box.querySelectorAll('.palette-item').forEach(n => n.classList.toggle('active', n === el));
+    });
+    el.addEventListener('click', () => {
+      paletteActive = +el.dataset.idx;
+      executePaletteActive();
+    });
+  });
+  const activeEl = box.querySelector('.palette-item.active');
+  if(activeEl) activeEl.scrollIntoView({block:'nearest'});
+}
+
+function executePaletteActive(){
+  const it = paletteItems[paletteActive];
+  if(!it) return;
+  closePalette();
+  it.fn();
+}
+
+/* ── 이벤트 리스너 ──────────────────────────────────────── */
+document.querySelectorAll('.switcher-btn[data-group]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.switcher-btn[data-group]').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+    btn.classList.add('active'); btn.setAttribute('aria-pressed','true');
     currentGroup = btn.dataset.group;
-    render(currentGroup, currentFilter);
+    render();
   });
 });
 
-document.querySelectorAll('.filter-tab').forEach(btn => {
+document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-tab').forEach(b => {
-      b.classList.remove('active');
-      b.setAttribute('aria-pressed', 'false');
-    });
-    btn.classList.add('active');
-    btn.setAttribute('aria-pressed', 'true');
+    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+    btn.classList.add('active'); btn.setAttribute('aria-pressed','true');
     currentFilter = btn.dataset.filter;
-    render(currentGroup, currentFilter);
+    render();
   });
 });
 
+document.querySelectorAll('.switcher-btn[data-status]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.switcher-btn[data-status]').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+    btn.classList.add('active'); btn.setAttribute('aria-pressed','true');
+    currentStatus = btn.dataset.status;
+    render();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  currentSearch = e.target.value;
+  updateClearBtn();
+  render();
+});
+
+document.getElementById('searchClear').addEventListener('click', () => {
+  currentSearch = '';
+  document.getElementById('searchInput').value = '';
+  updateClearBtn();
+  render();
+});
+
+/* ── 뷰 토글 + 재생 ─────────────────────────────────────── */
+document.querySelectorAll('.view-btn').forEach(btn => {
+  btn.addEventListener('click', () => setView(btn.dataset.view));
+});
+document.getElementById('playBtn').addEventListener('click', playTimeline);
+
+/* ── 커맨드 팔레트 키 핸들러 ────────────────────────────── */
+document.addEventListener('keydown', e => {
+  // ⌘K / Ctrl+K → 열기
+  if((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k'){
+    e.preventDefault();
+    const overlay = document.getElementById('paletteOverlay');
+    if(overlay.classList.contains('visible')) closePalette();
+    else openPalette();
+    return;
+  }
+  // 팔레트가 열려 있을 때만 처리
+  const overlay = document.getElementById('paletteOverlay');
+  if(!overlay.classList.contains('visible')) return;
+  if(e.key === 'Escape'){ e.preventDefault(); closePalette(); }
+  else if(e.key === 'ArrowDown'){
+    e.preventDefault();
+    paletteActive = Math.min(paletteActive+1, paletteItems.length-1);
+    renderPalette(document.getElementById('paletteInput').value);
+  }
+  else if(e.key === 'ArrowUp'){
+    e.preventDefault();
+    paletteActive = Math.max(paletteActive-1, 0);
+    renderPalette(document.getElementById('paletteInput').value);
+  }
+  else if(e.key === 'Enter'){
+    e.preventDefault();
+    executePaletteActive();
+  }
+});
+
+document.getElementById('paletteInput').addEventListener('input', e => {
+  paletteActive = 0;
+  renderPalette(e.target.value);
+});
+
+document.getElementById('paletteOverlay').addEventListener('click', e => {
+  if(e.target === e.currentTarget) closePalette();
+});
+
+/* ── 초기화 ─────────────────────────────────────────────── */
+loadURL();
 renderSummary();
-render('all', 'all');
+render();
 </script>
 </body>
 </html>
