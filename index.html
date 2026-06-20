@@ -330,26 +330,6 @@ a:focus-visible,
 .view-btn:last-child{border-right:none}
 .view-btn:hover{background:var(--surface-2);color:var(--ink)}
 .view-btn.active{background:var(--ink);color:var(--inverse-ink)}
-.play-btn{
-  background:var(--canvas);
-  border:1px solid var(--primary);color:var(--primary);
-  padding:9px 16px;display:inline-flex;align-items:center;gap:8px;
-  font-family:inherit;font-size:14px;font-weight:400;letter-spacing:0.16px;
-  cursor:pointer;white-space:nowrap;transition:all .1s;
-}
-.play-btn:hover,.play-btn.playing{background:var(--primary);color:var(--on-primary)}
-.play-progress{
-  height:2px;background:var(--surface-2);margin-bottom:16px;display:none;
-}
-.play-progress.visible{display:block}
-.play-progress-bar{
-  height:100%;background:var(--primary);width:0;transition:width .25s linear;
-}
-.timeline.play-mode .card{opacity:0}
-.timeline.play-mode .card.revealed{
-  opacity:1;animation:revealUp .35s ease-out;
-}
-@keyframes revealUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── Compact density ─────────────────────────────────────── */
 .timeline.compact .date-group{margin-bottom:12px}
@@ -645,9 +625,7 @@ a:focus-visible,
           <button class="view-btn" data-density="compact" aria-pressed="false">조밀</button>
         </div>
       </div>
-      <button class="play-btn" id="playBtn" aria-label="타임라인 재생">▶ 재생</button>
     </div>
-    <div class="play-progress" id="playProgress"><div class="play-progress-bar" id="playProgressBar"></div></div>
 
     <div class="timeline" id="timeline"></div>
     <div class="network-view" id="networkView" hidden>
@@ -762,9 +740,9 @@ let currentStatus = 'all';
 let currentSearch = '';
 let currentView   = 'timeline';  // 'timeline' | 'network'
 let currentDensity= 'comfortable';  // 'comfortable' | 'compact'
-let playState     = { timer:null, idx:0, cards:[] };
 let paletteActive = 0;
 let paletteItems  = [];
+let net           = null;  // 네트워크 뷰 팬/줌/드래그 공유 상태
 
 /* ── URL 동기화 ─────────────────────────────────────────── */
 function syncURL(){
@@ -882,19 +860,16 @@ function render(){
 
   const tl  = document.getElementById('timeline');
   const nv  = document.getElementById('networkView');
-  const pb  = document.getElementById('playBtn');
   const dt  = document.getElementById('densityToggle');
 
   if(currentView === 'network'){
     tl.hidden = true;
     nv.hidden = false;
-    pb.hidden = true;
     dt.hidden = true;
     renderNetwork(filtered);
   } else {
     tl.hidden = false;
     nv.hidden = true;
-    pb.hidden = false;
     dt.hidden = false;
     renderTimeline(filtered);
   }
@@ -904,7 +879,6 @@ function render(){
 function renderTimeline(filtered){
   const tl = document.getElementById('timeline');
   tl.innerHTML = '';
-  tl.classList.remove('play-mode');
   tl.classList.toggle('compact', currentDensity === 'compact');
 
   if(filtered.length === 0){
@@ -1189,18 +1163,27 @@ function renderNetwork(filtered){
     info.querySelector('.network-info-close').addEventListener('click', clearHighlight);
   }
 
-  // 노드 클릭 → 포커스
+  // 팬/줌/드래그 공유 상태 (window·svgEl 리스너는 init에서 1회 등록)
+  net = {
+    svgEl, nodes, W, H,
+    vb:{ x:0, y:0, w:W, h:H },
+    dragId:-1, dragRect:null, dragLabel:null, dragEdges:[],
+    moved:false, panning:false, panStart:null,
+  };
+
+  // 노드 클릭 → 포커스 (드래그 직후 클릭은 무시)
   svgEl.querySelectorAll('.network-node').forEach(el => {
     el.addEventListener('click', e => {
       e.stopPropagation();
+      if(net.moved) return;
       focusNode(+el.dataset.id);
     });
   });
-  // 배경 클릭 → 해제
-  svgEl.addEventListener('click', clearHighlight);
+  // 배경 클릭 → 해제 (팬 직후 클릭은 무시)
+  svgEl.addEventListener('click', () => { if(!net.moved) clearHighlight(); });
 }
 
-/* ── 뷰 토글 + 재생 모드 ────────────────────────────────── */
+/* ── 뷰 토글 ────────────────────────────────────────────── */
 function setView(v){
   currentView = v;
   document.querySelectorAll('.view-btn[data-view]').forEach(b => {
@@ -1208,65 +1191,12 @@ function setView(v){
     b.classList.toggle('active', on);
     b.setAttribute('aria-pressed', on ? 'true' : 'false');
   });
-  if(playState.timer) stopPlay();
   render();
-}
-
-function playTimeline(){
-  if(playState.timer || playState.idx > 0){ stopPlay(); return; }
-  if(currentView !== 'timeline') setView('timeline');
-  const tl = document.getElementById('timeline');
-  const cards = Array.from(tl.querySelectorAll('.card')).reverse();  // 오래된 것부터
-  if(cards.length === 0) return;
-  tl.classList.add('play-mode');
-  document.getElementById('playProgress').classList.add('visible');
-  const btn = document.getElementById('playBtn');
-  btn.classList.add('playing');
-  btn.textContent = '⏸ 정지';
-  playState = { timer:null, idx:0, cards };
-  playStep();
-}
-
-function playStep(){
-  if(playState.idx >= playState.cards.length){ finishPlay(); return; }
-  const c = playState.cards[playState.idx];
-  c.classList.add('revealed');
-  c.scrollIntoView({behavior:'smooth', block:'center'});
-  const bar = document.getElementById('playProgressBar');
-  if(bar) bar.style.width = ((playState.idx+1)/playState.cards.length*100) + '%';
-  playState.idx++;
-  playState.timer = setTimeout(playStep, 420);
-}
-
-function stopPlay(){
-  if(playState.timer) clearTimeout(playState.timer);
-  playState.cards.forEach(c => c.classList.remove('revealed'));
-  document.getElementById('timeline').classList.remove('play-mode');
-  document.getElementById('playProgress').classList.remove('visible');
-  const bar = document.getElementById('playProgressBar');
-  if(bar) bar.style.width = '0';
-  const btn = document.getElementById('playBtn');
-  btn.classList.remove('playing');
-  btn.textContent = '▶ 재생';
-  playState = { timer:null, idx:0, cards:[] };
-}
-
-function finishPlay(){
-  const btn = document.getElementById('playBtn');
-  btn.classList.remove('playing');
-  btn.textContent = '▶ 재생';
-  document.getElementById('playProgress').classList.remove('visible');
-  setTimeout(() => {
-    const bar = document.getElementById('playProgressBar');
-    if(bar) bar.style.width = '0';
-  }, 600);
-  playState = { timer:null, idx:0, cards:[] };
 }
 
 /* ── 커맨드 팔레트 ──────────────────────────────────────── */
 const ICONS = {
   view:    `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10"/><line x1="2" y1="7" x2="14" y2="7"/></svg>`,
-  play:    `<svg viewBox="0 0 16 16" fill="currentColor"><polygon points="4,3 13,8 4,13"/></svg>`,
   reset:   `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8a5 5 0 1 0 1.5-3.5"/><polyline points="3,3 3,5 5,5"/></svg>`,
   group:   `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5" cy="6" r="2.2"/><circle cx="11" cy="6" r="2.2"/><path d="M2 13c.5-2 2-3 3-3M14 13c-.5-2-2-3-3-3"/></svg>`,
   cat:     `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="2.5" width="5" height="5"/><rect x="8.5" y="2.5" width="5" height="5"/><rect x="2.5" y="8.5" width="5" height="5"/><rect x="8.5" y="8.5" width="5" height="5"/></svg>`,
@@ -1279,7 +1209,6 @@ function buildPaletteAll(){
   const items = [];
   items.push({icon:ICONS.view,   section:'view',   cmd:true, label:'타임라인 보기',  meta:'View',   fn:()=>setView('timeline')});
   items.push({icon:ICONS.view,   section:'view',   cmd:true, label:'네트워크 보기',  meta:'View',   fn:()=>setView('network')});
-  items.push({icon:ICONS.play,   section:'action', cmd:true, label:'타임라인 재생',  meta:'Action', fn:()=>{ closePalette(); playTimeline(); }});
   items.push({icon:ICONS.reset,  section:'action', cmd:true, label:'필터 초기화',    meta:'Action', fn:resetFilters});
   Object.entries(GROUP_LABELS).forEach(([k,v])  => items.push({icon:ICONS.group,  section:'filter', cmd:true, label:`그룹: ${v}`,     meta:'Filter', fn:()=>setGroup(k)}));
   Object.entries(CAT_LABELS).forEach(([k,v])    => items.push({icon:ICONS.cat,    section:'filter', cmd:true, label:`카테고리: ${v}`, meta:'Filter', fn:()=>setCat(k)}));
@@ -1484,7 +1413,7 @@ document.getElementById('searchClear').addEventListener('click', () => {
   render();
 });
 
-/* ── 뷰 토글 + 재생 ─────────────────────────────────────── */
+/* ── 뷰 토글 ────────────────────────────────────────────── */
 document.querySelectorAll('.view-btn[data-view]').forEach(btn => {
   btn.addEventListener('click', () => setView(btn.dataset.view));
 });
@@ -1499,7 +1428,6 @@ document.querySelectorAll('.view-btn[data-density]').forEach(btn => {
     render();
   });
 });
-document.getElementById('playBtn').addEventListener('click', playTimeline);
 
 /* ── 커맨드 팔레트 키 핸들러 ────────────────────────────── */
 document.addEventListener('keydown', e => {
@@ -1539,6 +1467,91 @@ document.getElementById('paletteInput').addEventListener('input', e => {
 document.getElementById('paletteOverlay').addEventListener('click', e => {
   if(e.target === e.currentTarget) closePalette();
 });
+
+/* ── 네트워크 팬/줌/드래그 (viewBox 조작, 무빌드) — 1회 등록 ── */
+(function initNetworkInteractions(){
+  const svgEl = document.getElementById('networkSvg');
+  const toSVG = (cx, cy) => {
+    const r = svgEl.getBoundingClientRect();
+    return {
+      x: net.vb.x + (cx - r.left) / r.width  * net.vb.w,
+      y: net.vb.y + (cy - r.top)  / r.height * net.vb.h,
+    };
+  };
+  const applyVB = () => svgEl.setAttribute('viewBox',
+    `${net.vb.x} ${net.vb.y} ${net.vb.w} ${net.vb.h}`);
+
+  // 휠 줌 — 커서 지점 고정
+  svgEl.addEventListener('wheel', e => {
+    if(!net) return;
+    e.preventDefault();
+    const p  = toSVG(e.clientX, e.clientY);
+    const f  = e.deltaY < 0 ? 0.85 : 1.18;
+    const nw = Math.min(Math.max(net.vb.w * f, 220), net.W * 4);
+    const nh = nw * (net.H / net.W);
+    net.vb.x = p.x - (p.x - net.vb.x) * (nw / net.vb.w);
+    net.vb.y = p.y - (p.y - net.vb.y) * (nh / net.vb.h);
+    net.vb.w = nw; net.vb.h = nh;
+    applyVB();
+  }, { passive:false });
+
+  // mousedown — 노드 위면 드래그, 배경이면 팬
+  svgEl.addEventListener('mousedown', e => {
+    if(!net) return;
+    net.moved = false;
+    const nodeEl = e.target.closest('.network-node');
+    if(nodeEl){
+      net.dragId    = +nodeEl.dataset.id;
+      net.dragRect  = nodeEl;
+      net.dragLabel = svgEl.querySelector(`.network-label[data-id="${net.dragId}"]`);
+      net.dragEdges = Array.from(svgEl.querySelectorAll(
+        `.network-edge[data-a="${net.dragId}"], .network-edge[data-b="${net.dragId}"]`));
+    } else {
+      net.panning  = true;
+      net.panStart = { mx:e.clientX, my:e.clientY, vx:net.vb.x, vy:net.vb.y };
+      svgEl.style.cursor = 'grabbing';
+    }
+  });
+
+  window.addEventListener('mousemove', e => {
+    if(!net) return;
+    if(net.dragId !== -1){
+      net.moved = true;
+      const p = toSVG(e.clientX, e.clientY);
+      const n = net.nodes[net.dragId], sz = 14;
+      n.x = p.x; n.y = p.y;
+      net.dragRect.setAttribute('x', (n.x - sz/2).toFixed(1));
+      net.dragRect.setAttribute('y', (n.y - sz/2).toFixed(1));
+      if(net.dragLabel){
+        net.dragLabel.setAttribute('x', n.x.toFixed(1));
+        net.dragLabel.setAttribute('y', (n.y + sz + 2).toFixed(1));
+      }
+      net.dragEdges.forEach(ln => {
+        const a = net.nodes[+ln.dataset.a], b = net.nodes[+ln.dataset.b];
+        ln.setAttribute('x1', a.x.toFixed(1)); ln.setAttribute('y1', a.y.toFixed(1));
+        ln.setAttribute('x2', b.x.toFixed(1)); ln.setAttribute('y2', b.y.toFixed(1));
+      });
+    } else if(net.panning){
+      const r = svgEl.getBoundingClientRect();
+      net.vb.x = net.panStart.vx - (e.clientX - net.panStart.mx) / r.width  * net.vb.w;
+      net.vb.y = net.panStart.vy - (e.clientY - net.panStart.my) / r.height * net.vb.h;
+      applyVB();
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    if(!net) return;
+    net.dragId = -1; net.panning = false;
+    svgEl.style.cursor = '';
+  });
+
+  // 더블클릭 → 뷰 리셋
+  svgEl.addEventListener('dblclick', () => {
+    if(!net) return;
+    net.vb = { x:0, y:0, w:net.W, h:net.H };
+    applyVB();
+  });
+})();
 
 /* ── 초기화 ─────────────────────────────────────────────── */
 loadURL();
