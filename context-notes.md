@@ -13,5 +13,5 @@
 ## Task 2 — React Flow 분리
 - React Flow는 번들러 전제라 Vite로 정식 구성(무빌드 CDN 방식은 깨지기 쉬워 제외). reactflow v11 사용.
 - React Flow는 레이아웃 엔진이 없으므로, 기존 대시보드의 force-directed 시뮬레이션을 `layout.js`로 이식해 초기 좌표만 계산하고, 팬/줌/드래그/미니맵은 React Flow에 위임한다.
-- **데이터 중복(알려진 fork)**: `src/projects.js`는 `index.html`의 projects 배열 복사본이다. file:// 더블클릭 실행을 유지하려고 index.html은 인라인 데이터를 그대로 둔다. 원본 변경 시 양쪽을 함께 갱신해야 한다. 추후 공유 JSON + 빌드 스텝으로 단일화 가능.
+- **데이터 단일화 완료(2026-06-20)**: 단일 원본은 `projects.json`. `scripts/build-data.js`가 이를 읽어 ① `index.html` 인라인 `projects` 배열과 ② `network-flow/src/projects.js`를 재생성한다. file:// 더블클릭 실행을 유지하려고 index.html은 여전히 인라인 데이터를 쓰지만(빌드가 써넣음, fetch 아님), 손으로 양쪽을 고치는 중복은 제거됐다. **데이터 수정 시 projects.json만 고치고 `node scripts/build-data.js` 실행.** 직렬화는 객체 1개당 1줄(JSON.stringify)로 diff 가독성 유지.
 - 엣지 규칙은 대시보드와 동일(태그 2개 이상 공유).
