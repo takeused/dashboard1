@@ -85,6 +85,15 @@ a:focus-visible,
 /* 카드 outline transition (jumpToProject 강조용) */
 .card{transition:background .12s,outline-color .25s}
 
+/* 모션 민감 사용자 — 트랜지션·애니메이션·부드러운 스크롤 최소화 */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    transition-duration:0.01ms !important;
+    animation-duration:0.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+
 /* ── Utility Strip ───────────────────────────────────────── */
 .utility-strip{
   background:var(--surface-1);color:var(--ink-muted);
@@ -310,6 +319,8 @@ a:focus-visible,
   background:var(--surface-1);color:var(--ink-muted);
   border:1px solid var(--hairline);
 }
+.tag-filter{cursor:pointer;transition:border-color .12s,color .12s,background .12s}
+.tag-filter:hover{border-color:var(--ink);color:var(--ink);background:var(--surface-2)}
 
 /* Open button — Carbon primary */
 .open-btn{
@@ -981,7 +992,7 @@ function renderTimeline(filtered){
           </div>
         </div>
         <div class="card-desc">${esc(p.desc)}</div>
-        <div class="tags">${p.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+        <div class="tags">${p.tags.map(t => `<span class="tag tag-filter" data-tag="${esc(t)}" role="button" tabindex="0" title="이 태그로 검색">${esc(t)}</span>`).join('')}</div>
         ${urlBtn}`;
 
       if(p.url){
@@ -1062,7 +1073,54 @@ function renderHeatmap(filtered){
   document.getElementById('heatmap').innerHTML = svg;
 }
 
-/* ── 네트워크 렌더 (force-directed) ─────────────────────── */
+/* ── 네트워크 레이아웃 캐시 ─────────────────────────────── */
+// 전체 프로젝트로 force 시뮬레이션을 1회만 돌려 좌표를 캐시한다.
+// 필터/검색 때마다 재시뮬하지 않으므로 빠르고, 노드 위치도 안정적으로 유지된다.
+const NET_W = 1100, NET_H = 600;
+let netLayoutCache = null; // Map<projObj, {x,y}>
+function computeNetLayout(){
+  if(netLayoutCache) return netLayoutCache;
+  const W = NET_W, H = NET_H;
+  const nodes = projects.map((p,i) => {
+    const a = (i / projects.length) * Math.PI * 2;
+    const r = 180 + (i % 3) * 50;
+    return { p, x: W/2 + Math.cos(a) * r, y: H/2 + Math.sin(a) * r, vx:0, vy:0 };
+  });
+  const links = [];
+  for(let a=0; a<nodes.length; a++){
+    for(let b=a+1; b<nodes.length; b++){
+      const ta = new Set(nodes[a].p.tags);
+      if(nodes[b].p.tags.filter(t => ta.has(t)).length >= 2) links.push({ source:a, target:b });
+    }
+  }
+  const REPEL = 1800, SPRING_K = 0.025, SPRING_LEN = 90, CENTER = 0.006, DAMP = 0.82;
+  for(let it=0; it<240; it++){
+    for(let a=0; a<nodes.length; a++){
+      for(let b=a+1; b<nodes.length; b++){
+        const na = nodes[a], nb = nodes[b];
+        const dx = nb.x - na.x, dy = nb.y - na.y;
+        const d2 = dx*dx + dy*dy + 1, d = Math.sqrt(d2), f = REPEL / d2;
+        na.vx -= (dx/d)*f; na.vy -= (dy/d)*f; nb.vx += (dx/d)*f; nb.vy += (dy/d)*f;
+      }
+    }
+    links.forEach(l => {
+      const a = nodes[l.source], b = nodes[l.target];
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const d = Math.sqrt(dx*dx + dy*dy) + 0.1, f = (d - SPRING_LEN) * SPRING_K;
+      a.vx += (dx/d)*f; a.vy += (dy/d)*f; b.vx -= (dx/d)*f; b.vy -= (dy/d)*f;
+    });
+    nodes.forEach(n => {
+      n.vx += (W/2 - n.x) * CENTER; n.vy += (H/2 - n.y) * CENTER;
+      n.vx *= DAMP; n.vy *= DAMP; n.x += n.vx; n.y += n.vy;
+      n.x = Math.max(30, Math.min(W-30, n.x));
+      n.y = Math.max(30, Math.min(H-50, n.y));
+    });
+  }
+  netLayoutCache = new Map(nodes.map(n => [n.p, { x:n.x, y:n.y }]));
+  return netLayoutCache;
+}
+
+/* ── 네트워크 렌더 ──────────────────────────────────────── */
 function renderNetwork(filtered){
   const svgEl  = document.getElementById('networkSvg');
   const info   = document.getElementById('networkInfo');
@@ -1082,12 +1140,12 @@ function renderNetwork(filtered){
     return;
   }
 
-  // 노드와 엣지 구성: 태그 ≥2개 공유 시 연결
-  // 초기 배치는 동심원 분산 — 시뮬레이션 안정성 향상
+  // 노드: 캐시된 전체 레이아웃 좌표 사용 (필터 시 재시뮬 없음 → 위치 안정)
+  // 엣지: 표시 중인 노드끼리 태그 2개 이상 공유 시 연결
+  const layout = computeNetLayout();
   const nodes = filtered.map((p,i) => {
-    const a = (i / filtered.length) * Math.PI * 2;
-    const r = 180 + (i % 3) * 50;
-    return { id:i, p, x: W/2 + Math.cos(a) * r, y: H/2 + Math.sin(a) * r, vx:0, vy:0 };
+    const c = layout.get(p) || { x: W/2, y: H/2 };
+    return { id:i, p, x:c.x, y:c.y };
   });
   const links = [];
   for(let a=0; a<nodes.length; a++){
@@ -1096,48 +1154,6 @@ function renderNetwork(filtered){
       const shared = nodes[b].p.tags.filter(t => ta.has(t)).length;
       if(shared >= 2) links.push({ source:a, target:b, w:shared });
     }
-  }
-
-  // Force simulation (200 iter)
-  const REPEL = 1800, SPRING_K = 0.025, SPRING_LEN = 90, CENTER = 0.006, DAMP = 0.82;
-  for(let it=0; it<240; it++){
-    // 반발력
-    for(let a=0; a<nodes.length; a++){
-      for(let b=a+1; b<nodes.length; b++){
-        const na = nodes[a], nb = nodes[b];
-        const dx = nb.x - na.x, dy = nb.y - na.y;
-        const d2 = dx*dx + dy*dy + 1;
-        const d = Math.sqrt(d2);
-        const f = REPEL / d2;
-        na.vx -= (dx/d) * f;
-        na.vy -= (dy/d) * f;
-        nb.vx += (dx/d) * f;
-        nb.vy += (dy/d) * f;
-      }
-    }
-    // 스프링 (엣지)
-    links.forEach(l => {
-      const a = nodes[l.source], b = nodes[l.target];
-      const dx = b.x - a.x, dy = b.y - a.y;
-      const d = Math.sqrt(dx*dx + dy*dy) + 0.1;
-      const f = (d - SPRING_LEN) * SPRING_K;
-      a.vx += (dx/d) * f;
-      a.vy += (dy/d) * f;
-      b.vx -= (dx/d) * f;
-      b.vy -= (dy/d) * f;
-    });
-    // 중심 끌림 + damping + 위치 업데이트
-    nodes.forEach(n => {
-      n.vx += (W/2 - n.x) * CENTER;
-      n.vy += (H/2 - n.y) * CENTER;
-      n.vx *= DAMP;
-      n.vy *= DAMP;
-      n.x += n.vx;
-      n.y += n.vy;
-      // 경계 clamp
-      n.x = Math.max(30, Math.min(W-30, n.x));
-      n.y = Math.max(30, Math.min(H-50, n.y));
-    });
   }
 
   // SVG 렌더 — 엣지 → 라벨 → 노드 순 (노드가 항상 최상위)
@@ -1154,7 +1170,7 @@ function renderNetwork(filtered){
   links.forEach(l => { degree[l.source]++; degree[l.target]++; });
   nodes.forEach(n => {
     const r = n.r = +(6 + Math.sqrt(degree[n.id]) * 1.8).toFixed(1);
-    nodeSvg += `<circle class="network-node" data-id="${n.id}" `
+    nodeSvg += `<circle class="network-node" data-id="${n.id}" tabindex="0" role="button" aria-label="${esc(n.p.name)}" `
          + `cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${r}" fill="var(--cat-${n.p.cat})">`
          + `<title>${esc(n.p.name)}</title></circle>`;
     const lbl = n.p.name.length > 14 ? n.p.name.slice(0,13)+'…' : n.p.name;
@@ -1209,7 +1225,7 @@ function renderNetwork(filtered){
       <div class="network-info-title">${esc(p.name)}</div>
       <div class="network-info-meta">${p.date} · ${GROUP_LABELS[p.group]} · ${CAT_LABELS[p.cat]} · ${p.status === 'done' ? '완료' : '진행중'}</div>
       <div class="network-info-meta">${esc(p.desc)}</div>
-      <div class="network-info-tags">${p.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
+      <div class="network-info-tags">${p.tags.map(t=>`<span class="tag tag-filter" data-tag="${esc(t)}" role="button" tabindex="0" title="이 태그로 검색">${esc(t)}</span>`).join('')}</div>
       <div class="network-info-meta" style="margin-top:8px">연결된 프로젝트: <strong>${neighbors.size}개</strong></div>`;
     info.classList.add('visible');
     info.querySelector('.network-info-close').addEventListener('click', clearHighlight);
@@ -1229,6 +1245,13 @@ function renderNetwork(filtered){
       e.stopPropagation();
       if(net.moved) return;
       focusNode(+el.dataset.id);
+    });
+    // 키보드 접근 — Enter/Space로 노드 포커스
+    el.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        focusNode(+el.dataset.id);
+      }
     });
   });
   // 배경 클릭 → 해제 (팬 직후 클릭은 무시)
@@ -1452,10 +1475,12 @@ document.querySelectorAll('.switcher-btn[data-status]').forEach(btn => {
   });
 });
 
+let searchTimer;
 document.getElementById('searchInput').addEventListener('input', e => {
   currentSearch = e.target.value;
   updateClearBtn();
-  render();
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(render, 150);   // 디바운스 — 연속 입력 중 재렌더 억제
 });
 
 document.getElementById('searchClear').addEventListener('click', () => {
@@ -1463,6 +1488,30 @@ document.getElementById('searchClear').addEventListener('click', () => {
   document.getElementById('searchInput').value = '';
   updateClearBtn();
   render();
+});
+
+// 태그 클릭/Enter → 해당 태그로 검색 (타임라인 카드·네트워크 정보 패널 공통, 위임)
+function applyTagSearch(tag){
+  const input = document.getElementById('searchInput');
+  input.value = tag;
+  currentSearch = tag;
+  updateClearBtn();
+  render();
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  input.scrollIntoView({ block:'center', behavior: reduce ? 'auto' : 'smooth' });
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('.tag-filter');
+  if(!t) return;
+  e.stopPropagation();
+  applyTagSearch(t.dataset.tag);
+});
+document.addEventListener('keydown', e => {
+  if(e.key !== 'Enter' && e.key !== ' ') return;
+  const t = e.target.closest && e.target.closest('.tag-filter');
+  if(!t) return;
+  e.preventDefault();
+  applyTagSearch(t.dataset.tag);
 });
 
 /* ── 뷰 토글 ────────────────────────────────────────────── */
@@ -1628,7 +1677,10 @@ render();
   const btn = document.getElementById('scrollTop');
   const onScroll = () => btn.classList.toggle('visible', window.scrollY > 400);
   window.addEventListener('scroll', onScroll, { passive:true });
-  btn.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+  btn.addEventListener('click', () => {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top:0, behavior: reduce ? 'auto' : 'smooth' });
+  });
   onScroll();
 })();
 </script>
