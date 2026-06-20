@@ -351,6 +351,17 @@ a:focus-visible,
 }
 @keyframes revealUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
+/* ── Compact density ─────────────────────────────────────── */
+.timeline.compact .date-group{margin-bottom:12px}
+.timeline.compact .card{padding:7px 16px 7px 24px}
+.timeline.compact .card-header{
+  flex-direction:row;align-items:center;gap:8px;margin-bottom:0;
+}
+.timeline.compact .card-title{font-size:14px;line-height:1.4}
+.timeline.compact .card-desc,
+.timeline.compact .tags,
+.timeline.compact .open-btn{display:none}
+
 /* ── Network View ────────────────────────────────────────── */
 .network-view{
   border:1px solid var(--hairline);
@@ -624,9 +635,15 @@ a:focus-visible,
 
     <!-- View toolbar -->
     <div class="view-toolbar">
-      <div class="view-toggle" role="group" aria-label="뷰 전환">
-        <button class="view-btn active" data-view="timeline" aria-pressed="true">타임라인</button>
-        <button class="view-btn" data-view="network" aria-pressed="false">네트워크</button>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div class="view-toggle" role="group" aria-label="뷰 전환">
+          <button class="view-btn active" data-view="timeline" aria-pressed="true">타임라인</button>
+          <button class="view-btn" data-view="network" aria-pressed="false">네트워크</button>
+        </div>
+        <div class="view-toggle" id="densityToggle" role="group" aria-label="밀도 전환">
+          <button class="view-btn active" data-density="comfortable" aria-pressed="true">편안</button>
+          <button class="view-btn" data-density="compact" aria-pressed="false">조밀</button>
+        </div>
       </div>
       <button class="play-btn" id="playBtn" aria-label="타임라인 재생">▶ 재생</button>
     </div>
@@ -720,6 +737,21 @@ const projects = [
   {date:"2026-05-10",group:"home",name:"Claude Trading Skills",desc:"Claude Code 기반 포지션 사이징·매매 전략 스킬 패키지",cat:"finance",status:"wip",tags:["Claude Code","Skills","트레이딩","주식"]},
   {date:"2026-05-11",group:"home",name:"Flutter Skills 패키지",desc:"Flutter 아키텍처 스킬 모음 — MVI·Go Router·GetIt DI·테스팅 등 8종",cat:"ai",status:"done",tags:["Flutter","Dart","Skills","MVI"]},
   {date:"2026-05-14",group:"home",name:"오빠두엑셀 Claude 디자인",desc:"Claude 디자인 실습 — 포트폴리오·리조트·레스토랑·청첩장·PPT 등 7종",cat:"doc",status:"done",tags:["HTML","CSS","디자인","실습"]},
+
+  /* ── 집 프로젝트 (D:\01 WORK 신규 반영) ─────────────────── */
+  {date:"2026-05-19",group:"home",name:"한글소리 AI (HwpVoice)",desc:"HWP/HWPX 문서를 브리핑 대본·공유 HTML·음성으로 변환하는 Next.js MVP — Gemini 구조화 출력 + Gemini/ElevenLabs TTS, Firebase 저장·공유 링크",cat:"ai",status:"done",tags:["Next.js","TypeScript","Gemini","Firebase","TTS","HWP"]},
+  {date:"2026-05-21",group:"home",name:"공모주 IPO 모니터",desc:"공모주 청약 일정·정보를 수집·모니터링하는 Python 도구",cat:"finance",status:"done",tags:["Python","공모주","IPO","모니터링"]},
+  {date:"2026-05-31",group:"home",name:"배당 시스템",desc:"배당주 포트폴리오·배당 일정 관리 시스템 (반복 리빌드 실험)",cat:"finance",status:"done",tags:["배당","포트폴리오","투자"]},
+  {date:"2026-05-31",group:"home",name:"부동산 경매 분석 플랫폼",desc:"Flask + Playwright 크롤링 + Gemini 분석 기반 부동산 경매 물건 분석 웹 서비스 — 국토부 주소 API·SQLite 연동",cat:"finance",status:"done",tags:["Python","Flask","Playwright","Gemini","부동산","경매"]},
+  {date:"2026-05-31",group:"home",name:"재무분석기",desc:"Gemini 기반 기업 재무 분석기 — 토스 증권 다크모드 모바일 UI 사양 적용",cat:"finance",status:"done",tags:["Gemini","재무분석","투자","UI"]},
+  {date:"2026-06-03",group:"work",name:"Nemotron 페르소나 재난 설문",desc:"Nemotron-Personas-Korea 합성 페르소나가 재난안전 인식조사에 1인칭 응답 — Cerebras GLM 기반 실리콘 샘플링·사후층화 가중 집계",cat:"ai",status:"done",tags:["LLM","Nemotron","Cerebras","설문","재난안전"]},
+  {date:"2026-06-06",group:"home",name:"TradingView × Claude 자동화",desc:"TradingView와 Claude를 연동한 매매·대시보드 구현 가이드 + 대시보드 생성 스크립트",cat:"finance",status:"done",tags:["TradingView","Claude","Python","대시보드"]},
+  {date:"2026-06-07",group:"home",name:"graphify 지식그래프",desc:"코드베이스를 AST 기반 지식 그래프로 변환해 질의·경로·설명을 제공하는 개발 도구",cat:"util",status:"done",tags:["AST","지식그래프","CLI","개발도구"]},
+  {date:"2026-06-13",group:"home",name:"한국 공개 API 디렉터리",desc:"국내 270여 종·글로벌 780여 종 공개 API를 분류 정리한 큐레이션 목록 (링크 헬스체크 CI 포함)",cat:"util",status:"done",tags:["API","문서","큐레이션","GitHub"]},
+  {date:"2026-06-13",group:"home",name:"논문·보고서 오디오뷰",desc:"Elsevier 논문·네이버 금융 자료를 검색·요약해 오디오뷰로 만드는 파이프라인",cat:"ai",status:"done",tags:["Python","논문검색","요약","오디오"]},
+  {date:"2026-06-14",group:"home",name:"Narrative Momentum 전략",desc:"뉴스·시장 내러티브의 강도·방향·가속도를 점수화해 연결 종목으로 분배하는 단기 모멘텀 전략 + 대시보드",cat:"finance",status:"done",tags:["Python","모멘텀","뉴스분석","투자전략"]},
+  {date:"2026-06-20",group:"work",name:"Cowork HWPX 스킬",desc:"기획보고서 작성용 HWPX Claude Code 스킬 패키지 + 양식 샘플",cat:"ai",status:"done",tags:["Claude Code","Skills","HWPX","보고서"]},
+  {date:"2026-06-20",group:"home",name:"나의 Claude 스킬 맵",desc:"보유한 Claude Code 스킬 생태계를 한눈에 보는 단일 HTML 시각화",cat:"util",status:"done",tags:["HTML","시각화","Claude Code","Skills"]},
 ];
 
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -729,6 +761,7 @@ let currentFilter = 'all';
 let currentStatus = 'all';
 let currentSearch = '';
 let currentView   = 'timeline';  // 'timeline' | 'network'
+let currentDensity= 'comfortable';  // 'comfortable' | 'compact'
 let playState     = { timer:null, idx:0, cards:[] };
 let paletteActive = 0;
 let paletteItems  = [];
@@ -741,6 +774,7 @@ function syncURL(){
   if(currentStatus !== 'all')      p.set('status', currentStatus);
   if(currentSearch)                p.set('q',      currentSearch);
   if(currentView !== 'timeline')   p.set('view',   currentView);
+  if(currentDensity !== 'comfortable') p.set('density', currentDensity);
   const qs = p.toString();
   history.replaceState(null, '', qs ? '?' + qs : location.pathname);
 }
@@ -752,8 +786,14 @@ function loadURL(){
   currentStatus = p.get('status') || 'all';
   currentSearch = p.get('q')      || '';
   currentView   = p.get('view')   || 'timeline';
-  document.querySelectorAll('.view-btn').forEach(b => {
+  currentDensity= p.get('density')|| 'comfortable';
+  document.querySelectorAll('.view-btn[data-view]').forEach(b => {
     const on = b.dataset.view === currentView;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  document.querySelectorAll('.view-btn[data-density]').forEach(b => {
+    const on = b.dataset.density === currentDensity;
     b.classList.toggle('active', on);
     b.setAttribute('aria-pressed', on ? 'true' : 'false');
   });
@@ -843,16 +883,19 @@ function render(){
   const tl  = document.getElementById('timeline');
   const nv  = document.getElementById('networkView');
   const pb  = document.getElementById('playBtn');
+  const dt  = document.getElementById('densityToggle');
 
   if(currentView === 'network'){
     tl.hidden = true;
     nv.hidden = false;
     pb.hidden = true;
+    dt.hidden = true;
     renderNetwork(filtered);
   } else {
     tl.hidden = false;
     nv.hidden = true;
     pb.hidden = false;
+    dt.hidden = false;
     renderTimeline(filtered);
   }
 }
@@ -862,6 +905,7 @@ function renderTimeline(filtered){
   const tl = document.getElementById('timeline');
   tl.innerHTML = '';
   tl.classList.remove('play-mode');
+  tl.classList.toggle('compact', currentDensity === 'compact');
 
   if(filtered.length === 0){
     const qPart = currentSearch ? ` · 검색: "<strong>${esc(currentSearch)}</strong>"` : '';
@@ -1159,7 +1203,7 @@ function renderNetwork(filtered){
 /* ── 뷰 토글 + 재생 모드 ────────────────────────────────── */
 function setView(v){
   currentView = v;
-  document.querySelectorAll('.view-btn').forEach(b => {
+  document.querySelectorAll('.view-btn[data-view]').forEach(b => {
     const on = b.dataset.view === v;
     b.classList.toggle('active', on);
     b.setAttribute('aria-pressed', on ? 'true' : 'false');
@@ -1441,8 +1485,19 @@ document.getElementById('searchClear').addEventListener('click', () => {
 });
 
 /* ── 뷰 토글 + 재생 ─────────────────────────────────────── */
-document.querySelectorAll('.view-btn').forEach(btn => {
+document.querySelectorAll('.view-btn[data-view]').forEach(btn => {
   btn.addEventListener('click', () => setView(btn.dataset.view));
+});
+document.querySelectorAll('.view-btn[data-density]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentDensity = btn.dataset.density;
+    document.querySelectorAll('.view-btn[data-density]').forEach(b => {
+      const on = b === btn;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    render();
+  });
 });
 document.getElementById('playBtn').addEventListener('click', playTimeline);
 
