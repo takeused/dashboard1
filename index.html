@@ -1085,21 +1085,23 @@ function renderNetwork(filtered){
   let edgeSvg = '', nodeSvg = '', labelSvg = '';
   links.forEach((l, idx) => {
     const a = nodes[l.source], b = nodes[l.target];
-    const op = Math.min(0.18 + l.w*0.12, 0.55);
+    const op = Math.min(0.3 + l.w*0.08, 0.6);
     edgeSvg += `<line class="network-edge" data-link="${idx}" data-a="${l.source}" data-b="${l.target}" `
          + `x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" `
-         + `stroke="#8c8c8c" stroke-opacity="${op}" stroke-width="${Math.min(l.w*0.7, 3)}"/>`;
+         + `stroke="#b4b4b4" stroke-opacity="${op}" stroke-width="${Math.min(0.8 + l.w*0.25, 1.8).toFixed(2)}"/>`;
   });
+  // 연결 수(차수)에 비례해 노드 반지름 결정 — 옵시디언 그래프뷰처럼 허브가 커짐
+  const degree = new Array(nodes.length).fill(0);
+  links.forEach(l => { degree[l.source]++; degree[l.target]++; });
   nodes.forEach(n => {
     const c = CAT_COLORS[n.p.cat] || '#525252';
-    const sz = 14;
-    nodeSvg += `<rect class="network-node" data-id="${n.id}" `
-         + `x="${(n.x-sz/2).toFixed(1)}" y="${(n.y-sz/2).toFixed(1)}" width="${sz}" height="${sz}" `
-         + `fill="${c}" stroke="#161616" stroke-width="0.5">`
-         + `<title>${esc(n.p.name)}</title></rect>`;
+    const r = n.r = +(6 + Math.sqrt(degree[n.id]) * 1.8).toFixed(1);
+    nodeSvg += `<circle class="network-node" data-id="${n.id}" `
+         + `cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${r}" fill="${c}">`
+         + `<title>${esc(n.p.name)}</title></circle>`;
     const lbl = n.p.name.length > 14 ? n.p.name.slice(0,13)+'…' : n.p.name;
     labelSvg += `<text class="network-label" data-id="${n.id}" `
-         + `x="${n.x.toFixed(1)}" y="${(n.y + sz + 2).toFixed(1)}" text-anchor="middle">${esc(lbl)}</text>`;
+         + `x="${n.x.toFixed(1)}" y="${(n.y + r + 11).toFixed(1)}" text-anchor="middle">${esc(lbl)}</text>`;
   });
 
   svgEl.innerHTML =
@@ -1510,13 +1512,13 @@ document.getElementById('paletteOverlay').addEventListener('click', e => {
     if(net.dragId !== -1){
       net.moved = true;
       const p = toSVG(e.clientX, e.clientY);
-      const n = net.nodes[net.dragId], sz = 14;
+      const n = net.nodes[net.dragId], r = n.r || 8;
       n.x = p.x; n.y = p.y;
-      net.dragRect.setAttribute('x', (n.x - sz/2).toFixed(1));
-      net.dragRect.setAttribute('y', (n.y - sz/2).toFixed(1));
+      net.dragRect.setAttribute('cx', n.x.toFixed(1));
+      net.dragRect.setAttribute('cy', n.y.toFixed(1));
       if(net.dragLabel){
         net.dragLabel.setAttribute('x', n.x.toFixed(1));
-        net.dragLabel.setAttribute('y', (n.y + sz + 2).toFixed(1));
+        net.dragLabel.setAttribute('y', (n.y + r + 11).toFixed(1));
       }
       net.dragEdges.forEach(ln => {
         const a = net.nodes[+ln.dataset.a], b = net.nodes[+ln.dataset.b];
