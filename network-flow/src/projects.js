@@ -1,5 +1,6 @@
 // projects.json에서 자동 생성됨 — 직접 수정 금지 (원본: ../../projects.json, 빌드: scripts/build-data.js)
 export const projects = [
+  {"date":"2026-04-24","group":"work","name":"RHWP Studio Windows 패치","desc":"HWP Studio(master-of-hwp) Windows 환경 패치 및 설치 자동화 — macOS/Linux 전용 코드의 Windows 호환성 문제 해결","cat":"util","status":"done","tags":["Python","HWP","Windows","패치"]},
   {"date":"2026-04-24","group":"work","name":"RHWP Studio","desc":"HWP 문서 작업용 AI 스튜디오 — GUI 설치, GitHub 연동 및 LLM 응답 에러 수정","cat":"doc","status":"done","tags":["Python","HWP","AI Studio"]},
   {"date":"2026-04-26","group":"work","name":"I am not AI","desc":"im-not-ai 리포지토리 초기 설정 및 구성","cat":"util","status":"done","tags":["GitHub"],"url":"https://iamnotai.pages.dev"},
   {"date":"2026-04-26","group":"work","name":"Slide-maker","desc":"AI 기반 슬라이드 자동 제작 도구","cat":"doc","status":"done","tags":["JavaScript","HTML"]},
@@ -10,6 +11,7 @@ export const projects = [
   {"date":"2026-04-30","group":"work","name":"Matt Pocock Skills","desc":"Claude Code 스킬 구조 분석 및 활용 방법 학습","cat":"util","status":"done","tags":["Claude Code","Skills"]},
   {"date":"2026-04-30","group":"work","name":"Slide-maker v2","desc":"슬라이드 제작 도구 개선 — 디자인 및 기능 업그레이드","cat":"doc","status":"done","tags":["JavaScript","HTML"]},
   {"date":"2026-05-03","group":"work","name":"KISTI MCP v2","desc":"KISTI MCP 서버 개선 버전 — 기능 확장","cat":"mcp","status":"done","tags":["MCP","Python","KISTI"]},
+  {"date":"2026-05-07","group":"work","name":"ScienceON / NTIS v2","desc":"과학기술 논문·국가R&D 과제 검색 도구 2차 개선 버전","cat":"data","status":"done","tags":["Web Scraping","JavaScript","API","NTIS"]},
   {"date":"2026-05-07","group":"work","name":"ScienceON / NTIS","desc":"과학기술 논문 및 국가R&D 과제 검색 · 트렌드 분석 도구","cat":"data","status":"done","tags":["Web Scraping","JavaScript","API"]},
   {"date":"2026-05-07","group":"work","name":"교육이수현황","desc":"교육 이수 현황 관리 및 조회 도구","cat":"util","status":"done","tags":["HTML","데이터 관리"]},
   {"date":"2026-05-09","group":"work","name":"네이버 주식 크롤러","desc":"네이버 금융 크롤링 — 증권사별 매매 동향 분석","cat":"data","status":"done","tags":["Python","Web Scraping","금융"]},
@@ -61,5 +63,11 @@ export const projects = [
   {"date":"2026-06-13","group":"home","name":"논문·보고서 오디오뷰","desc":"Elsevier 논문·네이버 금융 자료를 검색·요약해 오디오뷰로 만드는 파이프라인","cat":"ai","status":"done","tags":["Python","논문검색","요약","오디오"]},
   {"date":"2026-06-14","group":"home","name":"Narrative Momentum 전략","desc":"뉴스·시장 내러티브의 강도·방향·가속도를 점수화해 연결 종목으로 분배하는 단기 모멘텀 전략 + 대시보드","cat":"finance","status":"done","tags":["Python","모멘텀","뉴스분석","투자전략"]},
   {"date":"2026-06-20","group":"work","name":"Cowork HWPX 스킬","desc":"기획보고서 작성용 HWPX Claude Code 스킬 패키지 + 양식 샘플","cat":"ai","status":"done","tags":["Claude Code","Skills","HWPX","보고서"]},
-  {"date":"2026-06-20","group":"home","name":"나의 Claude 스킬 맵","desc":"보유한 Claude Code 스킬 생태계를 한눈에 보는 단일 HTML 시각화","cat":"util","status":"done","tags":["HTML","시각화","Claude Code","Skills"]}
+  {"date":"2026-06-20","group":"home","name":"나의 Claude 스킬 맵","desc":"보유한 Claude Code 스킬 생태계를 한눈에 보는 단일 HTML 시각화","cat":"util","status":"done","tags":["HTML","시각화","Claude Code","Skills"]},
+  {"date":"2026-05-24","group":"home","name":"Awesome Claude Skills","desc":"Claude Code 스킬 생태계 큐레이션 학습 — 공개 저장소 분석 및 Antigravity 2.0 + Gemini CLI 핵심 정리","cat":"util","status":"done","tags":["Claude Code","Skills","학습"]},
+  {"date":"2026-05-27","group":"work","name":"네이버 증권 리포트 크롤러","desc":"네이버 금융 증권사 리서치 리포트 크롤링 및 수집 도구","cat":"data","status":"done","tags":["Python","Web Scraping","금융","증권"]},
+  {"date":"2026-06-04","group":"work","name":"ScienceON / NTIS v3","desc":"과학기술 논문·국가R&D 검색 3차 버전 — 웹앱 형태로 개선","cat":"data","status":"done","tags":["JavaScript","HTML","API","NTIS"]},
+  {"date":"2026-06-05","group":"work","name":"Nemotron 가상 설문 v2","desc":"Nemotron-Personas-Korea 2,000명 합성 페르소나 × 재난안전 인식조사 — Cerebras GLM 응답 생성·사후층화 가중 집계","cat":"ai","status":"done","tags":["LLM","Nemotron","Cerebras","설문","재난안전"]},
+  {"date":"2026-06-07","group":"work","name":"국가R&D 예산 심의 도구","desc":"국가연구개발사업 예산 요구 심의를 위한 웹 기반 검토 도구","cat":"util","status":"done","tags":["HTML","JavaScript","R&D","예산"]},
+  {"date":"2026-06-18","group":"home","name":"dots.tts 로컬 TTS","desc":"rednote-hilab/dots.tts 2B 모델 Windows CPU 환경 설치·설정 — 사내 TLS 프록시 우회 및 Python 3.12 호환성 해결","cat":"ai","status":"done","tags":["Python","TTS","AI","로컬"]}
 ];
