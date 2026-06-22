@@ -141,6 +141,8 @@ a:focus-visible,
   color:var(--ink);margin-bottom:20px;
 }
 .hero-inner h1 em{font-style:normal;color:var(--primary)}
+#heroTitle{cursor:pointer}
+#heroTitle:hover em{opacity:0.75}
 .hero-sub{
   font-size:18px;font-weight:400;line-height:1.50;letter-spacing:0;
   color:var(--ink-muted);
@@ -581,7 +583,7 @@ a:focus-visible,
 <section class="hero-section">
   <div class="hero-inner container">
     <span class="hero-eyebrow">Project Timeline</span>
-    <h1>Claude, CODEX와 함께한<br><em>작업 기록</em></h1>
+    <h1 id="heroTitle" role="button" tabindex="0" title="홈으로 — 필터 초기화 후 맨 위로">Claude, CODEX, GEMINI와 함께한<br><em>작업 기록</em></h1>
     <p class="hero-sub" id="heroSummary"></p>
   </div>
 </section>
@@ -1340,6 +1342,16 @@ function resetFilters(){
   render();
 }
 
+// 제목 클릭 시 홈으로 — 필터 초기화 + 타임라인 뷰 + 맨 위로
+function goHome(){
+  currentGroup='all'; currentFilter='all'; currentStatus='all'; currentSearch='';
+  document.getElementById('searchInput').value = '';
+  updateClearBtn();
+  if(currentView !== 'timeline') setView('timeline');
+  else { syncUIFromState(); render(); }
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
 function jumpToProject(p){
   currentGroup = 'all'; currentFilter = 'all'; currentStatus = 'all'; currentSearch = '';
   document.getElementById('searchInput').value = '';
@@ -1521,6 +1533,16 @@ document.addEventListener('keydown', e => {
   e.preventDefault();
   applyTagSearch(t.dataset.tag);
 });
+
+/* ── 제목 클릭 → 홈 ─────────────────────────────────────── */
+(() => {
+  const t = document.getElementById('heroTitle');
+  if(!t) return;
+  t.addEventListener('click', goHome);
+  t.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); goHome(); }
+  });
+})();
 
 /* ── 뷰 토글 ────────────────────────────────────────────── */
 document.querySelectorAll('.view-btn[data-view]').forEach(btn => {
