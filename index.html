@@ -1596,7 +1596,10 @@ function netTick(){
   links.forEach(l => {
     const a = nodes[l.source], b = nodes[l.target];
     const dx = b.x-a.x, dy = b.y-a.y;
-    const d = Math.sqrt(dx*dx+dy*dy)+0.1, f = (d-LEN)*K*s;
+    const d = Math.sqrt(dx*dx+dy*dy)+0.1;
+    let f = (d-LEN)*K*s;
+    // 드래그 중인 노드의 엣지는 스프링 3배 — 이웃이 뚜렷하게 따라옴
+    if(dragging && (l.source === net.dragId || l.target === net.dragId)) f *= 3;
     a.vx += (dx/d)*f; a.vy += (dy/d)*f;
     b.vx -= (dx/d)*f; b.vy -= (dy/d)*f;
   });
@@ -1622,7 +1625,7 @@ function netTick(){
     eg.el.setAttribute('x2', b.x.toFixed(1)); eg.el.setAttribute('y2', b.y.toFixed(1));
   });
 
-  net.alpha = dragging ? Math.max(s, 0.35) : s * 0.975;
+  net.alpha = dragging ? Math.max(s, 0.6) : s * 0.975;
   netRAF = requestAnimationFrame(netTick);
 }
 
@@ -1999,6 +2002,10 @@ document.getElementById('paletteOverlay').addEventListener('click', e => {
       net.dragId    = +nodeEl.dataset.id;
       net.pinX      = net.nodes[net.dragId].x;   // 시뮬 핀 초기 위치
       net.pinY      = net.nodes[net.dragId].y;
+      // 이웃 인덱스 캐시 — 드래그 모멘텀 전달용
+      net.dragNbrs  = net.links
+        .filter(l => l.source === net.dragId || l.target === net.dragId)
+        .map(l => l.source === net.dragId ? l.target : l.source);
       net.dragRect  = nodeEl;
       net.dragLabel = svgEl.querySelector(`.network-label[data-id="${net.dragId}"]`);
       net.dragEdges = Array.from(svgEl.querySelectorAll(
@@ -2032,8 +2039,15 @@ document.getElementById('paletteOverlay').addEventListener('click', e => {
         });
       } else {
         // 라이브 시뮬 — 커서에 핀 고정, 이웃은 스프링으로 따라옴
+        const dxm = p.x - net.pinX, dym = p.y - net.pinY;
         net.pinX = p.x; net.pinY = p.y;
-        netWake(0.4);
+        // 드래그 모멘텀을 이웃에 직접 전달 — 흔들면 즉각 출렁이도록
+        (net.dragNbrs || []).forEach(id => {
+          const nn = net.nodes[id];
+          nn.vx += Math.max(-7, Math.min(7, dxm * 0.4));
+          nn.vy += Math.max(-7, Math.min(7, dym * 0.4));
+        });
+        netWake(0.6);
       }
     } else if(net.panning){
       const r = svgEl.getBoundingClientRect();
