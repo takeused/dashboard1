@@ -465,10 +465,10 @@ a:focus-visible,
   position:relative;height:600px;overflow:hidden;
 }
 #networkSvg{display:block;width:100%;height:100%;cursor:grab}
-.network-edge{stroke:var(--hairline);stroke-width:1;pointer-events:none;transition:stroke .18s,stroke-opacity .18s,stroke-width .18s}
+.network-edge{stroke:var(--hairline);stroke-width:1;pointer-events:none;transition:stroke .18s,stroke-opacity .18s,stroke-width .18s,opacity .3s}
 .network-edge.dim{stroke-opacity:0.05 !important}
 .network-edge.highlight{stroke:var(--primary) !important;stroke-opacity:0.85 !important;stroke-width:2}
-.network-node{cursor:pointer;transition:opacity .18s,transform .12s;transform-origin:center;transform-box:fill-box}
+.network-node{cursor:pointer;transition:opacity .3s,transform .35s cubic-bezier(.34,1.56,.64,1);transform-origin:center;transform-box:fill-box}
 .network-node:hover{transform:scale(1.25)}
 .network-node.dim{opacity:0.15}
 .network-node.active{stroke:#161616 !important;stroke-width:2 !important}
@@ -480,6 +480,15 @@ a:focus-visible,
 }
 .network-label.dim{opacity:0.12}
 .network-label.active{opacity:1;font-weight:600;font-size:11px}
+
+/* 스토리 재생 — 등장 전 숨김 상태 (제거 시 springy 팝 등장) */
+.network-node.rp-hidden{transform:scale(0);opacity:0;pointer-events:none}
+.network-label.rp-hidden{opacity:0}
+.network-edge.rp-hidden{opacity:0}
+.replay-date{
+  font-size:12px;color:var(--ink-muted);letter-spacing:0.32px;
+  min-width:84px;font-variant-numeric:tabular-nums;
+}
 .network-info{
   position:absolute;top:16px;right:16px;
   background:var(--canvas);border:1px solid var(--hairline);
@@ -756,6 +765,13 @@ a:focus-visible,
           <button class="switcher-btn" data-status="wip" aria-pressed="false">진행중</button>
         </div>
       </div>
+      <div class="switcher-group">
+        <span class="switcher-label" style="background:#ff832b">스토리</span>
+        <div class="view-toggle">
+          <button id="replayBtn" class="view-btn" type="button" title="첫 날짜부터 기록이 쌓이는 과정을 재생">▶ 재생</button>
+        </div>
+        <span id="replayDate" class="replay-date" aria-live="polite"></span>
+      </div>
     </div>
 
     <!-- Category tab strip -->
@@ -1020,6 +1036,7 @@ function applyFilters(){
 
 /* ── 메인 render dispatcher ─────────────────────────────── */
 function render(){
+  if(replayActive && !replayInternal) haltReplay();   // 사용자 조작 → 재생 중단
   const filtered = applyFilters();
 
   setStat('total', filtered.length);
@@ -1266,7 +1283,7 @@ function renderCumulativeChart(filtered){
   el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="누적 프로젝트 성장">`
     + grid
     + `<path d="${area}" fill="color-mix(in srgb, var(--primary) 14%, transparent)"/>`
-    + `<path d="${line}" fill="none" stroke="var(--primary)" stroke-width="1.6" pathLength="1" class="chart-line-draw"/>`
+    + `<path d="${line}" fill="none" stroke="var(--primary)" stroke-width="1.6" pathLength="1"${replayActive ? '' : ' class="chart-line-draw"'}/>`
     + `<circle cx="${X(t1).toFixed(1)}" cy="${Y(max).toFixed(1)}" r="3" fill="var(--primary)"/>`
     + `<text x="${(X(t1)-8).toFixed(1)}" y="${(Y(max)-8).toFixed(1)}" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="end">${max}개</text>`
     + `<text x="${L}" y="${H-8}" font-size="9" fill="var(--ink-subtle)">${fmtD(pts[0].d)}</text>`
@@ -1341,6 +1358,74 @@ function renderTagChart(filtered){
   // 안전망 — IO가 발화하지 않는 환경에서도 차트가 숨은 채 남지 않게
   setTimeout(() => cards.forEach(c => c.classList.add('in-view')), 2500);
 })();
+
+/* ── 스토리 재생 (타임 리플레이) ────────────────────────── */
+// 첫 날짜부터 커서를 흘리며 통계·히트맵·차트·타임라인·네트워크가 함께 자라난다.
+let replayActive = false, replayTimer = 0, replayInternal = false;
+
+function haltReplay(){   // 상태만 해제 (render 내부 훅·중지 버튼 공용)
+  replayActive = false;
+  clearTimeout(replayTimer);
+  const b = document.getElementById('replayBtn');
+  if(b) b.textContent = '▶ 재생';
+  document.getElementById('replayDate').textContent = '';
+}
+
+function updateReplayFrame(subset){
+  replayInternal = true;
+  setStat('total', subset.length);
+  setStat('work',  subset.filter(p => p.group === 'work').length);
+  setStat('home',  subset.filter(p => p.group === 'home').length);
+  if(subset.length) setStat('days', getDashboardStats(subset).days);
+  renderHeatmap(subset);
+  renderCharts(subset);
+  if(currentView === 'timeline') renderTimeline(subset);
+  replayInternal = false;
+}
+
+function startReplay(){
+  if(replayActive){ haltReplay(); render(); renderSummary(); return; }   // 재생 중 클릭 = 정지
+  const base = applyFilters();
+  if(base.length === 0) return;
+  const dates = [...new Set(base.map(p => p.date))].sort();
+  replayActive = true;
+  document.getElementById('replayBtn').textContent = '⏹ 정지';
+
+  // 네트워크 뷰: 전체 렌더 후 전부 숨김 — 날짜마다 팝 등장
+  if(currentView === 'network'){
+    replayInternal = true; renderNetwork(base); replayInternal = false;
+    net.nodes.forEach(n => { n.on = false; });
+    net.nodeEls.forEach(el => el.classList.add('rp-hidden'));
+    net.labelEls.forEach(el => el.classList.add('rp-hidden'));
+    net.edgeEls.forEach(eg => eg.el.classList.add('rp-hidden'));
+  }
+
+  let i = 0;
+  const stepMs = Math.max(140, Math.min(320, Math.round(15000 / dates.length)));
+  const step = () => {
+    if(!replayActive) return;
+    const cursor = dates[i];
+    document.getElementById('replayDate').textContent = cursor;
+    updateReplayFrame(base.filter(p => p.date <= cursor));
+    if(currentView === 'network' && net){
+      net.nodes.forEach((n, idx) => {
+        if(n.on === false && n.p.date <= cursor){
+          n.on = true;
+          net.nodeEls[idx].classList.remove('rp-hidden');
+          net.labelEls[idx].classList.remove('rp-hidden');
+        }
+      });
+      net.edgeEls.forEach(eg => {
+        if(net.nodes[eg.a].on !== false && net.nodes[eg.b].on !== false) eg.el.classList.remove('rp-hidden');
+      });
+      netWake(0.28);   // 새 노드 합류 → 그래프가 출렁이며 자리를 내줌
+    }
+    i++;
+    if(i < dates.length) replayTimer = setTimeout(step, stepMs);
+    else { haltReplay(); render(); renderSummary(); }   // 피날레 — 누적 곡선 draw 재생
+  };
+  step();
+}
 
 // 히트맵 셀 클릭 → 타임라인 해당 날짜로 이동
 function jumpToDate(ymd){
@@ -1585,7 +1670,9 @@ function netTick(){
 
   const REPEL = 1800, K = 0.025, LEN = 90, CENTER = 0.006, DAMP = 0.86;
   for(let a=0; a<nodes.length; a++){
+    if(nodes[a].on === false) continue;                    // 스토리 재생 중 미등장 노드 제외
     for(let b=a+1; b<nodes.length; b++){
+      if(nodes[b].on === false) continue;
       const na = nodes[a], nb = nodes[b];
       const dx = nb.x-na.x, dy = nb.y-na.y;
       const d2 = dx*dx+dy*dy+1, d = Math.sqrt(d2), f = REPEL/d2*s;
@@ -1595,6 +1682,7 @@ function netTick(){
   }
   links.forEach(l => {
     const a = nodes[l.source], b = nodes[l.target];
+    if(a.on === false || b.on === false) return;           // 미등장 노드의 엣지 제외
     const dx = b.x-a.x, dy = b.y-a.y;
     const d = Math.sqrt(dx*dx+dy*dy)+0.1;
     let f = (d-LEN)*K*s;
@@ -1656,6 +1744,7 @@ function buildPaletteAll(){
   items.push({icon:ICONS.view,   section:'view',   cmd:true, label:'타임라인 보기',  meta:'View',   fn:()=>setView('timeline')});
   items.push({icon:ICONS.view,   section:'view',   cmd:true, label:'네트워크 보기',  meta:'View',   fn:()=>setView('network')});
   items.push({icon:ICONS.reset,  section:'action', cmd:true, label:'필터 초기화',    meta:'Action', fn:resetFilters});
+  items.push({icon:ICONS.view,   section:'action', cmd:true, label:'스토리 재생 — 기록이 쌓이는 과정', meta:'Action', fn:startReplay});
   Object.entries(GROUP_LABELS).forEach(([k,v])  => items.push({icon:ICONS.group,  section:'filter', cmd:true, label:`그룹: ${v}`,     meta:'Filter', fn:()=>setGroup(k)}));
   Object.entries(CAT_LABELS).forEach(([k,v])    => items.push({icon:ICONS.cat,    section:'filter', cmd:true, label:`카테고리: ${v}`, meta:'Filter', fn:()=>setCat(k)}));
   Object.entries(STATUS_LABELS).forEach(([k,v]) => items.push({icon:ICONS.status, section:'filter', cmd:true, label:`상태: ${v}`,     meta:'Filter', fn:()=>setStatus(k)}));
@@ -2075,6 +2164,7 @@ document.getElementById('paletteOverlay').addEventListener('click', e => {
 loadURL();
 renderSummary();
 render();
+document.getElementById('replayBtn').addEventListener('click', startReplay);
 
 /* ── 테마 토글 ──────────────────────────────────────────── */
 (function initTheme(){
