@@ -394,7 +394,22 @@ a:focus-visible,
   display:grid;grid-template-columns:1fr 1fr;gap:32px 48px;
 }
 @media (max-width:860px){.charts-grid{grid-template-columns:1fr}}
-.chart-card{min-width:0}
+.chart-card{
+  min-width:0;
+  opacity:0;transform:translateY(14px);
+  transition:opacity .6s ease,transform .6s ease;
+}
+.chart-card:nth-child(2){transition-delay:.08s}
+.chart-card:nth-child(3){transition-delay:.16s}
+.chart-card:nth-child(4){transition-delay:.24s}
+.chart-card.in-view{opacity:1;transform:none}
+/* 누적 곡선 — 렌더 시 선이 그려지는 애니메이션 (pathLength=1 기준) */
+.chart-line-draw{stroke-dasharray:1;stroke-dashoffset:1;animation:lineDraw 1.1s ease-out forwards}
+@keyframes lineDraw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion: reduce){
+  .chart-card{opacity:1;transform:none;transition:none}
+  .chart-line-draw{animation:none;stroke-dashoffset:0}
+}
 .chart-title{
   font-size:12px;font-weight:400;letter-spacing:0.32px;
   color:var(--ink-muted);text-transform:uppercase;
@@ -425,6 +440,12 @@ a:focus-visible,
 }
 .view-btn:hover{background:var(--surface-2);color:var(--ink)}
 .view-btn.active{background:linear-gradient(180deg,#f5f5f7,#d2d2d7);color:#1d1d1f;border-color:#c0c0c5}
+/* pill active — 다크 테마에서는 어두운 그라데이션으로 */
+[data-theme="dark"] .switcher-btn.active,
+[data-theme="dark"] .view-btn.active{
+  background:linear-gradient(180deg,#48484a,#2c2c2e);
+  color:#f5f5f7;border-color:#5a5a5e;
+}
 
 /* ── Compact density ─────────────────────────────────────── */
 .timeline.compact .date-group{margin-bottom:12px}
@@ -950,14 +971,31 @@ function getDashboardStats(items){
   };
 }
 
+// 통계 숫자 카운트업 — 현재 표시값에서 목표값까지 500ms easeOut 트윈
+function setStat(key, value){
+  const el = document.querySelector(`[data-stat="${key}"]`);
+  const from = parseInt(el.textContent, 10) || 0;
+  if(from === value || matchMedia('(prefers-reduced-motion: reduce)').matches){
+    el.textContent = value; return;
+  }
+  cancelAnimationFrame(el._raf);
+  const t0 = performance.now(), dur = 500;
+  const step = t => {
+    const k = Math.min((t - t0) / dur, 1);
+    el.textContent = Math.round(from + (value - from) * (1 - Math.pow(1 - k, 3)));
+    if(k < 1) el._raf = requestAnimationFrame(step);
+  };
+  el._raf = requestAnimationFrame(step);
+}
+
 function renderSummary(){
   const stats = getDashboardStats(projects);
   document.getElementById('heroSummary').textContent =
     `회사 ${stats.work}개 · 집 ${stats.home}개 · 총 ${stats.total}개 프로젝트`;
-  document.querySelector('[data-stat="total"]').textContent = stats.total;
-  document.querySelector('[data-stat="work"]').textContent  = stats.work;
-  document.querySelector('[data-stat="home"]').textContent  = stats.home;
-  document.querySelector('[data-stat="days"]').textContent  = stats.days;
+  setStat('total', stats.total);
+  setStat('work',  stats.work);
+  setStat('home',  stats.home);
+  setStat('days',  stats.days);
   document.getElementById('dateRange').textContent = `${stats.firstLabel} — ${stats.lastLabel}`;
 }
 
@@ -984,9 +1022,9 @@ function applyFilters(){
 function render(){
   const filtered = applyFilters();
 
-  document.querySelector('[data-stat="total"]').textContent = filtered.length;
-  document.querySelector('[data-stat="work"]').textContent  = filtered.filter(p => p.group === 'work').length;
-  document.querySelector('[data-stat="home"]').textContent  = filtered.filter(p => p.group === 'home').length;
+  setStat('total', filtered.length);
+  setStat('work',  filtered.filter(p => p.group === 'work').length);
+  setStat('home',  filtered.filter(p => p.group === 'home').length);
 
   syncURL();
   renderHeatmap(filtered);
@@ -1228,7 +1266,7 @@ function renderCumulativeChart(filtered){
   el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="누적 프로젝트 성장">`
     + grid
     + `<path d="${area}" fill="color-mix(in srgb, var(--primary) 14%, transparent)"/>`
-    + `<path d="${line}" fill="none" stroke="var(--primary)" stroke-width="1.6"/>`
+    + `<path d="${line}" fill="none" stroke="var(--primary)" stroke-width="1.6" pathLength="1" class="chart-line-draw"/>`
     + `<circle cx="${X(t1).toFixed(1)}" cy="${Y(max).toFixed(1)}" r="3" fill="var(--primary)"/>`
     + `<text x="${(X(t1)-8).toFixed(1)}" y="${(Y(max)-8).toFixed(1)}" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="end">${max}개</text>`
     + `<text x="${L}" y="${H-8}" font-size="9" fill="var(--ink-subtle)">${fmtD(pts[0].d)}</text>`
@@ -1291,6 +1329,18 @@ function renderTagChart(filtered){
   });
   el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${g}</svg>`;
 }
+
+// 차트 카드 진입 리빌 — 화면에 처음 보일 때 1회 페이드+상승
+(function initChartReveal(){
+  const cards = document.querySelectorAll('.chart-card');
+  if(!('IntersectionObserver' in window)){ cards.forEach(c => c.classList.add('in-view')); return; }
+  const io = new IntersectionObserver(entries => entries.forEach(en => {
+    if(en.isIntersecting){ en.target.classList.add('in-view'); io.unobserve(en.target); }
+  }), { threshold: 0.2 });
+  cards.forEach(c => io.observe(c));
+  // 안전망 — IO가 발화하지 않는 환경에서도 차트가 숨은 채 남지 않게
+  setTimeout(() => cards.forEach(c => c.classList.add('in-view')), 2500);
+})();
 
 // 히트맵 셀 클릭 → 타임라인 해당 날짜로 이동
 function jumpToDate(ymd){
@@ -1377,7 +1427,7 @@ function renderNetwork(filtered){
   const layout = computeNetLayout();
   const nodes = filtered.map((p,i) => {
     const c = layout.get(p) || { x: W/2, y: H/2 };
-    return { id:i, p, x:c.x, y:c.y };
+    return { id:i, p, x:c.x, y:c.y, vx:0, vy:0 };
   });
   const links = [];
   for(let a=0; a<nodes.length; a++){
@@ -1424,14 +1474,20 @@ function renderNetwork(filtered){
     `<span class="network-legend-item"><span class="network-legend-swatch" style="background:var(--cat-${k})"></span>${v}</span>`
   ).join('') + `<span class="network-legend-item" style="margin-left:auto">노드 ${nodes.length} · 연결 ${links.length}</span>`;
 
-  function clearHighlight(){
+  function clearEmphasis(){
     svgEl.querySelectorAll('.network-node, .network-edge, .network-label').forEach(n => {
       n.classList.remove('dim','highlight','active');
     });
-    info.classList.remove('visible');
   }
 
-  function focusNode(id){
+  function clearHighlight(){
+    clearEmphasis();
+    info.classList.remove('visible');
+    if(net) net.focusedId = null;
+  }
+
+  // 노드+이웃 강조 (호버·클릭 공용) — 이웃 Set 반환
+  function applyEmphasis(id){
     const neighbors = new Set();
     links.forEach(l => {
       if(l.source === id) neighbors.add(l.target);
@@ -1452,6 +1508,12 @@ function renderNetwork(filtered){
       ln.classList.toggle('highlight', isHi);
       ln.classList.toggle('dim', !isHi);
     });
+    return neighbors;
+  }
+
+  function focusNode(id){
+    const neighbors = applyEmphasis(id);
+    net.focusedId = id;
     const p = nodes[id].p;
     info.innerHTML = `<button class="network-info-close" aria-label="닫기">×</button>
       <div class="network-info-title">${esc(p.name)}</div>
@@ -1463,12 +1525,17 @@ function renderNetwork(filtered){
     info.querySelector('.network-info-close').addEventListener('click', clearHighlight);
   }
 
-  // 팬/줌/드래그 공유 상태 (window·svgEl 리스너는 init에서 1회 등록)
+  // 팬/줌/드래그/시뮬 공유 상태 (window·svgEl 리스너는 init에서 1회 등록)
   net = {
-    svgEl, nodes, W, H,
+    svgEl, nodes, links, W, H,
+    nodeEls:  Array.from(svgEl.querySelectorAll('.network-node')),
+    labelEls: Array.from(svgEl.querySelectorAll('.network-label')),
+    edgeEls:  Array.from(svgEl.querySelectorAll('.network-edge')).map(el => ({ el, a:+el.dataset.a, b:+el.dataset.b })),
     vb:{ x:0, y:0, w:W, h:H },
     dragId:-1, dragRect:null, dragLabel:null, dragEdges:[],
     moved:false, panning:false, panStart:null,
+    alpha:0, pinX:0, pinY:0, focusedId:null,
+    reduce: matchMedia('(prefers-reduced-motion: reduce)').matches,
   };
 
   // 노드 클릭 → 포커스 (드래그 직후 클릭은 무시)
@@ -1485,9 +1552,78 @@ function renderNetwork(filtered){
         focusNode(+el.dataset.id);
       }
     });
+    // 호버 — 클릭 선택이 없을 때만 이웃 강조 (옵시디언 동작)
+    el.addEventListener('mouseenter', () => {
+      if(net.focusedId === null && net.dragId === -1) applyEmphasis(+el.dataset.id);
+    });
+    el.addEventListener('mouseleave', () => {
+      if(net.focusedId === null) clearEmphasis();
+      else applyEmphasis(net.focusedId);
+    });
   });
   // 배경 클릭 → 해제 (팬 직후 클릭은 무시)
   svgEl.addEventListener('click', () => { if(!net.moved) clearHighlight(); });
+
+  // 진입 시 부드러운 정착 시뮬 — 그래프가 살아있는 느낌
+  netWake(0.3);
+}
+
+/* ── 라이브 force 시뮬레이션 (rAF, 안정되면 잠들고 드래그로 깨어남) ── */
+let netRAF = 0;
+function netWake(a){
+  if(!net || net.reduce) return;
+  net.alpha = Math.max(net.alpha, a);
+  if(!netRAF) netRAF = requestAnimationFrame(netTick);
+}
+function netTick(){
+  netRAF = 0;
+  if(!net || currentView !== 'network') return;
+  const { nodes, links, W, H } = net;
+  const dragging = net.dragId !== -1;
+  const s = net.alpha;                       // 힘 스케일 (알파 감쇠)
+  if(s < 0.005 && !dragging) return;         // 안정 → 잠들기
+
+  const REPEL = 1800, K = 0.025, LEN = 90, CENTER = 0.006, DAMP = 0.86;
+  for(let a=0; a<nodes.length; a++){
+    for(let b=a+1; b<nodes.length; b++){
+      const na = nodes[a], nb = nodes[b];
+      const dx = nb.x-na.x, dy = nb.y-na.y;
+      const d2 = dx*dx+dy*dy+1, d = Math.sqrt(d2), f = REPEL/d2*s;
+      na.vx -= (dx/d)*f; na.vy -= (dy/d)*f;
+      nb.vx += (dx/d)*f; nb.vy += (dy/d)*f;
+    }
+  }
+  links.forEach(l => {
+    const a = nodes[l.source], b = nodes[l.target];
+    const dx = b.x-a.x, dy = b.y-a.y;
+    const d = Math.sqrt(dx*dx+dy*dy)+0.1, f = (d-LEN)*K*s;
+    a.vx += (dx/d)*f; a.vy += (dy/d)*f;
+    b.vx -= (dx/d)*f; b.vy -= (dy/d)*f;
+  });
+  nodes.forEach((n, i) => {
+    if(i === net.dragId){ n.x = net.pinX; n.y = net.pinY; n.vx = 0; n.vy = 0; return; }
+    n.vx += (W/2-n.x)*CENTER*s; n.vy += (H/2-n.y)*CENTER*s;
+    n.vx *= DAMP; n.vy *= DAMP;
+    n.x += n.vx; n.y += n.vy;
+    n.x = Math.max(30, Math.min(W-30, n.x));
+    n.y = Math.max(30, Math.min(H-50, n.y));
+  });
+
+  // DOM 반영 (렌더 시 캐시한 요소 참조 사용)
+  nodes.forEach((n, i) => {
+    const c = net.nodeEls[i];
+    c.setAttribute('cx', n.x.toFixed(1)); c.setAttribute('cy', n.y.toFixed(1));
+    const lb = net.labelEls[i];
+    lb.setAttribute('x', n.x.toFixed(1)); lb.setAttribute('y', (n.y + (n.r||8) + 11).toFixed(1));
+  });
+  net.edgeEls.forEach(eg => {
+    const a = nodes[eg.a], b = nodes[eg.b];
+    eg.el.setAttribute('x1', a.x.toFixed(1)); eg.el.setAttribute('y1', a.y.toFixed(1));
+    eg.el.setAttribute('x2', b.x.toFixed(1)); eg.el.setAttribute('y2', b.y.toFixed(1));
+  });
+
+  net.alpha = dragging ? Math.max(s, 0.35) : s * 0.975;
+  netRAF = requestAnimationFrame(netTick);
 }
 
 /* ── 뷰 토글 ────────────────────────────────────────────── */
@@ -1861,6 +1997,8 @@ document.getElementById('paletteOverlay').addEventListener('click', e => {
     const nodeEl = e.target.closest('.network-node');
     if(nodeEl){
       net.dragId    = +nodeEl.dataset.id;
+      net.pinX      = net.nodes[net.dragId].x;   // 시뮬 핀 초기 위치
+      net.pinY      = net.nodes[net.dragId].y;
       net.dragRect  = nodeEl;
       net.dragLabel = svgEl.querySelector(`.network-label[data-id="${net.dragId}"]`);
       net.dragEdges = Array.from(svgEl.querySelectorAll(
@@ -1877,19 +2015,26 @@ document.getElementById('paletteOverlay').addEventListener('click', e => {
     if(net.dragId !== -1){
       net.moved = true;
       const p = toSVG(e.clientX, e.clientY);
-      const n = net.nodes[net.dragId], r = n.r || 8;
-      n.x = p.x; n.y = p.y;
-      net.dragRect.setAttribute('cx', n.x.toFixed(1));
-      net.dragRect.setAttribute('cy', n.y.toFixed(1));
-      if(net.dragLabel){
-        net.dragLabel.setAttribute('x', n.x.toFixed(1));
-        net.dragLabel.setAttribute('y', (n.y + r + 11).toFixed(1));
+      if(net.reduce){
+        // 모션 최소화 — 시뮬 없이 직접 이동 (기존 방식)
+        const n = net.nodes[net.dragId], r = n.r || 8;
+        n.x = p.x; n.y = p.y;
+        net.dragRect.setAttribute('cx', n.x.toFixed(1));
+        net.dragRect.setAttribute('cy', n.y.toFixed(1));
+        if(net.dragLabel){
+          net.dragLabel.setAttribute('x', n.x.toFixed(1));
+          net.dragLabel.setAttribute('y', (n.y + r + 11).toFixed(1));
+        }
+        net.dragEdges.forEach(ln => {
+          const a = net.nodes[+ln.dataset.a], b = net.nodes[+ln.dataset.b];
+          ln.setAttribute('x1', a.x.toFixed(1)); ln.setAttribute('y1', a.y.toFixed(1));
+          ln.setAttribute('x2', b.x.toFixed(1)); ln.setAttribute('y2', b.y.toFixed(1));
+        });
+      } else {
+        // 라이브 시뮬 — 커서에 핀 고정, 이웃은 스프링으로 따라옴
+        net.pinX = p.x; net.pinY = p.y;
+        netWake(0.4);
       }
-      net.dragEdges.forEach(ln => {
-        const a = net.nodes[+ln.dataset.a], b = net.nodes[+ln.dataset.b];
-        ln.setAttribute('x1', a.x.toFixed(1)); ln.setAttribute('y1', a.y.toFixed(1));
-        ln.setAttribute('x2', b.x.toFixed(1)); ln.setAttribute('y2', b.y.toFixed(1));
-      });
     } else if(net.panning){
       const r = svgEl.getBoundingClientRect();
       net.vb.x = net.panStart.vx - (e.clientX - net.panStart.mx) / r.width  * net.vb.w;
