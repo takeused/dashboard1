@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claude Code Project Timeline</title>
+<meta name="description" content="Claude·CODEX와 함께한 작업 기록 — 타임라인·네트워크 그래프 대시보드">
+<meta property="og:title" content="Claude Code Project Timeline">
+<meta property="og:description" content="Claude·CODEX와 함께한 작업 기록 — 타임라인·네트워크 그래프 대시보드">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://takeused.github.io/dashboard1/">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230f62fe'/%3E%3Ccircle cx='10' cy='11' r='3.4' fill='%23fff'/%3E%3Ccircle cx='22' cy='9' r='2.6' fill='%23fff'/%3E%3Ccircle cx='19' cy='22' r='4' fill='%23fff'/%3E%3Cpath d='M10 11L22 9M10 11l9 11M22 9l-3 13' stroke='%23fff' stroke-width='1.2' stroke-opacity='.65'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
@@ -375,6 +383,31 @@ a:focus-visible,
 .legend-cell{display:inline-block;width:11px;height:11px}
 .heatmap-wrap{overflow-x:auto;padding-bottom:4px}
 #heatmap svg{display:block;min-width:600px}
+.heatmap-cell-active{cursor:pointer}
+
+/* ── Insight Charts ──────────────────────────────────────── */
+.charts-section{
+  background:var(--canvas);padding:48px 0;
+  border-bottom:1px solid var(--hairline);
+}
+.charts-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:32px 48px;
+}
+@media (max-width:860px){.charts-grid{grid-template-columns:1fr}}
+.chart-card{min-width:0}
+.chart-title{
+  font-size:12px;font-weight:400;letter-spacing:0.32px;
+  color:var(--ink-muted);text-transform:uppercase;
+  margin-bottom:16px;display:block;
+}
+.chart-card svg{display:block;width:100%;height:auto}
+.chart-card svg text{font-family:'IBM Plex Sans',sans-serif}
+.chart-row-click{cursor:pointer}
+.chart-row-click:hover rect{opacity:0.8}
+.chart-empty{
+  font-size:13px;color:var(--ink-subtle);letter-spacing:0.16px;
+  padding:24px 0;
+}
 
 /* ── View Toolbar ────────────────────────────────────────── */
 .view-toolbar{
@@ -619,14 +652,38 @@ a:focus-visible,
       <div class="heatmap-legend">
         <span>적음</span>
         <span class="legend-cell" style="background:var(--surface-1);border:1px solid var(--hairline)"></span>
-        <span class="legend-cell" style="background:rgba(15,98,254,0.25)"></span>
-        <span class="legend-cell" style="background:rgba(15,98,254,0.5)"></span>
-        <span class="legend-cell" style="background:rgba(15,98,254,0.75)"></span>
+        <span class="legend-cell" style="background:color-mix(in srgb, var(--primary) 28%, transparent)"></span>
+        <span class="legend-cell" style="background:color-mix(in srgb, var(--primary) 50%, transparent)"></span>
+        <span class="legend-cell" style="background:color-mix(in srgb, var(--primary) 78%, transparent)"></span>
         <span class="legend-cell" style="background:var(--primary)"></span>
         <span>많음</span>
       </div>
     </div>
     <div class="heatmap-wrap"><div id="heatmap"></div></div>
+  </div>
+</section>
+
+<!-- Insight Charts -->
+<section class="charts-section">
+  <div class="container">
+    <div class="charts-grid">
+      <div class="chart-card">
+        <span class="chart-title">월별 활동 추이</span>
+        <div id="chartMonthly"></div>
+      </div>
+      <div class="chart-card">
+        <span class="chart-title">누적 프로젝트 성장</span>
+        <div id="chartCumulative"></div>
+      </div>
+      <div class="chart-card">
+        <span class="chart-title">카테고리 분포</span>
+        <div id="chartCategory"></div>
+      </div>
+      <div class="chart-card">
+        <span class="chart-title">태그 Top 12</span>
+        <div id="chartTags"></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -933,6 +990,7 @@ function render(){
 
   syncURL();
   renderHeatmap(filtered);
+  renderCharts(filtered);
 
   const tl  = document.getElementById('timeline');
   const nv  = document.getElementById('networkView');
@@ -976,6 +1034,7 @@ function renderTimeline(filtered){
   Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a)).forEach(d => {
     const g  = document.createElement('div');
     g.className = 'date-group';
+    g.dataset.date = d;
     const dt = new Date(d + 'T00:00:00');
     const lbl = `${dt.getFullYear()}.${String(dt.getMonth()+1).padStart(2,'0')}.${String(dt.getDate()).padStart(2,'0')}`;
     g.innerHTML = `<div class="date-label">${lbl}</div>`;
@@ -1033,10 +1092,10 @@ function renderHeatmap(filtered){
   const H = TOP + 7 * (CELL+GAP) + 4;
 
   const intensity = c => {
-    if(!c)        return { fill:'var(--surface-1)', stroke:'#e0e0e0' };
-    if(c === 1)   return { fill:'rgba(15,98,254,0.28)', stroke:'rgba(15,98,254,0.35)' };
-    if(c === 2)   return { fill:'rgba(15,98,254,0.5)',  stroke:'rgba(15,98,254,0.55)' };
-    if(c <= 4)    return { fill:'rgba(15,98,254,0.78)', stroke:'rgba(15,98,254,0.8)'  };
+    if(!c)        return { fill:'var(--surface-1)', stroke:'var(--hairline)' };
+    if(c === 1)   return { fill:'color-mix(in srgb, var(--primary) 28%, transparent)', stroke:'color-mix(in srgb, var(--primary) 35%, transparent)' };
+    if(c === 2)   return { fill:'color-mix(in srgb, var(--primary) 50%, transparent)', stroke:'color-mix(in srgb, var(--primary) 55%, transparent)' };
+    if(c <= 4)    return { fill:'color-mix(in srgb, var(--primary) 78%, transparent)', stroke:'color-mix(in srgb, var(--primary) 80%, transparent)' };
     return            { fill:'var(--primary)', stroke:'var(--primary)' };
   };
 
@@ -1046,7 +1105,7 @@ function renderHeatmap(filtered){
   ['','월','','수','','금',''].forEach((d, i) => {
     if(!d) return;
     dayLabels += `<text x="0" y="${TOP + i*(CELL+GAP) + CELL - 2}" `
-              + `font-size="10" fill="#8c8c8c" font-family="IBM Plex Sans,sans-serif" letter-spacing="0.32">${d}</text>`;
+              + `font-size="10" fill="var(--ink-subtle)" font-family="IBM Plex Sans,sans-serif" letter-spacing="0.32">${d}</text>`;
   });
 
   // 셀 + 월 라벨
@@ -1062,16 +1121,18 @@ function renderHeatmap(filtered){
       const x = LEFT + w*(CELL+GAP);
       const y = TOP + d*(CELL+GAP);
       const { fill, stroke } = intensity(count);
-      cells += `<rect x="${x}" y="${y}" width="${CELL}" height="${CELL}" `
+      // 프로젝트가 있는 날은 클릭 → 타임라인 해당 날짜로 점프
+      const clickable = count > 0 ? ` class="heatmap-cell-active" data-jump-date="${ymd}"` : '';
+      cells += `<rect${clickable} x="${x}" y="${y}" width="${CELL}" height="${CELL}" `
             + `fill="${fill}" stroke="${stroke}" stroke-width="0.5">`
-            + `<title>${ymd} · ${count}개</title></rect>`;
+            + `<title>${ymd} · ${count}개${count > 0 ? ' — 클릭하여 이동' : ''}</title></rect>`;
       if(monthInWeek === -1) monthInWeek = dt.getMonth();
     }
     // 월 라벨 — 주의 첫 유효 셀의 월이 직전 라벨과 다를 때
     if(monthInWeek !== -1 && monthInWeek !== lastMonth){
       lastMonth = monthInWeek;
       const x = LEFT + w*(CELL+GAP);
-      monthLabels += `<text x="${x}" y="${TOP - 7}" font-size="10" fill="#8c8c8c" `
+      monthLabels += `<text x="${x}" y="${TOP - 7}" font-size="10" fill="var(--ink-subtle)" `
                   + `font-family="IBM Plex Sans,sans-serif" letter-spacing="0.32">${String(monthInWeek+1).padStart(2,'0')}월</text>`;
     }
   }
@@ -1080,6 +1141,168 @@ function renderHeatmap(filtered){
             + `style="width:${W}px;height:${H}px;display:block">`
             + monthLabels + dayLabels + cells + `</svg>`;
   document.getElementById('heatmap').innerHTML = svg;
+}
+
+/* ── 인사이트 차트 (순수 SVG, 필터 연동) ────────────────── */
+const CHART_EMPTY = '<p class="chart-empty">표시할 데이터가 없습니다.</p>';
+const CAT_SHORT = {ai:'AI / LLM',data:'데이터',doc:'문서',mcp:'MCP',util:'유틸',finance:'재테크'};
+
+function renderCharts(filtered){
+  renderMonthlyChart(filtered);
+  renderCumulativeChart(filtered);
+  renderCategoryChart(filtered);
+  renderTagChart(filtered);
+}
+
+// 월별 활동 추이 — 회사/집 스택 막대 (월 축은 전체 기간으로 고정)
+function renderMonthlyChart(filtered){
+  const el = document.getElementById('chartMonthly');
+  if(filtered.length === 0){ el.innerHTML = CHART_EMPTY; return; }
+
+  const allM = projects.map(p => p.date.slice(0,7));
+  const minM = allM.reduce((a,b) => a < b ? a : b);
+  const maxM = allM.reduce((a,b) => a > b ? a : b);
+  const months = [];
+  let [y,m] = minM.split('-').map(Number);
+  const [ey,em] = maxM.split('-').map(Number);
+  while(y < ey || (y === ey && m <= em)){
+    months.push(`${y}-${String(m).padStart(2,'0')}`);
+    m++; if(m > 12){ m = 1; y++; }
+  }
+
+  const counts = months.map(mo => {
+    const items = filtered.filter(p => p.date.slice(0,7) === mo);
+    return { work: items.filter(p=>p.group==='work').length, home: items.filter(p=>p.group==='home').length };
+  });
+  const maxTotal = Math.max(...counts.map(c => c.work + c.home), 1);
+
+  const W = 560, H = 220, L = 8, R = 8, T = 22, B = 26;
+  const slotW = (W - L - R) / months.length;
+  const barW = Math.max(Math.min(slotW - 6, 34), 5);
+  let bars = '', labels = '';
+  months.forEach((mo, i) => {
+    const c = counts[i], total = c.work + c.home;
+    const x = L + i*slotW + (slotW - barW)/2;
+    const hW = c.work / maxTotal * (H-T-B);
+    const hH = c.home / maxTotal * (H-T-B);
+    bars += `<g><title>20${mo.slice(2,4)}.${mo.slice(5)} · 회사 ${c.work} · 집 ${c.home}</title>`
+         + (c.work ? `<rect x="${x.toFixed(1)}" y="${(H-B-hW).toFixed(1)}" width="${barW.toFixed(1)}" height="${hW.toFixed(1)}" fill="var(--primary)"/>` : '')
+         + (c.home ? `<rect x="${x.toFixed(1)}" y="${(H-B-hW-hH).toFixed(1)}" width="${barW.toFixed(1)}" height="${hH.toFixed(1)}" fill="var(--cat-finance)"/>` : '')
+         + (total ? `<text x="${(x+barW/2).toFixed(1)}" y="${(H-B-hW-hH-4).toFixed(1)}" font-size="9" fill="var(--ink-muted)" text-anchor="middle">${total}</text>` : '')
+         + `</g>`;
+    labels += `<text x="${(x+barW/2).toFixed(1)}" y="${H-8}" font-size="9" fill="var(--ink-subtle)" text-anchor="middle">${mo.slice(2,4)}.${mo.slice(5)}</text>`;
+  });
+  const legend = `<rect x="${W-118}" y="6" width="9" height="9" fill="var(--primary)"/><text x="${W-105}" y="14" font-size="10" fill="var(--ink-muted)">회사</text>`
+               + `<rect x="${W-64}" y="6" width="9" height="9" fill="var(--cat-finance)"/><text x="${W-51}" y="14" font-size="10" fill="var(--ink-muted)">집</text>`;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="월별 활동 추이">`
+    + `<line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" stroke="var(--hairline)"/>`
+    + bars + labels + legend + `</svg>`;
+}
+
+// 누적 프로젝트 성장 — 영역 곡선
+function renderCumulativeChart(filtered){
+  const el = document.getElementById('chartCumulative');
+  if(filtered.length === 0){ el.innerHTML = CHART_EMPTY; return; }
+
+  const byDate = {};
+  filtered.forEach(p => { byDate[p.date] = (byDate[p.date]||0)+1; });
+  const pts = []; let cum = 0;
+  Object.keys(byDate).sort().forEach(d => { cum += byDate[d]; pts.push({ t: new Date(d+'T00:00:00').getTime(), c: cum, d }); });
+  const t0 = pts[0].t, t1 = pts[pts.length-1].t, max = cum;
+
+  const W = 560, H = 220, L = 34, R = 14, T = 14, B = 24;
+  const X = t => L + (t1 === t0 ? 0.5 : (t - t0)/(t1 - t0)) * (W-L-R);
+  const Y = v => H-B - v/max * (H-T-B);
+
+  let line = `M ${X(pts[0].t).toFixed(1)} ${Y(pts[0].c).toFixed(1)}`;
+  pts.slice(1).forEach(p => { line += ` L ${X(p.t).toFixed(1)} ${Y(p.c).toFixed(1)}`; });
+  const area = `M ${X(t0).toFixed(1)} ${H-B} ` + line.slice(2) + ` L ${X(t1).toFixed(1)} ${H-B} Z`;
+
+  // y축 그리드 (0 · 절반 · 최대)
+  let grid = '';
+  [0, Math.round(max/2), max].forEach(v => {
+    grid += `<line x1="${L}" y1="${Y(v).toFixed(1)}" x2="${W-R}" y2="${Y(v).toFixed(1)}" stroke="var(--hairline)" stroke-dasharray="${v?'2 3':''}"/>`
+         + `<text x="${L-5}" y="${(Y(v)+3).toFixed(1)}" font-size="9" fill="var(--ink-subtle)" text-anchor="end">${v}</text>`;
+  });
+  const fmtD = d => `${d.slice(2,4)}.${d.slice(5,7)}`;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="누적 프로젝트 성장">`
+    + grid
+    + `<path d="${area}" fill="color-mix(in srgb, var(--primary) 14%, transparent)"/>`
+    + `<path d="${line}" fill="none" stroke="var(--primary)" stroke-width="1.6"/>`
+    + `<circle cx="${X(t1).toFixed(1)}" cy="${Y(max).toFixed(1)}" r="3" fill="var(--primary)"/>`
+    + `<text x="${(X(t1)-8).toFixed(1)}" y="${(Y(max)-8).toFixed(1)}" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="end">${max}개</text>`
+    + `<text x="${L}" y="${H-8}" font-size="9" fill="var(--ink-subtle)">${fmtD(pts[0].d)}</text>`
+    + `<text x="${W-R}" y="${H-8}" font-size="9" fill="var(--ink-subtle)" text-anchor="end">${fmtD(pts[pts.length-1].d)}</text>`
+    + `</svg>`;
+}
+
+// 카테고리 분포 — 가로 막대 (클릭 시 해당 카테고리 필터)
+function renderCategoryChart(filtered){
+  const el = document.getElementById('chartCategory');
+  if(filtered.length === 0){ el.innerHTML = CHART_EMPTY; return; }
+
+  const rows = Object.keys(CAT_SHORT)
+    .map(k => ({ k, n: filtered.filter(p => p.cat === k).length }))
+    .sort((a,b) => b.n - a.n);
+  const max = Math.max(...rows.map(r => r.n), 1);
+
+  const W = 560, ROWH = 30, LBL = 96, VAL = 76;
+  const H = rows.length * ROWH + 6;
+  let g = '';
+  rows.forEach((r, i) => {
+    const y = i * ROWH + 4;
+    const bw = Math.max(r.n / max * (W - LBL - VAL), r.n ? 2 : 0);
+    const pct = Math.round(r.n / filtered.length * 100);
+    g += `<g class="chart-row-click" data-cat-jump="${r.k}" tabindex="0" role="button" aria-label="${CAT_SHORT[r.k]} ${r.n}개 필터">`
+      + `<title>${CAT_SHORT[r.k]} · ${r.n}개 (${pct}%) — 클릭하여 필터</title>`
+      + `<rect x="0" y="${y}" width="${W}" height="${ROWH-8}" fill="transparent"/>`
+      + `<text x="0" y="${y+15}" font-size="11" fill="var(--ink-muted)">${CAT_SHORT[r.k]}</text>`
+      + `<rect x="${LBL}" y="${y+3}" width="${bw.toFixed(1)}" height="14" fill="var(--cat-${r.k})"/>`
+      + `<text x="${(LBL+bw+8).toFixed(1)}" y="${y+15}" font-size="11" fill="var(--ink-subtle)">${r.n} · ${pct}%</text>`
+      + `</g>`;
+  });
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${g}</svg>`;
+}
+
+// 태그 Top 12 — 가로 막대 (클릭 시 태그 검색, 기존 .tag-filter 위임 재사용)
+function renderTagChart(filtered){
+  const el = document.getElementById('chartTags');
+  if(filtered.length === 0){ el.innerHTML = CHART_EMPTY; return; }
+
+  const freq = {};
+  filtered.forEach(p => p.tags.forEach(t => { freq[t] = (freq[t]||0)+1; }));
+  const rows = Object.entries(freq).sort((a,b) => b[1]-a[1]).slice(0,12);
+  const max = rows[0] ? rows[0][1] : 1;
+
+  const W = 560, ROWH = 26, LBL = 130, VAL = 40;
+  const H = rows.length * ROWH + 6;
+  let g = '';
+  rows.forEach(([t,n], i) => {
+    const y = i * ROWH + 4;
+    const bw = Math.max(n / max * (W - LBL - VAL), 2);
+    const lbl = t.length > 13 ? t.slice(0,12)+'…' : t;
+    g += `<g class="tag-filter" data-tag="${esc(t)}" tabindex="0" role="button" aria-label="태그 ${esc(t)} ${n}개 검색">`
+      + `<title>${esc(t)} · ${n}개 — 클릭하여 검색</title>`
+      + `<rect x="0" y="${y}" width="${W}" height="${ROWH-6}" fill="transparent"/>`
+      + `<text x="0" y="${y+14}" font-size="11" fill="var(--ink-muted)">${esc(lbl)}</text>`
+      + `<rect x="${LBL}" y="${y+3}" width="${bw.toFixed(1)}" height="12" fill="color-mix(in srgb, var(--primary) 72%, transparent)"/>`
+      + `<text x="${(LBL+bw+8).toFixed(1)}" y="${y+14}" font-size="11" fill="var(--ink-subtle)">${n}</text>`
+      + `</g>`;
+  });
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${g}</svg>`;
+}
+
+// 히트맵 셀 클릭 → 타임라인 해당 날짜로 이동
+function jumpToDate(ymd){
+  if(currentView !== 'timeline') setView('timeline');
+  setTimeout(() => {
+    const target = document.querySelector(`.date-group[data-date="${ymd}"]`);
+    if(!target) return;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block:'start' });
+    const lbl = target.querySelector('.date-label');
+    if(lbl){ lbl.style.color = 'var(--primary)'; setTimeout(() => { lbl.style.color = ''; }, 2000); }
+  }, 100);
 }
 
 /* ── 네트워크 레이아웃 캐시 ─────────────────────────────── */
@@ -1521,16 +1744,19 @@ function applyTagSearch(tag){
 }
 document.addEventListener('click', e => {
   const t = e.target.closest('.tag-filter');
-  if(!t) return;
-  e.stopPropagation();
-  applyTagSearch(t.dataset.tag);
+  if(t){ e.stopPropagation(); applyTagSearch(t.dataset.tag); return; }
+  const c = e.target.closest('[data-cat-jump]');            // 카테고리 차트 → 필터
+  if(c){ setCat(c.dataset.catJump); return; }
+  const h = e.target.closest('[data-jump-date]');           // 히트맵 셀 → 날짜 점프
+  if(h){ jumpToDate(h.dataset.jumpDate); }
 });
 document.addEventListener('keydown', e => {
   if(e.key !== 'Enter' && e.key !== ' ') return;
-  const t = e.target.closest && e.target.closest('.tag-filter');
-  if(!t) return;
-  e.preventDefault();
-  applyTagSearch(t.dataset.tag);
+  if(!e.target.closest) return;
+  const t = e.target.closest('.tag-filter');
+  if(t){ e.preventDefault(); applyTagSearch(t.dataset.tag); return; }
+  const c = e.target.closest('[data-cat-jump]');
+  if(c){ e.preventDefault(); setCat(c.dataset.catJump); }
 });
 
 /* ── 제목 클릭 → 홈 ─────────────────────────────────────── */
