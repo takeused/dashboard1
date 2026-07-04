@@ -781,6 +781,7 @@
     "desc": "TradingView와 Claude를 연동한 매매·대시보드 구현 가이드 + 대시보드 생성 스크립트",
     "cat": "finance",
     "status": "done",
+    "url": "https://tradingview-chart-report.takeused.workers.dev/stock_comparison_report_2026-06-25",
     "tags": [
       "TradingView",
       "Claude",
