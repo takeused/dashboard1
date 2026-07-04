@@ -1271,7 +1271,7 @@ function renderCumulativeChart(filtered){
   Object.keys(byDate).sort().forEach(d => { cum += byDate[d]; pts.push({ t: new Date(d+'T00:00:00').getTime(), c: cum, d }); });
   const t0 = pts[0].t, t1 = pts[pts.length-1].t, max = cum;
 
-  const W = 560, H = 220, L = 34, R = 14, T = 14, B = 24;
+  const W = 560, H = 220, L = 34, R = 14, T = 28, B = 24;
   const X = t => L + (t1 === t0 ? 0.5 : (t - t0)/(t1 - t0)) * (W-L-R);
   const Y = v => H-B - v/max * (H-T-B);
 
