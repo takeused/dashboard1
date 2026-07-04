@@ -1651,14 +1651,14 @@ function renderMomentumGauge(filtered){
     `<path d="${arcPath(z.from, z.to, R)}" fill="none" stroke="${z.color}" stroke-width="15" stroke-opacity="0.85"/>`
   ).join('');
   const labels = zones.map(z => {
-    const lp = pt((z.from+z.to)/2, R + 14);
-    return `<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" font-size="10" fill="var(--ink-subtle)" text-anchor="middle">${z.label}</text>`;
+    const lp = pt((z.from+z.to)/2, R + 20);
+    return `<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" font-size="12" font-weight="500" fill="var(--ink-muted)" text-anchor="middle">${z.label}</text>`;
   }).join('');
   const tip = pt(theta, R2);
   const needle = `<line x1="${cx}" y1="${cy}" x2="${tip.x.toFixed(1)}" y2="${tip.y.toFixed(1)}" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>`
     + `<circle cx="${cx}" cy="${cy}" r="6" fill="var(--ink)"/>`;
 
-  el.innerHTML = `<svg viewBox="0 -12 ${W} ${H+12}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="모멘텀 게이지">
+  el.innerHTML = `<svg viewBox="0 -18 ${W} ${H+18}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="모멘텀 게이지">
     <title>최근 4주 ${recentRate.toFixed(1)}건/주 · 전체 평균 ${baselineRate.toFixed(1)}건/주 대비 ${ratio.toFixed(1)}배</title>
     ${arcs}${labels}${needle}
     <text x="${cx}" y="${cy+38}" font-size="19" font-weight="600" fill="${statusColor}" text-anchor="middle">${status}</text>
