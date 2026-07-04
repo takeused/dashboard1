@@ -423,6 +423,37 @@ a:focus-visible,
   font-size:13px;color:var(--ink-subtle);letter-spacing:0.16px;
   padding:24px 0;
 }
+.chart-card-wide{grid-column:1 / -1}
+
+/* ── 기록 인사이트 카드 ─────────────────────────────────── */
+.insights-title{margin-top:56px}
+.insights-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--hairline);border:1px solid var(--hairline);
+}
+@media (max-width:860px){.insights-grid{grid-template-columns:repeat(2,1fr)}}
+.insight-card{
+  background:var(--canvas);padding:24px;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .5s ease,transform .5s ease;
+}
+.insight-card.in-view{opacity:1;transform:none}
+.insight-card:nth-child(2){transition-delay:.06s}
+.insight-card:nth-child(3){transition-delay:.12s}
+.insight-card:nth-child(4){transition-delay:.18s}
+.insight-card:nth-child(5){transition-delay:.24s}
+.insight-card:nth-child(6){transition-delay:.3s}
+@media (prefers-reduced-motion: reduce){.insight-card{opacity:1;transform:none;transition:none}}
+.insight-emoji{font-size:18px;line-height:1}
+.insight-value{
+  font-size:28px;font-weight:600;color:var(--ink);
+  margin:10px 0 2px;font-variant-numeric:tabular-nums;line-height:1.2;
+}
+.insight-label{
+  font-size:11px;color:var(--ink-muted);letter-spacing:0.32px;
+  text-transform:uppercase;
+}
+.insight-sub{font-size:12px;color:var(--ink-subtle);margin-top:6px;line-height:1.5}
 
 /* ── View Toolbar ────────────────────────────────────────── */
 .view-toolbar{
@@ -634,6 +665,9 @@ a:focus-visible,
   <span>Claude Code Dashboard</span>
   <span class="utility-right">
     <span id="dateRange">—</span>
+    <button id="shareCardBtn" class="theme-toggle" type="button" aria-label="공유 카드 PNG 저장" title="현재 필터 기준 공유 카드 PNG 저장">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M8 1.5v8M4.8 6.5L8 9.7l3.2-3.2M2.5 11v2.5h11V11"/></svg>
+    </button>
     <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="라이트/다크 테마 전환" title="라이트/다크 테마 전환">
       <svg class="icon-moon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6 1a6.5 6.5 0 1 0 8.5 8.5A5.5 5.5 0 0 1 6 1z"/></svg>
       <svg class="icon-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 .8v2M8 13.2v2M.8 8h2M13.2 8h2M2.8 2.8l1.4 1.4M11.8 11.8l1.4 1.4M2.8 13.2l1.4-1.4M11.8 4.2l1.4-1.4"/></svg>
@@ -713,7 +747,13 @@ a:focus-visible,
         <span class="chart-title">태그 Top 12</span>
         <div id="chartTags"></div>
       </div>
+      <div class="chart-card chart-card-wide">
+        <span class="chart-title">카테고리 물결 — 시간에 따른 관심사의 흐름</span>
+        <div id="chartStream"></div>
+      </div>
     </div>
+    <span class="chart-title insights-title">기록 인사이트 <span style="text-transform:none;color:var(--ink-subtle)">— 전체 기록 기준</span></span>
+    <div class="insights-grid" id="insights"></div>
   </div>
 </section>
 
@@ -1213,6 +1253,20 @@ function renderCharts(filtered){
   renderCumulativeChart(filtered);
   renderCategoryChart(filtered);
   renderTagChart(filtered);
+  renderStreamChart(filtered);
+}
+
+// 점 배열을 카트멀롬 스플라인 기반 부드러운 베지어 경로로 변환
+function smoothLine(pts){
+  if(pts.length < 3) return pts.map((p,i) => `${i ? 'L' : 'M'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+  let d = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
+  for(let i=0; i<pts.length-1; i++){
+    const p0 = pts[Math.max(0,i-1)], p1 = pts[i], p2 = pts[i+1], p3 = pts[Math.min(pts.length-1,i+2)];
+    d += ` C ${(p1.x+(p2.x-p0.x)/6).toFixed(1)} ${(p1.y+(p2.y-p0.y)/6).toFixed(1)}`
+       + ` ${(p2.x-(p3.x-p1.x)/6).toFixed(1)} ${(p2.y-(p3.y-p1.y)/6).toFixed(1)}`
+       + ` ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+  }
+  return d;
 }
 
 // 월별 활동 추이 — 회사/집 스택 막대 (월 축은 전체 기간으로 고정)
@@ -1353,6 +1407,140 @@ function renderTagChart(filtered){
   el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${g}</svg>`;
 }
 
+/* ── 기록 인사이트 엔진 — 전체 데이터에서 재미있는 사실 자동 발굴 ── */
+function renderInsights(){
+  const ds = [...new Set(projects.map(p => p.date))].sort();
+  const byDate = {};
+  projects.forEach(p => { byDate[p.date] = (byDate[p.date]||0)+1; });
+
+  // 최장 연속 작업 스트릭
+  let bestLen = 1, bestEnd = ds[0], cur = 1;
+  for(let i=1; i<ds.length; i++){
+    const diff = (new Date(ds[i]) - new Date(ds[i-1])) / 86400000;
+    if(diff === 1){ cur++; if(cur > bestLen){ bestLen = cur; bestEnd = ds[i]; } }
+    else cur = 1;
+  }
+  const streakStart = new Date(new Date(bestEnd).getTime() - (bestLen-1)*86400000);
+  const fmtMD = d => `${d.getMonth()+1}/${d.getDate()}`;
+
+  // 하루 최다 기록
+  const busiest = Object.entries(byDate).sort((a,b) => b[1]-a[1])[0];
+  // 주말 작업 비율
+  const weekend = projects.filter(p => [0,6].includes(new Date(p.date+'T00:00:00').getDay())).length;
+  // 최고의 달
+  const byMonth = {};
+  projects.forEach(p => { const mo = p.date.slice(0,7); byMonth[mo] = (byMonth[mo]||0)+1; });
+  const bestMonth = Object.entries(byMonth).sort((a,b) => b[1]-a[1])[0];
+  // 대표 기술
+  const tagFreq = {};
+  projects.forEach(p => p.tags.forEach(t => { tagFreq[t] = (tagFreq[t]||0)+1; }));
+  const topTag = Object.entries(tagFreq).sort((a,b) => b[1]-a[1])[0];
+  // 최장 공백 후 복귀
+  let gap = 0, gapEnd = ds[0];
+  for(let i=1; i<ds.length; i++){
+    const diff = (new Date(ds[i]) - new Date(ds[i-1])) / 86400000;
+    if(diff > gap){ gap = diff; gapEnd = ds[i]; }
+  }
+
+  const cards = [
+    { e:'🔥', v:`${bestLen}일 연속`, l:'최장 스트릭', s:`${fmtMD(streakStart)} ~ ${fmtMD(new Date(bestEnd))} — 쉼 없이 달린 기간` },
+    { e:'⚡', v:`하루 ${busiest[1]}개`, l:'최다 기록일', s:`${busiest[0]} — 가장 뜨거웠던 하루` },
+    { e:'🌙', v:`${Math.round(weekend/projects.length*100)}%`, l:'주말 작업 비중', s:`${weekend}개 프로젝트가 토·일에 태어남` },
+    { e:'🏆', v:bestMonth[0].replace('-','.'), l:'최고의 달', s:`한 달에 ${bestMonth[1]}개 — 역대 최고 생산성` },
+    { e:'🧰', v:esc(topTag[0]), l:'대표 기술', s:`${topTag[1]}개 프로젝트에 등장한 최애 스택` },
+    { e:'🪃', v:`${gap}일 공백 후 복귀`, l:'복귀력', s:`${gapEnd}에 다시 시작 — 멈춰도 다시 돌아온다` },
+  ];
+  const box = document.getElementById('insights');
+  box.innerHTML = cards.map(c =>
+    `<div class="insight-card"><span class="insight-emoji">${c.e}</span>`
+    + `<div class="insight-value">${c.v}</div>`
+    + `<div class="insight-label">${c.l}</div>`
+    + `<div class="insight-sub">${c.s}</div></div>`
+  ).join('');
+
+  // 진입 리빌 (전용 IO + 안전망)
+  const items = box.querySelectorAll('.insight-card');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver(es => es.forEach(en => {
+      if(en.isIntersecting){ en.target.classList.add('in-view'); io.unobserve(en.target); }
+    }), { threshold: 0.2 });
+    items.forEach(c => io.observe(c));
+  }
+  setTimeout(() => items.forEach(c => c.classList.add('in-view')), 2500);
+}
+
+/* ── 공유 카드 PNG — 현재 필터 기준 요약 카드를 캔버스로 생성·다운로드 ── */
+function downloadShareCard(){
+  const filtered = applyFilters();
+  const items = filtered.length ? filtered : projects;
+  const stats = getDashboardStats(items);
+  const FONT = '"IBM Plex Sans","Malgun Gothic",sans-serif';
+
+  const c = document.createElement('canvas');
+  c.width = 1200; c.height = 630;
+  const x = c.getContext('2d');
+
+  // 배경 + 상단 액센트
+  x.fillStyle = '#161616'; x.fillRect(0, 0, 1200, 630);
+  x.fillStyle = '#0f62fe'; x.fillRect(0, 0, 1200, 6);
+
+  x.fillStyle = '#8d8d8d'; x.font = `500 19px ${FONT}`;
+  x.fillText('CLAUDE CODE PROJECT TIMELINE', 64, 76);
+
+  x.fillStyle = '#f4f4f4'; x.font = `600 84px ${FONT}`;
+  x.fillText(`${items.length}개의 프로젝트`, 60, 178);
+
+  x.fillStyle = '#c6c6c6'; x.font = `400 24px ${FONT}`;
+  x.fillText(`${stats.firstLabel} — ${stats.lastLabel}  ·  회사 ${stats.work} · 집 ${stats.home}  ·  활동 ${stats.days}일`, 64, 228);
+
+  // 태그 Top 6 pill
+  const freq = {};
+  items.forEach(p => p.tags.forEach(t => { freq[t] = (freq[t]||0)+1; }));
+  const top = Object.entries(freq).sort((a,b) => b[1]-a[1]).slice(0,6);
+  let px = 64;
+  x.font = `500 20px ${FONT}`;
+  top.forEach(([t,n]) => {
+    const label = `${t} ${n}`;
+    const w = x.measureText(label).width + 36;
+    if(px + w > 1140) return;
+    x.fillStyle = '#262626';
+    x.beginPath(); x.roundRect(px, 262, w, 42, 21); x.fill();
+    x.fillStyle = '#e0e0e0';
+    x.fillText(label, px + 18, 290);
+    px += w + 12;
+  });
+
+  // 월별 미니 막대 (회사/집 스택)
+  const byMonth = {};
+  items.forEach(p => {
+    const mo = p.date.slice(0,7);
+    if(!byMonth[mo]) byMonth[mo] = { w:0, h:0 };
+    byMonth[mo][p.group === 'work' ? 'w' : 'h']++;
+  });
+  const mos = Object.keys(byMonth).sort();
+  const maxM = Math.max(...mos.map(mo => byMonth[mo].w + byMonth[mo].h), 1);
+  const areaX = 64, areaW = 1072, baseY = 540, maxH = 170;
+  const slot = areaW / mos.length, bw = Math.max(Math.min(slot - 10, 56), 8);
+  x.font = `400 15px ${FONT}`;
+  mos.forEach((mo, i) => {
+    const bx = areaX + i*slot + (slot - bw)/2;
+    const hw = byMonth[mo].w / maxM * maxH, hh = byMonth[mo].h / maxM * maxH;
+    x.fillStyle = '#0f62fe'; x.fillRect(bx, baseY - hw, bw, hw);
+    x.fillStyle = '#2dd4bf'; x.fillRect(bx, baseY - hw - hh, bw, hh);
+    x.fillStyle = '#6f6f6f'; x.textAlign = 'center';
+    x.fillText(mo.slice(2).replace('-','.'), bx + bw/2, 566);
+    x.textAlign = 'left';
+  });
+
+  x.fillStyle = '#8d8d8d'; x.font = `400 18px ${FONT}`;
+  x.fillText('takeused.github.io/dashboard1', 64, 606);
+
+  const a = document.createElement('a');
+  a.download = 'claude-code-timeline-card.png';
+  a.href = c.toDataURL('image/png');
+  a.click();
+}
+
 // 차트 카드 진입 리빌 — 화면에 처음 보일 때 1회 페이드+상승
 (function initChartReveal(){
   const cards = document.querySelectorAll('.chart-card');
@@ -1364,6 +1552,69 @@ function renderTagChart(filtered){
   // 안전망 — IO가 발화하지 않는 환경에서도 차트가 숨은 채 남지 않게
   setTimeout(() => cards.forEach(c => c.classList.add('in-view')), 2500);
 })();
+
+// 카테고리 물결 (스트림그래프) — 월별 활동을 카테고리 층으로 쌓아 중앙 정렬(ThemeRiver)
+function renderStreamChart(filtered){
+  const el = document.getElementById('chartStream');
+  if(filtered.length === 0){ el.innerHTML = CHART_EMPTY; return; }
+
+  // 월 축은 전체 기간 고정 (월별 추이 차트와 동일 기준)
+  const allM = projects.map(p => p.date.slice(0,7));
+  const minM = allM.reduce((a,b) => a < b ? a : b);
+  const maxM = allM.reduce((a,b) => a > b ? a : b);
+  const months = [];
+  let [y,m] = minM.split('-').map(Number);
+  const [ey,em] = maxM.split('-').map(Number);
+  while(y < ey || (y === ey && m <= em)){
+    months.push(`${y}-${String(m).padStart(2,'0')}`);
+    m++; if(m > 12){ m = 1; y++; }
+  }
+
+  const cats = Object.keys(CAT_SHORT);
+  const series = {};   // cat -> 월별 카운트
+  cats.forEach(k => { series[k] = months.map(mo => filtered.filter(p => p.cat === k && p.date.slice(0,7) === mo).length); });
+  const totals = months.map((_, i) => cats.reduce((s,k) => s + series[k][i], 0));
+  const maxTotal = Math.max(...totals, 1);
+
+  const W = 1160, H = 260, L = 10, R = 10, T = 16, B = 28;
+  const innerW = W-L-R, innerH = H-T-B;
+  const X = i => L + (months.length === 1 ? 0.5 : i/(months.length-1)) * innerW;
+  const scale = innerH / maxTotal;
+
+  // 층 경계 계산 — 각 월의 스택을 세로 중앙 정렬 (강물 실루엣)
+  const bottoms = months.map((_, i) => T + (innerH + totals[i]*scale) / 2);
+  let layers = '';
+  const acc = bottoms.slice();   // 현재 층의 바닥 y
+  cats.forEach(k => {
+    const cnt = series[k];
+    if(cnt.every(c => c === 0)) return;
+    const topPts = [], botPts = [];
+    months.forEach((_, i) => {
+      botPts.push({ x: X(i), y: acc[i] });
+      acc[i] -= cnt[i] * scale;
+      topPts.push({ x: X(i), y: acc[i] });
+    });
+    const total = cnt.reduce((a,b) => a+b, 0);
+    const path = smoothLine(topPts)
+      + ` L ${botPts[botPts.length-1].x.toFixed(1)} ${botPts[botPts.length-1].y.toFixed(1)} `
+      + smoothLine(botPts.slice().reverse()).replace(/^M/, 'L') + ' Z';
+    layers += `<path d="${path}" fill="var(--cat-${k})" fill-opacity="0.82" stroke="var(--canvas)" stroke-width="1">`
+            + `<title>${CAT_SHORT[k]} · 총 ${total}개</title></path>`;
+  });
+
+  let axis = '';
+  months.forEach((mo, i) => {
+    if(months.length > 8 && i % 2 === 1) return;
+    axis += `<text x="${X(i).toFixed(1)}" y="${H-8}" font-size="9" fill="var(--ink-subtle)" text-anchor="middle">${mo.slice(2,4)}.${mo.slice(5)}</text>`;
+  });
+  const legend = cats.map((k,i) =>
+    `<rect x="${L + i*92}" y="2" width="9" height="9" fill="var(--cat-${k})"/>`
+    + `<text x="${L + i*92 + 13}" y="10" font-size="10" fill="var(--ink-muted)">${CAT_SHORT[k]}</text>`
+  ).join('');
+
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="카테고리별 월간 활동 스트림그래프">`
+    + legend + layers + axis + `</svg>`;
+}
 
 /* ── 스토리 재생 (타임 리플레이) ────────────────────────── */
 // 첫 날짜부터 커서를 흘리며 통계·히트맵·차트·타임라인·네트워크가 함께 자라난다.
@@ -1751,6 +2002,7 @@ function buildPaletteAll(){
   items.push({icon:ICONS.view,   section:'view',   cmd:true, label:'네트워크 보기',  meta:'View',   fn:()=>setView('network')});
   items.push({icon:ICONS.reset,  section:'action', cmd:true, label:'필터 초기화',    meta:'Action', fn:resetFilters});
   items.push({icon:ICONS.view,   section:'action', cmd:true, label:'스토리 재생 — 기록이 쌓이는 과정', meta:'Action', fn:startReplay});
+  items.push({icon:ICONS.project,section:'action', cmd:true, label:'공유 카드 PNG 저장', meta:'Action', fn:downloadShareCard});
   Object.entries(GROUP_LABELS).forEach(([k,v])  => items.push({icon:ICONS.group,  section:'filter', cmd:true, label:`그룹: ${v}`,     meta:'Filter', fn:()=>setGroup(k)}));
   Object.entries(CAT_LABELS).forEach(([k,v])    => items.push({icon:ICONS.cat,    section:'filter', cmd:true, label:`카테고리: ${v}`, meta:'Filter', fn:()=>setCat(k)}));
   Object.entries(STATUS_LABELS).forEach(([k,v]) => items.push({icon:ICONS.status, section:'filter', cmd:true, label:`상태: ${v}`,     meta:'Filter', fn:()=>setStatus(k)}));
@@ -2170,7 +2422,9 @@ document.getElementById('paletteOverlay').addEventListener('click', e => {
 loadURL();
 renderSummary();
 render();
+renderInsights();
 document.getElementById('replayBtn').addEventListener('click', startReplay);
+document.getElementById('shareCardBtn').addEventListener('click', downloadShareCard);
 
 /* ── 테마 토글 ──────────────────────────────────────────── */
 (function initTheme(){
