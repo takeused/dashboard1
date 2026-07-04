@@ -40,6 +40,7 @@
     "desc": "AI 기반 슬라이드 자동 제작 도구",
     "cat": "doc",
     "status": "done",
+    "series": "slide-maker",
     "tags": [
       "JavaScript",
       "HTML"
@@ -90,6 +91,7 @@
     "desc": "KISTI 과학기술 정보 MCP 서버 구축",
     "cat": "mcp",
     "status": "done",
+    "series": "kisti-mcp",
     "tags": [
       "MCP",
       "Python",
@@ -115,6 +117,7 @@
     "desc": "슬라이드 제작 도구 개선 — 디자인 및 기능 업그레이드",
     "cat": "doc",
     "status": "done",
+    "series": "slide-maker",
     "tags": [
       "JavaScript",
       "HTML"
@@ -127,6 +130,7 @@
     "desc": "KISTI MCP 서버 개선 버전 — 기능 확장",
     "cat": "mcp",
     "status": "done",
+    "series": "kisti-mcp",
     "tags": [
       "MCP",
       "Python",
@@ -140,6 +144,7 @@
     "desc": "과학기술 논문·국가R&D 과제 검색 도구 2차 개선 버전",
     "cat": "data",
     "status": "done",
+    "series": "scienceon-ntis",
     "tags": ["Web Scraping", "JavaScript", "API", "NTIS"]
   },
   {
@@ -149,6 +154,7 @@
     "desc": "과학기술 논문 및 국가R&D 과제 검색 · 트렌드 분석 도구",
     "cat": "data",
     "status": "done",
+    "series": "scienceon-ntis",
     "tags": [
       "Web Scraping",
       "JavaScript",
@@ -239,6 +245,7 @@
     "desc": "작업 결과 정리 타임라인 대시보드 1차 버전",
     "cat": "util",
     "status": "done",
+    "series": "dashboard",
     "tags": [
       "HTML",
       "CSS",
@@ -758,6 +765,7 @@
     "desc": "Nemotron-Personas-Korea 합성 페르소나가 재난안전 인식조사에 1인칭 응답 — Cerebras GLM 기반 실리콘 샘플링·사후층화 가중 집계",
     "cat": "ai",
     "status": "done",
+    "series": "nemotron-survey",
     "tags": [
       "LLM",
       "Nemotron",
@@ -866,8 +874,8 @@
   },
   {"date": "2026-05-24", "group": "home", "name": "Awesome Claude Skills", "desc": "Claude Code 스킬 생태계 큐레이션 학습 — 공개 저장소 분석 및 Antigravity 2.0 + Gemini CLI 핵심 정리", "cat": "util", "status": "done", "tags": ["Claude Code", "Skills", "학습"]},
   {"date": "2026-05-27", "group": "work", "name": "네이버 증권 리포트 크롤러", "desc": "네이버 금융 증권사 리서치 리포트 크롤링 및 수집 도구", "cat": "data", "status": "done", "tags": ["Python", "Web Scraping", "금융", "증권"]},
-  {"date": "2026-06-04", "group": "work", "name": "ScienceON / NTIS v3", "desc": "과학기술 논문·국가R&D 검색 3차 버전 — 웹앱 형태로 개선", "cat": "data", "status": "done", "tags": ["JavaScript", "HTML", "API", "NTIS"], "url": "http://172.30.24.141:3737/"},
-  {"date": "2026-06-05", "group": "work", "name": "Nemotron 가상 설문 v2", "desc": "Nemotron-Personas-Korea 2,000명 합성 페르소나 × 재난안전 인식조사 — Cerebras GLM 응답 생성·사후층화 가중 집계", "cat": "ai", "status": "done", "tags": ["LLM", "Nemotron", "Cerebras", "설문", "재난안전"]},
+  {"date": "2026-06-04", "group": "work", "name": "ScienceON / NTIS v3", "desc": "과학기술 논문·국가R&D 검색 3차 버전 — 웹앱 형태로 개선", "cat": "data", "status": "done", "series": "scienceon-ntis", "tags": ["JavaScript", "HTML", "API", "NTIS"], "url": "http://172.30.24.141:3737/"},
+  {"date": "2026-06-05", "group": "work", "name": "Nemotron 가상 설문 v2", "desc": "Nemotron-Personas-Korea 2,000명 합성 페르소나 × 재난안전 인식조사 — Cerebras GLM 응답 생성·사후층화 가중 집계", "cat": "ai", "status": "done", "series": "nemotron-survey", "tags": ["LLM", "Nemotron", "Cerebras", "설문", "재난안전"]},
   {"date": "2026-06-07", "group": "work", "name": "국가R&D 예산 심의 도구", "desc": "국가연구개발사업 예산 요구 심의를 위한 웹 기반 검토 도구", "cat": "util", "status": "done", "tags": ["HTML", "JavaScript", "R&D", "예산"]},
   {"date": "2026-06-18", "group": "home", "name": "dots.tts 로컬 TTS", "desc": "rednote-hilab/dots.tts 2B 모델 Windows CPU 환경 설치·설정 — 사내 TLS 프록시 우회 및 Python 3.12 호환성 해결", "cat": "ai", "status": "done", "tags": ["Python", "TTS", "AI", "로컬"]},
   {"date": "2026-05-10", "group": "home", "name": "Gemma4 파인튜닝 실험", "desc": "Ollama Modelfile 기반 Gemma4 로컬 파인튜닝 — 철학 데이터셋(philo_dataset)으로 커스텀 모델 학습", "cat": "ai", "status": "done", "tags": ["Ollama", "Gemma", "파인튜닝", "Fine-tuning"]},
@@ -876,6 +884,6 @@
   {"date": "2026-06-23", "group": "home", "name": "Claude Design MCP 실험", "desc": "claude.ai/design 연동 MCP 실험 — React+Vite+TypeScript 스캐폴딩으로 디자인 시스템 프로젝트 동기화 테스트", "cat": "mcp", "status": "wip", "tags": ["MCP", "React", "Vite", "디자인"]},
   {"date": "2026-06-25", "group": "home", "name": "아름다운 HTML 프레젠테이션 스킬화", "desc": "beautiful-html-templates(34종 슬라이드 템플릿) 라이브러리를 클론해 Claude Code 스킬로 재구성 — 에이전트가 자동으로 어울리는 템플릿을 골라 덱 제작", "cat": "doc", "status": "done", "tags": ["HTML", "프레젠테이션", "Skills", "템플릿"]},
   {"date": "2026-06-25", "group": "home", "name": "Insane Search 스킬", "desc": "차단된 웹사이트(X/Twitter, Reddit, YouTube 등) 우회 접근 스킬 — yt-dlp·Jina Reader·curl_cffi TLS 위장 체인으로 자동 폴백", "cat": "util", "status": "done", "tags": ["Claude Code", "Skills", "웹 스크래핑", "우회"]},
-  {"date": "2026-06-22", "group": "work", "name": "Dashboard v2", "desc": "타임라인 대시보드 GitHub 이전·대확장 — 네트워크 뷰 팬/줌/드래그, React Flow 분리, 차트·인사이트·스토리 재생, GitHub Pages 배포 (현재 프로젝트)", "cat": "util", "status": "wip", "tags": ["HTML", "JavaScript", "SVG", "React Flow"], "url": "https://takeused.github.io/dashboard1/"},
+  {"date": "2026-06-22", "group": "work", "name": "Dashboard v2", "desc": "타임라인 대시보드 GitHub 이전·대확장 — 네트워크 뷰 팬/줌/드래그, React Flow 분리, 차트·인사이트·스토리 재생, GitHub Pages 배포 (현재 프로젝트)", "cat": "util", "status": "wip", "series": "dashboard", "tags": ["HTML", "JavaScript", "SVG", "React Flow"], "url": "https://takeused.github.io/dashboard1/"},
   {"date": "2026-06-26", "group": "work", "name": "Antigravity 세미나 발표자료", "desc": "Antigravity IDE로 제작한 HTML 세미나 프레젠테이션 3종 — AI 주식투자 전략, AX 전환시대 R&D 기획 대전환, 합성 페르소나 가상설문 활용", "cat": "doc", "status": "done", "tags": ["HTML", "프레젠테이션", "Antigravity", "세미나"]}
 ]
