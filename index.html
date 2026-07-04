@@ -792,12 +792,12 @@ a:focus-visible,
         <div id="chartCategory"></div>
       </div>
       <div class="chart-card">
-        <span class="chart-title">태그 Top 12</span>
-        <div id="chartTags"></div>
-      </div>
-      <div class="chart-card">
         <span class="chart-title">요일별 활동</span>
         <div id="chartWeekday"></div>
+      </div>
+      <div class="chart-card">
+        <span class="chart-title">태그 Top 12</span>
+        <div id="chartTags"></div>
       </div>
       <div class="chart-card">
         <span class="chart-title">모멘텀 게이지</span>
@@ -1414,8 +1414,8 @@ function renderCharts(filtered){
   renderMonthlyChart(filtered);
   renderCumulativeChart(filtered);
   renderCategoryChart(filtered);
-  renderTagChart(filtered);
   renderWeekdayChart(filtered);
+  renderTagChart(filtered);
   renderMomentumGauge(filtered);
   renderStreamChart(filtered);
 }
@@ -1633,7 +1633,7 @@ function renderMomentumGauge(filtered){
   const status = ratio > 4/3 ? '가속 중' : ratio < 2/3 ? '휴지기' : '평온한 페이스';
   const statusColor = ratio > 4/3 ? 'var(--cat-finance)' : ratio < 2/3 ? 'var(--ink-subtle)' : 'var(--primary)';
 
-  const W = 300, H = 195, cx = 150, cy = 130, R = 95, R2 = 78;
+  const W = 300, H = 170, cx = 150, cy = 108, R = 88, R2 = 72;
   const pt = (deg, r) => {
     const rad = deg * Math.PI / 180;
     return { x: cx + r*Math.cos(rad), y: cy - r*Math.sin(rad) };
