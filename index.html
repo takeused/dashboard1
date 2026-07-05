@@ -1487,6 +1487,7 @@ function renderMonthlyChart(filtered){
 
 // 누적 프로젝트 성장 — Star History 풍 손그림(hand-drawn) 라인 차트.
 // feTurbulence+feDisplacementMap로 선·축을 물결치게 하고, 텍스트는 손글씨 폰트로 또렷하게 둔다.
+let cumChart = null;   // 호버 툴팁용 현재 차트 좌표 데이터
 function renderCumulativeChart(filtered){
   const el = document.getElementById('chartCumulative');
   if(filtered.length === 0){ el.innerHTML = CHART_EMPTY; return; }
@@ -1501,6 +1502,9 @@ function renderCumulativeChart(filtered){
   const yTop = T - 6, xRight = W - R + 4, y0 = H - B;
   const X = t => L + (t1 === t0 ? 0.5 : (t - t0)/(t1 - t0)) * (W-L-R);
   const Y = v => y0 - v/max * (y0 - T);
+
+  // 호버용 좌표 캐시 (컨테이너 리스너가 참조)
+  cumChart = { W, T, y0, pts: pts.map(p => ({ x: X(p.t), y: Y(p.c), c: p.c, d: p.d })) };
 
   let line = `M ${X(pts[0].t).toFixed(1)} ${Y(pts[0].c).toFixed(1)}`;
   pts.slice(1).forEach(p => { line += ` L ${X(p.t).toFixed(1)} ${Y(p.c).toFixed(1)}`; });
@@ -1550,7 +1554,48 @@ function renderCumulativeChart(filtered){
     + yticks + xticks + legend
     + `<text transform="translate(14 ${(T+y0)/2}) rotate(-90)" font-size="13" fill="var(--ink-muted)" text-anchor="middle">누적 개수</text>`
     + `<text x="${(L+xRight)/2}" y="${H-8}" font-size="13" fill="var(--ink-muted)" text-anchor="middle">기간</text>`
+    // 호버 툴팁 (JS가 위치/내용 갱신) + 이벤트 캡처 오버레이
+    + `<g id="cumHover" opacity="0" style="pointer-events:none">`
+    + `<line class="cum-hL" x1="0" y1="${T}" x2="0" y2="${y0}" stroke="var(--ink-subtle)" stroke-width="1" stroke-dasharray="3 3"/>`
+    + `<rect class="cum-tipBg" x="0" y="0" width="0" height="24" rx="4" fill="var(--ink)" opacity="0.92"/>`
+    + `<text class="cum-tipTx" x="0" y="0" font-size="14" fill="var(--inverse-ink)" text-anchor="start"> </text>`
+    + `<circle class="cum-hD" cx="0" cy="0" r="4.5" fill="var(--primary)" stroke="var(--canvas)" stroke-width="2"/></g>`
+    + `<rect class="cum-overlay" x="${L}" y="${T-12}" width="${(W-R-L).toFixed(1)}" height="${(y0-T+12).toFixed(1)}" fill="transparent" pointer-events="all" style="cursor:crosshair"/>`
     + `</svg>`;
+
+  bindCumulativeHover(el);
+}
+
+// 컨테이너에 1회만 바인딩 — 매 렌더마다 innerHTML이 갈려도 cumChart를 참조해 최신 유지
+function bindCumulativeHover(el){
+  if(el.dataset.hoverBound) return;
+  el.dataset.hoverBound = '1';
+  const hide = () => { const g = el.querySelector('#cumHover'); if(g) g.setAttribute('opacity','0'); };
+  el.addEventListener('pointerleave', hide);
+  el.addEventListener('pointermove', e => {
+    const svg = el.querySelector('svg'); const g = el.querySelector('#cumHover');
+    if(!svg || !g || !cumChart) return;
+    const r = svg.getBoundingClientRect();
+    const vbX = (e.clientX - r.left) / r.width * cumChart.W;
+    if(vbX < 0 || vbX > cumChart.W){ hide(); return; }
+    let best = cumChart.pts[0], bd = Infinity;
+    cumChart.pts.forEach(p => { const d = Math.abs(p.x - vbX); if(d < bd){ bd = d; best = p; } });
+    const label = `${best.d.slice(2).replace(/-/g,'.')} · ${best.c}개`;
+    const w = label.length * 8 + 14;
+    const flip = best.x > cumChart.W - w - 10;             // 우측 끝이면 왼쪽으로 뒤집기
+    const bgX = flip ? best.x - w - 8 : best.x + 8;
+    const txAnchor = 'start', txX = bgX + 7;
+    const above = best.y > cumChart.T + 34;
+    const bgY = above ? best.y - 30 : best.y + 8;
+    g.querySelector('.cum-hL').setAttribute('x1', best.x); g.querySelector('.cum-hL').setAttribute('x2', best.x);
+    g.querySelector('.cum-hD').setAttribute('cx', best.x); g.querySelector('.cum-hD').setAttribute('cy', best.y);
+    const bg = g.querySelector('.cum-tipBg');
+    bg.setAttribute('x', bgX.toFixed(1)); bg.setAttribute('y', bgY.toFixed(1)); bg.setAttribute('width', w.toFixed(1));
+    const tx = g.querySelector('.cum-tipTx');
+    tx.setAttribute('x', txX.toFixed(1)); tx.setAttribute('y', (bgY+16).toFixed(1)); tx.setAttribute('text-anchor', txAnchor);
+    tx.textContent = label;
+    g.setAttribute('opacity','1');
+  });
 }
 
 // 카테고리 분포 — 가로 막대 (클릭 시 해당 카테고리 필터)
