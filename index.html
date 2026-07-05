@@ -1546,7 +1546,7 @@ function renderCumulativeChart(filtered){
     + `<path d="${line}" fill="none" stroke="var(--primary)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" pathLength="1"${replayActive ? '' : ' class="chart-line-draw"'}/>`
     + axes + `</g>`
     + `<circle cx="${X(t1).toFixed(1)}" cy="${Y(max).toFixed(1)}" r="4" fill="var(--primary)"/>`
-    + `<text x="${(X(t1)-6).toFixed(1)}" y="${(Y(max)-10).toFixed(1)}" font-size="20" font-weight="700" fill="var(--ink)" text-anchor="end">${max}개</text>`
+    + `<text x="${(X(t1)-6).toFixed(1)}" y="${(Y(max)-10).toFixed(1)}" font-size="20" font-weight="400" fill="var(--ink)" text-anchor="end">${max}개</text>`
     + yticks + xticks + legend
     + `<text transform="translate(14 ${(T+y0)/2}) rotate(-90)" font-size="13" fill="var(--ink-muted)" text-anchor="middle">누적 개수</text>`
     + `<text x="${(L+xRight)/2}" y="${H-8}" font-size="13" fill="var(--ink-muted)" text-anchor="middle">기간</text>`
