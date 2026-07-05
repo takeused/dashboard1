@@ -1556,7 +1556,6 @@ function renderCumulativeChart(filtered){
     + `<text x="${(L+xRight)/2}" y="${H-8}" font-size="13" fill="var(--ink-muted)" text-anchor="middle">기간</text>`
     // 호버 툴팁 (JS가 위치/내용 갱신) + 이벤트 캡처 오버레이
     + `<g id="cumHover" opacity="0" style="pointer-events:none">`
-    + `<line class="cum-hL" x1="0" y1="${T}" x2="0" y2="${y0}" stroke="var(--ink-subtle)" stroke-width="1" stroke-dasharray="3 3"/>`
     + `<rect class="cum-tipBg" x="0" y="0" width="0" height="24" rx="4" fill="var(--ink)" opacity="0.92"/>`
     + `<text class="cum-tipTx" x="0" y="0" font-size="14" fill="var(--inverse-ink)" text-anchor="start"> </text>`
     + `<circle class="cum-hD" cx="0" cy="0" r="4.5" fill="var(--primary)" stroke="var(--canvas)" stroke-width="2"/></g>`
@@ -1587,7 +1586,6 @@ function bindCumulativeHover(el){
     const txAnchor = 'start', txX = bgX + 7;
     const above = best.y > cumChart.T + 34;
     const bgY = above ? best.y - 30 : best.y + 8;
-    g.querySelector('.cum-hL').setAttribute('x1', best.x); g.querySelector('.cum-hL').setAttribute('x2', best.x);
     g.querySelector('.cum-hD').setAttribute('cx', best.x); g.querySelector('.cum-hD').setAttribute('cy', best.y);
     const bg = g.querySelector('.cum-tipBg');
     bg.setAttribute('x', bgX.toFixed(1)); bg.setAttribute('y', bgY.toFixed(1)); bg.setAttribute('width', w.toFixed(1));
