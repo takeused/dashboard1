@@ -14,7 +14,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230f62fe'/%3E%3Ccircle cx='10' cy='11' r='3.4' fill='%23fff'/%3E%3Ccircle cx='22' cy='9' r='2.6' fill='%23fff'/%3E%3Ccircle cx='19' cy='22' r='4' fill='%23fff'/%3E%3Cpath d='M10 11L22 9M10 11l9 11M22 9l-3 13' stroke='%23fff' stroke-width='1.2' stroke-opacity='.65'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* ── Reset ─────────────────────────────────────────────── */
 *{margin:0;padding:0;box-sizing:border-box}
@@ -462,6 +462,8 @@ a:focus-visible,
 }
 .chart-card svg{display:block;width:100%;height:auto}
 .chart-card svg text{font-family:'IBM Plex Sans',sans-serif}
+/* Star History 풍 손그림 차트 — 손글씨 폰트 */
+#chartCumulative svg text{font-family:'Gaegu','IBM Plex Sans',sans-serif;letter-spacing:0}
 .chart-row-click{cursor:pointer}
 .chart-row-click:hover rect{opacity:0.8}
 .chart-empty{
@@ -1483,7 +1485,8 @@ function renderMonthlyChart(filtered){
     + bars + labels + legend + `</svg>`;
 }
 
-// 누적 프로젝트 성장 — 영역 곡선
+// 누적 프로젝트 성장 — Star History 풍 손그림(hand-drawn) 라인 차트.
+// feTurbulence+feDisplacementMap로 선·축을 물결치게 하고, 텍스트는 손글씨 폰트로 또렷하게 둔다.
 function renderCumulativeChart(filtered){
   const el = document.getElementById('chartCumulative');
   if(filtered.length === 0){ el.innerHTML = CHART_EMPTY; return; }
@@ -1494,29 +1497,59 @@ function renderCumulativeChart(filtered){
   Object.keys(byDate).sort().forEach(d => { cum += byDate[d]; pts.push({ t: new Date(d+'T00:00:00').getTime(), c: cum, d }); });
   const t0 = pts[0].t, t1 = pts[pts.length-1].t, max = cum;
 
-  const W = 560, H = 220, L = 34, R = 14, T = 28, B = 24;
+  const W = 460, H = 320, L = 46, R = 18, T = 34, B = 50;
+  const yTop = T - 6, xRight = W - R + 4, y0 = H - B;
   const X = t => L + (t1 === t0 ? 0.5 : (t - t0)/(t1 - t0)) * (W-L-R);
-  const Y = v => H-B - v/max * (H-T-B);
+  const Y = v => y0 - v/max * (y0 - T);
 
   let line = `M ${X(pts[0].t).toFixed(1)} ${Y(pts[0].c).toFixed(1)}`;
   pts.slice(1).forEach(p => { line += ` L ${X(p.t).toFixed(1)} ${Y(p.c).toFixed(1)}`; });
-  const area = `M ${X(t0).toFixed(1)} ${H-B} ` + line.slice(2) + ` L ${X(t1).toFixed(1)} ${H-B} Z`;
+  const area = `M ${X(t0).toFixed(1)} ${y0} ` + line.slice(2) + ` L ${X(t1).toFixed(1)} ${y0} Z`;
 
-  // y축 그리드 (0 · 절반 · 최대)
-  let grid = '';
-  [0, Math.round(max/2), max].forEach(v => {
-    grid += `<line x1="${L}" y1="${Y(v).toFixed(1)}" x2="${W-R}" y2="${Y(v).toFixed(1)}" stroke="var(--hairline)" stroke-dasharray="${v?'2 3':''}"/>`
-         + `<text x="${L-5}" y="${(Y(v)+3).toFixed(1)}" font-size="9" fill="var(--ink-subtle)" text-anchor="end">${v}</text>`;
-  });
-  const fmtD = d => `${d.slice(2,4)}.${d.slice(5,7)}`;
+  // y 그리드 + 라벨 (0 ~ max, 5단계)
+  let grid = '', yticks = '';
+  for(let i=0; i<=4; i++){
+    const v = Math.round(max * i/4), gy = Y(v).toFixed(1);
+    if(i>0) grid += `<line x1="${L}" y1="${gy}" x2="${W-R}" y2="${gy}" stroke="var(--hairline)" stroke-dasharray="2 4"/>`;
+    yticks += `<text x="${L-8}" y="${(+gy+4).toFixed(1)}" font-size="13" fill="var(--ink-subtle)" text-anchor="end">${v}</text>`;
+  }
+
+  // x 날짜 눈금 (5개, 시간 등간격 보간)
+  const fmtT = ts => { const d = new Date(ts); return `${String(d.getFullYear()).slice(2)}.${String(d.getMonth()+1).padStart(2,'0')}`; };
+  let xticks = '';
+  for(let i=0; i<=4; i++){
+    const ts = t0 + (t1-t0)*i/4, tx = X(ts).toFixed(1);
+    const anchor = i===0 ? 'start' : i===4 ? 'end' : 'middle';
+    xticks += `<text x="${tx}" y="${H-28}" font-size="13" fill="var(--ink-subtle)" text-anchor="${anchor}">${fmtT(ts)}</text>`;
+  }
+
+  // 손그림 축 + 화살촉
+  const axes =
+    `<line x1="${L}" y1="${yTop}" x2="${L}" y2="${y0}" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round"/>`
+    + `<line x1="${L}" y1="${y0}" x2="${xRight}" y2="${y0}" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round"/>`
+    + `<path d="M ${L-4} ${yTop+7} L ${L} ${yTop} L ${L+4} ${yTop+7}" fill="none" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`
+    + `<path d="M ${xRight-7} ${y0-4} L ${xRight} ${y0} L ${xRight-7} ${y0+4}" fill="none" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`;
+
+  // 범례 박스 (Star History 시그니처)
+  const legend =
+    `<g><rect x="${L+10}" y="${T-2}" width="150" height="26" rx="6" fill="var(--canvas)" stroke="var(--ink)" stroke-width="1.5" filter="url(#roughen)"/>`
+    + `<rect x="${L+20}" y="${T+8}" width="12" height="12" rx="2" fill="var(--primary)"/>`
+    + `<text x="${L+38}" y="${T+18}" font-size="14" fill="var(--ink)">takeused/dashboard1</text></g>`;
+
   el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="누적 프로젝트 성장">`
+    + `<defs><filter id="roughen" x="-6%" y="-15%" width="112%" height="130%">`
+    + `<feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="11" result="n"/>`
+    + `<feDisplacementMap in="SourceGraphic" in2="n" scale="4" xChannelSelector="R" yChannelSelector="G"/></filter></defs>`
     + grid
-    + `<path d="${area}" fill="color-mix(in srgb, var(--primary) 14%, transparent)"/>`
-    + `<path d="${line}" fill="none" stroke="var(--primary)" stroke-width="1.6" pathLength="1"${replayActive ? '' : ' class="chart-line-draw"'}/>`
-    + `<circle cx="${X(t1).toFixed(1)}" cy="${Y(max).toFixed(1)}" r="3" fill="var(--primary)"/>`
-    + `<text x="${(X(t1)-8).toFixed(1)}" y="${(Y(max)-8).toFixed(1)}" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="end">${max}개</text>`
-    + `<text x="${L}" y="${H-8}" font-size="9" fill="var(--ink-subtle)">${fmtD(pts[0].d)}</text>`
-    + `<text x="${W-R}" y="${H-8}" font-size="9" fill="var(--ink-subtle)" text-anchor="end">${fmtD(pts[pts.length-1].d)}</text>`
+    + `<g filter="url(#roughen)">`
+    + `<path d="${area}" fill="color-mix(in srgb, var(--primary) 13%, transparent)"/>`
+    + `<path d="${line}" fill="none" stroke="var(--primary)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" pathLength="1"${replayActive ? '' : ' class="chart-line-draw"'}/>`
+    + axes + `</g>`
+    + `<circle cx="${X(t1).toFixed(1)}" cy="${Y(max).toFixed(1)}" r="4" fill="var(--primary)"/>`
+    + `<text x="${(X(t1)-6).toFixed(1)}" y="${(Y(max)-10).toFixed(1)}" font-size="20" font-weight="700" fill="var(--ink)" text-anchor="end">${max}개</text>`
+    + yticks + xticks + legend
+    + `<text transform="translate(14 ${(T+y0)/2}) rotate(-90)" font-size="13" fill="var(--ink-muted)" text-anchor="middle">누적 개수</text>`
+    + `<text x="${(L+xRight)/2}" y="${H-8}" font-size="13" fill="var(--ink-muted)" text-anchor="middle">기간</text>`
     + `</svg>`;
 }
 
