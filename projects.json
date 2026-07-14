@@ -849,6 +849,7 @@
     "desc": "뉴스·시장 내러티브의 강도·방향·가속도를 점수화해 연결 종목으로 분배하는 단기 모멘텀 전략 + 대시보드",
     "cat": "finance",
     "status": "done",
+    "url": "https://takeused.github.io/Narrative-Momentum/",
     "tags": [
       "Python",
       "모멘텀",
@@ -1157,6 +1158,40 @@
       "멀티에이전트",
       "R&D",
       "예산심의"
+    ]
+  },
+  {
+    "date": "2026-07-14",
+    "group": "work",
+    "name": "ScienceON / NTIS v4",
+    "desc": "과학기술 논문·국가R&D 검색을 적정 연구개발비 산출과 연구–IP 전환 공백 분석으로 확장하고, Cerebras 모델 비교와 Cloudflare Worker 배포까지 통합한 R&D 기획 분석 웹앱",
+    "cat": "data",
+    "status": "done",
+    "series": "scienceon-ntis",
+    "url": "https://scienceon-ntis4.takeused.workers.dev/",
+    "tags": [
+      "ScienceON",
+      "NTIS",
+      "Cerebras",
+      "R&D",
+      "Cloudflare Workers"
+    ]
+  },
+  {
+    "date": "2026-07-14",
+    "group": "work",
+    "name": "ScienceON / NTIS v5",
+    "desc": "등록 IP 제한이 있는 ScienceON·NTIS API를 Vercel 화면과 로컬 프록시·Cloudflare Tunnel로 연결해 외부에서도 검색·적정 연구개발비 산출·연구–IP 공백 분석을 실행하도록 고도화",
+    "cat": "data",
+    "status": "wip",
+    "series": "scienceon-ntis",
+    "url": "https://nits5.vercel.app/",
+    "tags": [
+      "ScienceON",
+      "NTIS",
+      "Vercel",
+      "Cloudflare Tunnel",
+      "프록시"
     ]
   },
   {
