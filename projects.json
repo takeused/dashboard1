@@ -791,6 +791,7 @@
     "desc": "TradingView와 Claude를 연동한 매매·대시보드 구현 가이드 + 대시보드 생성 스크립트",
     "cat": "finance",
     "status": "done",
+    "series": "tradingview",
     "url": "https://tradingview-chart-report.takeused.workers.dev/",
     "tags": [
       "TradingView",
@@ -1096,6 +1097,80 @@
       "Claude Code",
       "지식관리",
       "위키"
+    ]
+  },
+  {
+    "date": "2026-07-05",
+    "group": "home",
+    "name": "TradingAgents 멀티에이전트",
+    "desc": "TauricResearch/TradingAgents 로컬 구축 — 애널리스트→리서처(강세/약세 토론)→트레이더→리스크 관리 순으로 협업해 매매 판단(BUY/HOLD/SELL)을 내리는 LLM 멀티에이전트 프레임워크 (연구·교육용)",
+    "cat": "finance",
+    "status": "done",
+    "tags": [
+      "LLM",
+      "멀티에이전트",
+      "Python",
+      "트레이딩"
+    ]
+  },
+  {
+    "date": "2026-07-05",
+    "group": "home",
+    "name": "TradingView MCP 리포트 v2",
+    "desc": "TradingView MCP 연동 고도화 — MSIX 패키지 런처로 CDP 디버깅 포트 연결 문제 해결, 차트 분석 리포트를 Cloudflare Workers로 배포",
+    "cat": "finance",
+    "status": "done",
+    "series": "tradingview",
+    "url": "https://tradingview-chart-report.takeused.workers.dev/",
+    "tags": [
+      "TradingView",
+      "MCP",
+      "Cloudflare Workers",
+      "PowerShell"
+    ]
+  },
+  {
+    "date": "2026-07-11",
+    "group": "home",
+    "name": "Toss-Slack VCP 자동매매",
+    "desc": "토스증권 Open API 기반 자동매매 봇 — 로컬 일봉 DB에서 VCP(변동성 수축 패턴) 스캔 후 Slack 승인(휴먼-인-더-루프)을 거쳐야만 주문 집행, 기본값은 모의매매",
+    "cat": "finance",
+    "status": "done",
+    "tags": [
+      "Python",
+      "토스증권",
+      "Slack",
+      "자동매매",
+      "VCP"
+    ]
+  },
+  {
+    "date": "2026-07-12",
+    "group": "work",
+    "name": "R&D 신규사업 심의 시뮬레이터",
+    "desc": "국가 R&D 예산 심의를 LangGraph 멀티에이전트로 시뮬레이션 — 6인 분석가·심사 공방·기획처 3자 토론·최종 승인권자 구성, 예상 질의와 기획보고서 보완점을 사전 도출",
+    "cat": "ai",
+    "status": "done",
+    "tags": [
+      "Python",
+      "LangGraph",
+      "멀티에이전트",
+      "R&D",
+      "예산심의"
+    ]
+  },
+  {
+    "date": "2026-07-14",
+    "group": "home",
+    "name": "GAMMA 프레젠테이션 실험",
+    "desc": "Gamma AI로 AI 주제 프레젠테이션(PPTX) 자동 생성 실험",
+    "cat": "doc",
+    "status": "done",
+    "tags": [
+      "Gamma",
+      "PowerPoint",
+      "프레젠테이션",
+      "AI"
     ]
   }
 ]
