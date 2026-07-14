@@ -1163,23 +1163,6 @@
   {
     "date": "2026-07-14",
     "group": "work",
-    "name": "ScienceON / NTIS v4",
-    "desc": "과학기술 논문·국가R&D 검색을 적정 연구개발비 산출과 연구–IP 전환 공백 분석으로 확장하고, Cerebras 모델 비교와 Cloudflare Worker 배포까지 통합한 R&D 기획 분석 웹앱",
-    "cat": "data",
-    "status": "done",
-    "series": "scienceon-ntis",
-    "url": "https://scienceon-ntis4.takeused.workers.dev/",
-    "tags": [
-      "ScienceON",
-      "NTIS",
-      "Cerebras",
-      "R&D",
-      "Cloudflare Workers"
-    ]
-  },
-  {
-    "date": "2026-07-14",
-    "group": "work",
     "name": "ScienceON / NTIS v5",
     "desc": "등록 IP 제한이 있는 ScienceON·NTIS API를 Vercel 화면과 로컬 프록시·Cloudflare Tunnel로 연결해 외부에서도 검색·적정 연구개발비 산출·연구–IP 공백 분석을 실행하도록 고도화",
     "cat": "data",
