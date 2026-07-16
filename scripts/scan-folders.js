@@ -8,6 +8,9 @@ const projects = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'projects
 
 const SKIP_NAMES = new Set(['node_modules', '.git', '.claude']);
 
+// 큐레이션 대상이 아니라고 확정된 폴더 (context-notes.md "영구 제외 확정" 참고)
+const EXCLUDED = new Set(['260628 insight']);
+
 // "260622 dashboard" → "2026-06-22" (폴더명 앞 6자리 YYMMDD 관례)
 function parseFolderDate(name) {
   const m = name.match(/^(\d{2})(\d{2})(\d{2})/);
@@ -37,8 +40,10 @@ const folders = fs.readdirSync(root, { withFileTypes: true })
 const matched = [];
 const unmatched = [];
 const empty = [];
+const excluded = [];
 
 folders.forEach(e => {
+  if (EXCLUDED.has(e.name)) { excluded.push(e.name); return; }
   const full = path.join(root, e.name);
   if (isEmptyDir(full)) { empty.push(e.name); return; }
   const date = parseFolderDate(e.name);
@@ -54,7 +59,12 @@ matched.forEach(m => console.log(`  ${m.date}  ${m.name}`));
 console.log(`\n○ 빈 폴더 — 큐레이션 기준상 제외 대상 (${empty.length})`);
 empty.forEach(n => console.log(`  ${n}`));
 
+if (excluded.length) {
+  console.log(`\n― 영구 제외 확정 — 재검토 불필요 (${excluded.length})`);
+  excluded.forEach(n => console.log(`  ${n}`));
+}
+
 console.log(`\n⚠ 미등록 후보 — 내용 확인 후 projects.json 추가 검토 (${unmatched.length})`);
 unmatched.forEach(u => console.log(`  ${u.date || '(날짜 파싱 실패)'}  ${u.name}`));
 
-console.log(`\n요약: 등록 ${matched.length} · 빈 폴더 ${empty.length} · 검토 필요 ${unmatched.length}\n`);
+console.log(`\n요약: 등록 ${matched.length} · 빈 폴더 ${empty.length} · 제외 확정 ${excluded.length} · 검토 필요 ${unmatched.length}\n`);
