@@ -1107,6 +1107,7 @@
     "desc": "TauricResearch/TradingAgents 로컬 구축 — 애널리스트→리서처(강세/약세 토론)→트레이더→리스크 관리 순으로 협업해 매매 판단(BUY/HOLD/SELL)을 내리는 LLM 멀티에이전트 프레임워크 (연구·교육용)",
     "cat": "finance",
     "status": "done",
+    "url": "https://trading-agents.takeused.workers.dev/",
     "tags": [
       "LLM",
       "멀티에이전트",
@@ -1152,6 +1153,7 @@
     "desc": "국가 R&D 예산 심의를 LangGraph 멀티에이전트로 시뮬레이션 — 6인 분석가·심사 공방·기획처 3자 토론·최종 승인권자 구성, 예상 질의와 기획보고서 보완점을 사전 도출",
     "cat": "ai",
     "status": "done",
+    "url": "https://260713-r-d.pages.dev/",
     "tags": [
       "Python",
       "LangGraph",

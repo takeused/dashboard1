@@ -151,31 +151,17 @@ a:focus-visible,
 .hero-inner h1 em{font-style:normal;color:var(--primary)}
 #heroTitle{cursor:pointer}
 #heroTitle:hover em{opacity:0.75}
-.hero-sub{
-  font-size:18px;font-weight:400;line-height:1.50;letter-spacing:0;
-  color:var(--ink-muted);
+.hero-stats{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-muted);
 }
-
-/* ── Stats Band ──────────────────────────────────────────── */
-.stats-band{
-  background:var(--surface-1);padding:48px 0;
-  border-bottom:1px solid var(--hairline);
+.hero-stats strong{
+  font-size:18px;font-weight:500;color:var(--ink);
 }
-.stats-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  background:var(--hairline);gap:1px;
-  border:1px solid var(--hairline);
-}
-.stat-card{
-  background:var(--canvas);
-  padding:32px 24px;text-align:center;
-}
-.stat-number{
-  display:block;font-size:48px;font-weight:300;line-height:1.17;letter-spacing:-0.4px;
-  color:var(--ink);margin-bottom:8px;
-}
-.stat-label{
-  font-size:14px;font-weight:400;letter-spacing:0.16px;color:var(--ink-muted);
+.hero-stat-sep{color:var(--hairline-strong)}
+@media(max-width:479px){
+  .hero-stats{flex-wrap:wrap;gap:4px 8px;font-size:14px}
+  .hero-stats strong{font-size:16px}
 }
 
 /* ── Timeline Section ────────────────────────────────────── */
@@ -679,9 +665,6 @@ a:focus-visible,
 .search-clear.visible ~ .search-hint{display:none}
 
 /* ── Responsive ──────────────────────────────────────────── */
-@media(max-width:1055px){
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
-}
 @media(max-width:767px){
   .hero-inner h1{font-size:42px}
   .container{padding:0 16px}
@@ -692,8 +675,6 @@ a:focus-visible,
 }
 @media(max-width:479px){
   .hero-inner h1{font-size:32px;letter-spacing:0}
-  .stats-grid{grid-template-columns:1fr 1fr}
-  .stat-number{font-size:36px}
 }
 </style>
 <script>
@@ -730,31 +711,15 @@ a:focus-visible,
   <div class="hero-inner container">
     <span class="hero-eyebrow">Project Timeline</span>
     <h1 id="heroTitle" role="button" tabindex="0" title="홈으로 — 필터 초기화 후 맨 위로">Claude, CODEX, GEMINI와 함께한<br><em>작업 기록</em></h1>
-    <p class="hero-sub" id="heroSummary"></p>
-  </div>
-</section>
-
-<!-- Stats Band -->
-<section class="stats-band">
-  <div class="container">
-    <div class="stats-grid">
-      <div class="stat-card">
-        <span class="stat-number" data-stat="total">0</span>
-        <span class="stat-label">총 프로젝트</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-number" data-stat="work">0</span>
-        <span class="stat-label">회사 프로젝트</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-number" data-stat="home">0</span>
-        <span class="stat-label">집 프로젝트</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-number" data-stat="days">0</span>
-        <span class="stat-label">활동 일수</span>
-      </div>
-    </div>
+    <p class="hero-stats" id="heroSummary" aria-label="프로젝트 통계">
+      <span>총 <strong data-stat="total">0</strong>개</span>
+      <span class="hero-stat-sep" aria-hidden="true">·</span>
+      <span>회사 <strong data-stat="work">0</strong>개</span>
+      <span class="hero-stat-sep" aria-hidden="true">·</span>
+      <span>집 <strong data-stat="home">0</strong>개</span>
+      <span class="hero-stat-sep" aria-hidden="true">·</span>
+      <span>활동 <strong data-stat="days">0</strong>일</span>
+    </p>
   </div>
 </section>
 
@@ -1021,10 +986,10 @@ const projects = [
   {"date":"2026-06-22","group":"work","name":"Dashboard v2","desc":"타임라인 대시보드 GitHub 이전·대확장 — 네트워크 뷰 팬/줌/드래그, React Flow 분리, 차트·인사이트·스토리 재생, GitHub Pages 배포 (현재 프로젝트)","cat":"util","status":"wip","series":"dashboard","tags":["HTML","JavaScript","SVG","React Flow"],"url":"https://takeused.github.io/dashboard1/"},
   {"date":"2026-06-26","group":"work","name":"Antigravity 세미나 발표자료","desc":"Antigravity IDE로 제작한 HTML 세미나 프레젠테이션 3종 — AI 주식투자 전략, AX 전환시대 R&D 기획 대전환, 합성 페르소나 가상설문 활용","cat":"doc","status":"done","tags":["HTML","프레젠테이션","Antigravity","세미나"]},
   {"date":"2026-04-12","group":"home","name":"R&D 지식 위키 (Obsidian+Claude)","desc":"R&D 신규사업 기획·학습 지식을 축적하는 개인 위키 — CLAUDE.md 운영 스키마로 자료 투입(raw)→분류→위키화→양방향 교차참조까지 Claude가 자동 관리","cat":"ai","status":"done","tags":["Obsidian","Claude Code","지식관리","위키"]},
-  {"date":"2026-07-05","group":"home","name":"TradingAgents 멀티에이전트","desc":"TauricResearch/TradingAgents 로컬 구축 — 애널리스트→리서처(강세/약세 토론)→트레이더→리스크 관리 순으로 협업해 매매 판단(BUY/HOLD/SELL)을 내리는 LLM 멀티에이전트 프레임워크 (연구·교육용)","cat":"finance","status":"done","tags":["LLM","멀티에이전트","Python","트레이딩"]},
+  {"date":"2026-07-05","group":"home","name":"TradingAgents 멀티에이전트","desc":"TauricResearch/TradingAgents 로컬 구축 — 애널리스트→리서처(강세/약세 토론)→트레이더→리스크 관리 순으로 협업해 매매 판단(BUY/HOLD/SELL)을 내리는 LLM 멀티에이전트 프레임워크 (연구·교육용)","cat":"finance","status":"done","url":"https://trading-agents.takeused.workers.dev/","tags":["LLM","멀티에이전트","Python","트레이딩"]},
   {"date":"2026-07-05","group":"home","name":"TradingView MCP 리포트 v2","desc":"TradingView MCP 연동 고도화 — MSIX 패키지 런처로 CDP 디버깅 포트 연결 문제 해결, 차트 분석 리포트를 Cloudflare Workers로 배포","cat":"finance","status":"done","series":"tradingview","url":"https://tradingview-chart-report.takeused.workers.dev/","tags":["TradingView","MCP","Cloudflare Workers","PowerShell"]},
   {"date":"2026-07-11","group":"home","name":"Toss-Slack VCP 자동매매","desc":"토스증권 Open API 기반 자동매매 봇 — 로컬 일봉 DB에서 VCP(변동성 수축 패턴) 스캔 후 Slack 승인(휴먼-인-더-루프)을 거쳐야만 주문 집행, 기본값은 모의매매","cat":"finance","status":"done","tags":["Python","토스증권","Slack","자동매매","VCP"]},
-  {"date":"2026-07-12","group":"work","name":"R&D 신규사업 심의 시뮬레이터","desc":"국가 R&D 예산 심의를 LangGraph 멀티에이전트로 시뮬레이션 — 6인 분석가·심사 공방·기획처 3자 토론·최종 승인권자 구성, 예상 질의와 기획보고서 보완점을 사전 도출","cat":"ai","status":"done","tags":["Python","LangGraph","멀티에이전트","R&D","예산심의"]},
+  {"date":"2026-07-12","group":"work","name":"R&D 신규사업 심의 시뮬레이터","desc":"국가 R&D 예산 심의를 LangGraph 멀티에이전트로 시뮬레이션 — 6인 분석가·심사 공방·기획처 3자 토론·최종 승인권자 구성, 예상 질의와 기획보고서 보완점을 사전 도출","cat":"ai","status":"done","url":"https://260713-r-d.pages.dev/","tags":["Python","LangGraph","멀티에이전트","R&D","예산심의"]},
   {"date":"2026-07-14","group":"work","name":"ScienceON / NTIS v5","desc":"등록 IP 제한이 있는 ScienceON·NTIS API를 Vercel 화면과 로컬 프록시·Cloudflare Tunnel로 연결해 외부에서도 검색·적정 연구개발비 산출·연구–IP 공백 분석을 실행하도록 고도화","cat":"data","status":"wip","series":"scienceon-ntis","url":"https://nits5.vercel.app/","tags":["ScienceON","NTIS","Vercel","Cloudflare Tunnel","프록시"]},
   {"date":"2026-07-14","group":"home","name":"GAMMA 프레젠테이션 실험","desc":"Gamma AI로 AI 주제 프레젠테이션(PPTX) 자동 생성 실험","cat":"doc","status":"done","tags":["Gamma","PowerPoint","프레젠테이션","AI"]}
 ];
@@ -1156,8 +1121,6 @@ function setStat(key, value){
 
 function renderSummary(){
   const stats = getDashboardStats(projects);
-  document.getElementById('heroSummary').textContent =
-    `회사 ${stats.work}개 · 집 ${stats.home}개 · 총 ${stats.total}개 프로젝트`;
   setStat('total', stats.total);
   setStat('work',  stats.work);
   setStat('home',  stats.home);
