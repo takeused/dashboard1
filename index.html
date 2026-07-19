@@ -88,7 +88,6 @@ a:focus-visible,
   outline:2px solid var(--primary);
   outline-offset:-2px;
 }
-.tab-btn:focus-visible{outline-offset:0}
 
 /* 카드 outline transition (jumpToProject 강조용) */
 .card{transition:background .12s,outline-color .25s}
@@ -206,27 +205,22 @@ a:focus-visible,
 .switcher-btn:hover{background:var(--surface-2);color:var(--ink)}
 .switcher-btn.active{background:linear-gradient(180deg,#f5f5f7,#d2d2d7);color:#1d1d1f;border-color:#c0c0c5}
 
-/* Category tabs — Carbon tab strip */
-.tabs-row{
-  border-bottom:1px solid var(--hairline);
-  display:flex;overflow-x:auto;
-  margin:24px 0 40px;
-  -ms-overflow-style:none;scrollbar-width:none;
-}
+/* Category filter — 상단 스위처와 동일한 pill 스타일 */
+.tabs-row{margin-bottom:24px}
 .tabs-row::-webkit-scrollbar{display:none}
 .tab-btn{
-  background:none;border:none;
-  border-bottom:2px solid transparent;margin-bottom:-1px;
-  padding:12px 16px;
-  font-family:inherit;font-size:14px;font-weight:400;letter-spacing:0.16px;
+  background:var(--canvas);
+  border:1px solid var(--hairline);border-radius:999px;
+  padding:5px 10px;
+  font-family:inherit;font-size:12px;font-weight:400;letter-spacing:0.16px;
   color:var(--ink-muted);cursor:pointer;white-space:nowrap;
-  transition:color .1s,background .1s;
+  transition:background .1s,color .1s;
 }
-.tab-btn:hover{color:var(--ink);background:var(--surface-1)}
-.tab-btn.active{color:var(--ink);font-weight:600;border-bottom-color:var(--primary)}
+.tab-btn:hover{background:var(--surface-2);color:var(--ink)}
+.tab-btn.active{background:linear-gradient(180deg,#f5f5f7,#d2d2d7);color:#1d1d1f;border-color:#c0c0c5}
 .cat-dot{
-  display:inline-block;width:8px;height:8px;
-  margin-right:6px;vertical-align:middle;
+  display:inline-block;width:7px;height:7px;border-radius:50%;
+  margin-right:5px;vertical-align:middle;
 }
 
 /* Active filter chips — 시리즈/월 필터처럼 탭·스위처에 없는 필터의 해제 지점 */
@@ -456,6 +450,7 @@ a:focus-visible,
 .view-btn.active{background:linear-gradient(180deg,#f5f5f7,#d2d2d7);color:#1d1d1f;border-color:#c0c0c5}
 /* pill active — 다크 테마에서는 어두운 그라데이션으로 */
 [data-theme="dark"] .switcher-btn.active,
+[data-theme="dark"] .tab-btn.active,
 [data-theme="dark"] .view-btn.active{
   background:linear-gradient(180deg,#48484a,#2c2c2e);
   color:#f5f5f7;border-color:#5a5a5e;
@@ -741,26 +736,31 @@ a:focus-visible,
     </div>
 
     <!-- Category tab strip -->
-    <div class="tabs-row" role="group" aria-label="카테고리 필터">
-      <button class="tab-btn active" data-filter="all" aria-pressed="true">전체</button>
-      <button class="tab-btn" data-filter="ai" aria-pressed="false">
-        <span class="cat-dot" style="background:var(--cat-ai)"></span>AI / LLM
-      </button>
-      <button class="tab-btn" data-filter="data" aria-pressed="false">
-        <span class="cat-dot" style="background:var(--cat-data)"></span>데이터 수집 / 분석
-      </button>
-      <button class="tab-btn" data-filter="doc" aria-pressed="false">
-        <span class="cat-dot" style="background:var(--cat-doc)"></span>문서 / 보고서
-      </button>
-      <button class="tab-btn" data-filter="mcp" aria-pressed="false">
-        <span class="cat-dot" style="background:var(--cat-mcp)"></span>MCP 서버
-      </button>
-      <button class="tab-btn" data-filter="util" aria-pressed="false">
-        <span class="cat-dot" style="background:var(--cat-util)"></span>교육 / 유틸
-      </button>
-      <button class="tab-btn" data-filter="finance" aria-pressed="false">
-        <span class="cat-dot" style="background:var(--cat-finance)"></span>재테크 / 투자
-      </button>
+    <div class="filter-controls tabs-row">
+      <div class="switcher-group">
+        <span class="switcher-label" style="background:#00838f">카테고리</span>
+        <div class="switcher" role="group" aria-label="카테고리 필터">
+          <button class="tab-btn active" data-filter="all" aria-pressed="true">전체</button>
+          <button class="tab-btn" data-filter="ai" aria-pressed="false">
+            <span class="cat-dot" style="background:var(--cat-ai)"></span>AI / LLM
+          </button>
+          <button class="tab-btn" data-filter="data" aria-pressed="false">
+            <span class="cat-dot" style="background:var(--cat-data)"></span>데이터 수집 / 분석
+          </button>
+          <button class="tab-btn" data-filter="doc" aria-pressed="false">
+            <span class="cat-dot" style="background:var(--cat-doc)"></span>문서 / 보고서
+          </button>
+          <button class="tab-btn" data-filter="mcp" aria-pressed="false">
+            <span class="cat-dot" style="background:var(--cat-mcp)"></span>MCP 서버
+          </button>
+          <button class="tab-btn" data-filter="util" aria-pressed="false">
+            <span class="cat-dot" style="background:var(--cat-util)"></span>교육 / 유틸
+          </button>
+          <button class="tab-btn" data-filter="finance" aria-pressed="false">
+            <span class="cat-dot" style="background:var(--cat-finance)"></span>재테크 / 투자
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="active-chips" id="activeChips"></div>
