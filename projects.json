@@ -1035,6 +1035,7 @@
     "desc": "beautiful-html-templates(34종 슬라이드 템플릿) 라이브러리를 클론해 Claude Code 스킬로 재구성 — 에이전트가 자동으로 어울리는 템플릿을 골라 덱 제작",
     "cat": "doc",
     "status": "done",
+    "url": "https://html-presentation.takeused.workers.dev/",
     "tags": [
       "HTML",
       "프레젠테이션",
