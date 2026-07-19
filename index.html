@@ -151,18 +151,6 @@ a:focus-visible,
 .hero-inner h1 em{font-style:normal;color:var(--primary)}
 #heroTitle{cursor:pointer}
 #heroTitle:hover em{opacity:0.75}
-.hero-stats{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-muted);
-}
-.hero-stats strong{
-  font-size:18px;font-weight:500;color:var(--ink);
-}
-.hero-stat-sep{color:var(--hairline-strong)}
-@media(max-width:479px){
-  .hero-stats{flex-wrap:wrap;gap:4px 8px;font-size:14px}
-  .hero-stats strong{font-size:16px}
-}
 
 /* ── Timeline Section ────────────────────────────────────── */
 .timeline-section{background:var(--canvas);padding:48px 0 80px}
@@ -396,24 +384,57 @@ a:focus-visible,
 }
 
 /* ── Heatmap ─────────────────────────────────────────────── */
-.heatmap-section{
-  background:var(--canvas);padding:48px 0;
-  border-bottom:1px solid var(--hairline);
+/* ── 개요 패널 — 통계 타일 + 히트맵을 한 카드에 압축 ─────── */
+.overview-section{background:var(--canvas);padding:24px 0}
+.overview-panel{
+  background:var(--surface-1);border:1px solid var(--hairline);
+  border-radius:14px;padding:14px;
 }
-.heatmap-header{
-  display:flex;align-items:baseline;justify-content:space-between;
-  gap:16px;margin-bottom:24px;flex-wrap:wrap;
+.ov-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin-bottom:12px;flex-wrap:wrap;
 }
-.heatmap-title{
-  font-size:12px;font-weight:400;letter-spacing:0.32px;
-  color:var(--ink-muted);text-transform:uppercase;
+.ov-title{
+  font-size:13px;font-weight:600;color:var(--ink);
+  background:var(--canvas);border-radius:8px;padding:6px 12px;
 }
-.heatmap-legend{
-  display:flex;align-items:center;gap:6px;
-  font-size:12px;letter-spacing:0.32px;color:var(--ink-subtle);
+.ov-range{display:inline-flex;gap:2px;background:transparent}
+.ov-range-btn{
+  border:none;background:transparent;border-radius:8px;
+  padding:6px 12px;cursor:pointer;
+  font-family:inherit;font-size:13px;color:var(--ink-subtle);
+  transition:background .12s,color .12s;
 }
-.legend-cell{display:inline-block;width:11px;height:11px}
-.heatmap-wrap{overflow-x:auto;padding-bottom:4px}
+.ov-range-btn:hover{color:var(--ink)}
+.ov-range-btn.active{background:var(--canvas);color:var(--ink);font-weight:600}
+.ov-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+  margin-bottom:12px;
+}
+@media (max-width:760px){.ov-grid{grid-template-columns:repeat(2,1fr)}}
+.ov-tile{
+  background:var(--canvas);border-radius:10px;padding:10px 12px;min-width:0;
+}
+.ov-label{
+  display:block;font-size:12px;color:var(--ink-subtle);
+  letter-spacing:0.16px;margin-bottom:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.ov-value{
+  display:block;font-size:19px;font-weight:600;color:var(--ink);
+  font-variant-numeric:tabular-nums;line-height:1.25;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.ov-value.is-text{font-size:16px;font-weight:500}
+.ov-heat{
+  background:var(--canvas);border-radius:10px;padding:10px 12px;
+  overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none;
+}
+.ov-heat::-webkit-scrollbar{display:none}
+.ov-note{
+  margin-top:10px;font-size:13px;color:var(--ink-subtle);
+  letter-spacing:0.16px;line-height:1.5;
+}
 #heatmap svg{display:block;min-width:600px}
 .heatmap-cell-active{cursor:pointer}
 
@@ -460,27 +481,6 @@ a:focus-visible,
   padding:24px 0;
 }
 .chart-card-wide{grid-column:1 / -1}
-
-/* ── 기록 인사이트 — 한 줄 요약 ─────────────────────────── */
-.insights-title{margin-top:40px}
-.insights-grid{
-  display:flex;align-items:stretch;
-  border:1px solid var(--hairline);overflow-x:auto;
-  -ms-overflow-style:none;scrollbar-width:none;
-}
-.insights-grid::-webkit-scrollbar{display:none}
-.insight-card{
-  display:flex;align-items:center;gap:7px;justify-content:center;
-  flex:1 0 auto;min-width:132px;padding:14px 16px;
-  border-right:1px solid var(--hairline);background:var(--canvas);
-  white-space:nowrap;
-}
-.insight-card:last-child{border-right:none}
-.insight-emoji{font-size:16px;line-height:1}
-.insight-value{
-  font-size:14px;font-weight:600;color:var(--ink);
-  font-variant-numeric:tabular-nums;line-height:1.2;
-}
 
 /* ── View Toolbar ────────────────────────────────────────── */
 .view-toolbar{
@@ -705,34 +705,25 @@ a:focus-visible,
   <div class="hero-inner container">
     <span class="hero-eyebrow">Project Timeline</span>
     <h1 id="heroTitle" role="button" tabindex="0" title="홈으로 — 필터 초기화 후 맨 위로">Claude, CODEX, GEMINI와 함께한<br><em>작업 기록</em></h1>
-    <p class="hero-stats" id="heroSummary" aria-label="프로젝트 통계">
-      <span>총 <strong data-stat="total">0</strong>개</span>
-      <span class="hero-stat-sep" aria-hidden="true">·</span>
-      <span>회사 <strong data-stat="work">0</strong>개</span>
-      <span class="hero-stat-sep" aria-hidden="true">·</span>
-      <span>집 <strong data-stat="home">0</strong>개</span>
-      <span class="hero-stat-sep" aria-hidden="true">·</span>
-      <span>활동 <strong data-stat="days">0</strong>일</span>
-    </p>
   </div>
 </section>
 
-<!-- Heatmap -->
-<section class="heatmap-section">
+<!-- 개요 패널 — 통계 타일 + 일별 활동 히트맵 -->
+<section class="overview-section">
   <div class="container">
-    <div class="heatmap-header">
-      <span class="heatmap-title">일별 활동 히트맵</span>
-      <div class="heatmap-legend">
-        <span>적음</span>
-        <span class="legend-cell" style="background:var(--surface-1);border:1px solid var(--hairline)"></span>
-        <span class="legend-cell" style="background:color-mix(in srgb, var(--primary) 28%, transparent)"></span>
-        <span class="legend-cell" style="background:color-mix(in srgb, var(--primary) 50%, transparent)"></span>
-        <span class="legend-cell" style="background:color-mix(in srgb, var(--primary) 78%, transparent)"></span>
-        <span class="legend-cell" style="background:var(--primary)"></span>
-        <span>많음</span>
+    <div class="overview-panel">
+      <div class="ov-head">
+        <span class="ov-title">개요</span>
+        <div class="ov-range" id="ovRange" role="group" aria-label="통계 기간 범위">
+          <button class="ov-range-btn active" type="button" data-range="all" aria-pressed="true">전체</button>
+          <button class="ov-range-btn" type="button" data-range="30d" aria-pressed="false">30d</button>
+          <button class="ov-range-btn" type="button" data-range="7d" aria-pressed="false">7d</button>
+        </div>
       </div>
+      <div class="ov-grid" id="ovGrid"></div>
+      <div class="ov-heat"><div id="heatmap"></div></div>
+      <p class="ov-note" id="ovNote"></p>
     </div>
-    <div class="heatmap-wrap"><div id="heatmap"></div></div>
   </div>
 </section>
 
@@ -769,8 +760,6 @@ a:focus-visible,
         <div id="chartStream"></div>
       </div>
     </div>
-    <span class="chart-title insights-title">기록 인사이트 <span style="text-transform:none;color:var(--ink-subtle)">— 전체 기록 기준</span></span>
-    <div class="insights-grid" id="insights"></div>
   </div>
 </section>
 
@@ -1090,6 +1079,7 @@ function setStat(key, value){
     el.textContent = value; return;
   }
   cancelAnimationFrame(el._raf);
+  clearTimeout(el._settle);
   const t0 = performance.now(), dur = 500;
   const step = t => {
     const k = Math.min((t - t0) / dur, 1);
@@ -1097,14 +1087,12 @@ function setStat(key, value){
     if(k < 1) el._raf = requestAnimationFrame(step);
   };
   el._raf = requestAnimationFrame(step);
+  // 안전망 — 백그라운드 탭 등 rAF가 멈추는 환경에서 숫자가 중간값에 갇히지 않도록 최종값 보장
+  el._settle = setTimeout(() => { cancelAnimationFrame(el._raf); el.textContent = value; }, dur + 150);
 }
 
 function renderSummary(){
   const stats = getDashboardStats(projects);
-  setStat('total', stats.total);
-  setStat('work',  stats.work);
-  setStat('home',  stats.home);
-  setStat('days',  stats.days);
   document.getElementById('dateRange').textContent = `${stats.firstLabel} — ${stats.lastLabel}`;
 }
 
@@ -1164,11 +1152,8 @@ function render(){
   if(replayActive && !replayInternal) haltReplay();   // 사용자 조작 → 재생 중단
   const filtered = applyFilters();
 
-  setStat('total', filtered.length);
-  setStat('work',  filtered.filter(p => p.group === 'work').length);
-  setStat('home',  filtered.filter(p => p.group === 'home').length);
-
   syncURL();
+  renderOverview(filtered);
   renderHeatmap(filtered);
   renderCharts(filtered);
   renderActiveChips();
@@ -1336,7 +1321,7 @@ function renderHeatmap(filtered){
       const { fill, stroke } = intensity(count);
       // 프로젝트가 있는 날은 클릭 → 타임라인 해당 날짜로 점프
       const clickable = count > 0 ? ` class="heatmap-cell-active" data-jump-date="${ymd}"` : '';
-      cells += `<rect${clickable} x="${x}" y="${y}" width="${CELL}" height="${CELL}" `
+      cells += `<rect${clickable} x="${x}" y="${y}" width="${CELL}" height="${CELL}" rx="2.5" `
             + `fill="${fill}" stroke="${stroke}" stroke-width="0.5">`
             + `<title>${ymd} · ${count}개${count > 0 ? ' — 클릭하여 이동' : ''}</title></rect>`;
       if(monthInWeek === -1) monthInWeek = dt.getMonth();
@@ -1690,52 +1675,88 @@ function renderMomentumGauge(filtered){
   </svg>`;
 }
 
-/* ── 기록 인사이트 엔진 — 전체 데이터에서 재미있는 사실 자동 발굴 ── */
-function renderInsights(){
-  const ds = [...new Set(projects.map(p => p.date))].sort();
+/* ── 개요 패널 — 통계 8종을 타일로 압축, 기간 범위(전체/30d/7d) 대응 ── */
+let overviewRange = 'all';
+
+// 기간 기준점은 오늘이 아니라 데이터의 최신 날짜 — 큐레이션 공백으로 "최근 0건"이 되는 것을 방지
+function overviewWindow(items){
+  if(overviewRange === 'all' || items.length === 0) return items;
+  const days = overviewRange === '7d' ? 7 : 30;
+  const latest = projects.reduce((m,p) => p.date > m ? p.date : m, projects[0].date);
+  const from = new Date(new Date(latest+'T00:00:00').getTime() - (days-1)*86400000)
+    .toISOString().slice(0,10);
+  return items.filter(p => p.date >= from);
+}
+
+// 연속 일수 — 최신 활동일부터 하루씩 이어진 길이(현재), 그리고 전체 최장
+function streaks(dates){
+  if(dates.length === 0) return { now:0, max:0 };
+  let max = 1, cur = 1;
+  for(let i=1; i<dates.length; i++){
+    const diff = (new Date(dates[i]) - new Date(dates[i-1])) / 86400000;
+    cur = diff === 1 ? cur+1 : 1;
+    if(cur > max) max = cur;
+  }
+  let now = 1;
+  for(let i=dates.length-1; i>0; i--){
+    const diff = (new Date(dates[i]) - new Date(dates[i-1])) / 86400000;
+    if(diff === 1) now++; else break;
+  }
+  return { now, max };
+}
+
+function renderOverview(filtered){
+  const items = overviewWindow(filtered);
+  const grid = document.getElementById('ovGrid');
+  const note = document.getElementById('ovNote');
+
+  if(items.length === 0){
+    grid.innerHTML = '';
+    note.textContent = '이 기간에 해당하는 프로젝트가 없습니다.';
+    return;
+  }
+
+  const dates = [...new Set(items.map(p => p.date))].sort();
   const byDate = {};
-  projects.forEach(p => { byDate[p.date] = (byDate[p.date]||0)+1; });
-
-  // 최장 연속 작업 스트릭
-  let bestLen = 1, bestEnd = ds[0], cur = 1;
-  for(let i=1; i<ds.length; i++){
-    const diff = (new Date(ds[i]) - new Date(ds[i-1])) / 86400000;
-    if(diff === 1){ cur++; if(cur > bestLen){ bestLen = cur; bestEnd = ds[i]; } }
-    else cur = 1;
-  }
-
-  // 하루 최다 기록
+  items.forEach(p => { byDate[p.date] = (byDate[p.date]||0)+1; });
   const busiest = Object.entries(byDate).sort((a,b) => b[1]-a[1])[0];
-  // 주말 작업 비율
-  const weekend = projects.filter(p => [0,6].includes(new Date(p.date+'T00:00:00').getDay())).length;
-  // 최고의 달
-  const byMonth = {};
-  projects.forEach(p => { const mo = p.date.slice(0,7); byMonth[mo] = (byMonth[mo]||0)+1; });
-  const bestMonth = Object.entries(byMonth).sort((a,b) => b[1]-a[1])[0];
-  // 대표 기술
+  const st = streaks(dates);
   const tagFreq = {};
-  projects.forEach(p => p.tags.forEach(t => { tagFreq[t] = (tagFreq[t]||0)+1; }));
+  items.forEach(p => p.tags.forEach(t => { tagFreq[t] = (tagFreq[t]||0)+1; }));
   const topTag = Object.entries(tagFreq).sort((a,b) => b[1]-a[1])[0];
-  // 최장 공백 후 복귀
-  let gap = 0;
-  for(let i=1; i<ds.length; i++){
-    const diff = (new Date(ds[i]) - new Date(ds[i-1])) / 86400000;
-    if(diff > gap) gap = diff;
-  }
+  const weekend = items.filter(p => [0,6].includes(new Date(p.date+'T00:00:00').getDay())).length;
+  const byMonth = {};
+  items.forEach(p => { const mo = p.date.slice(0,7); byMonth[mo] = (byMonth[mo]||0)+1; });
+  const bestMonth = Object.entries(byMonth).sort((a,b) => b[1]-a[1])[0];
 
-  const cards = [
-    { e:'🔥', v:`${bestLen}일 연속` },
-    { e:'⚡', v:`하루 ${busiest[1]}개` },
-    { e:'🌙', v:`주말 ${Math.round(weekend/projects.length*100)}%` },
-    { e:'🏆', v:`${bestMonth[0].replace('-','.')} · ${bestMonth[1]}개` },
-    { e:'🧰', v:`${topTag[0]} · ${topTag[1]}개` },
-    { e:'🪃', v:`${gap}일 공백 후 복귀` },
+  const tiles = [
+    { key:'total', label:'총 프로젝트', num:items.length },
+    { key:'work',  label:'회사',        num:items.filter(p => p.group === 'work').length },
+    { key:'home',  label:'집',          num:items.filter(p => p.group === 'home').length },
+    { key:'days',  label:'활동 일수',   num:dates.length },
+    { label:'현재 연속',   text:`${st.now}일` },
+    { label:'최장 연속',   text:`${st.max}일` },
+    { label:'최다 기록일', text:`하루 ${busiest[1]}개` },
+    { label:'대표 기술',   text:topTag[0], isText:true },
   ];
-  const box = document.getElementById('insights');
-  box.innerHTML = cards.map(c =>
-    `<div class="insight-card"><span class="insight-emoji">${c.e}</span>`
-    + `<span class="insight-value">${esc(c.v)}</span></div>`
-  ).join('');
+
+  // 타일 껍데기는 1회만 생성 — 이후엔 값만 갱신해 카운트업 애니메이션을 유지
+  if(grid.children.length !== tiles.length){
+    grid.innerHTML = tiles.map((t,i) =>
+      `<div class="ov-tile"><span class="ov-label">${esc(t.label)}</span>`
+      + `<span class="ov-value${t.isText ? ' is-text' : ''}"${t.key ? ` data-stat="${t.key}"` : ` data-ov="${i}"`}>0</span></div>`
+    ).join('');
+  }
+  tiles.forEach((t,i) => {
+    if(t.key) { setStat(t.key, t.num); return; }
+    const el = grid.querySelector(`[data-ov="${i}"]`);
+    el.className = 'ov-value' + (t.isText ? ' is-text' : '');
+    el.textContent = t.text;
+  });
+
+  const rangeLabel = overviewRange === 'all' ? '전체 기간' : overviewRange === '30d' ? '최근 30일' : '최근 7일';
+  note.textContent = `${rangeLabel} 기준 · 가장 뜨거웠던 달은 ${bestMonth[0].replace('-','.')}(${bestMonth[1]}개)이고, `
+    + `${Math.round(weekend/items.length*100)}%는 주말에 만들었습니다. 히트맵은 전체 기간을 보여줍니다.`;
 }
 
 /* ── Markdown 작업 보고서 — 현재 필터 기준, 그룹→카테고리 순 정리 ── */
@@ -2928,7 +2949,19 @@ document.getElementById('paletteOverlay').addEventListener('click', e => {
 loadURL();
 renderSummary();
 render();
-renderInsights();
+
+// 개요 패널 기간 범위 토글
+document.getElementById('ovRange').addEventListener('click', e => {
+  const btn = e.target.closest('.ov-range-btn');
+  if(!btn || btn.dataset.range === overviewRange) return;
+  overviewRange = btn.dataset.range;
+  document.querySelectorAll('.ov-range-btn').forEach(b => {
+    const on = b.dataset.range === overviewRange;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  renderOverview(applyFilters());
+});
 document.getElementById('replayBtn').addEventListener('click', startReplay);
 document.getElementById('shareCardBtn').addEventListener('click', downloadShareCard);
 document.getElementById('mdReportBtn').addEventListener('click', exportMarkdownReport);
