@@ -249,20 +249,6 @@
     ]
   },
   {
-    "date": "2026-05-12",
-    "group": "work",
-    "name": "Dashboard",
-    "desc": "작업 결과 정리 타임라인 대시보드 1차 버전",
-    "cat": "util",
-    "status": "done",
-    "series": "dashboard",
-    "tags": [
-      "HTML",
-      "CSS",
-      "JavaScript"
-    ]
-  },
-  {
     "date": "2025-08-29",
     "group": "work",
     "name": "행안부 R&D 예타 공모전",
@@ -1060,13 +1046,13 @@
   {
     "date": "2026-06-22",
     "group": "work",
-    "name": "Dashboard v2",
-    "desc": "타임라인 대시보드 GitHub 이전·대확장 — 네트워크 뷰 팬/줌/드래그, React Flow 분리, 차트·인사이트·스토리 재생, GitHub Pages 배포 (현재 프로젝트)",
+    "name": "Dashboard",
+    "desc": "작업 결과 정리 타임라인 대시보드 — 1차 버전(2026-05) 이후 GitHub 이전·대확장, 네트워크 뷰 팬/줌/드래그, React Flow 분리, 차트·인사이트·스토리 재생, GitHub Pages 배포 (현재 프로젝트)",
     "cat": "util",
     "status": "wip",
-    "series": "dashboard",
     "tags": [
       "HTML",
+      "CSS",
       "JavaScript",
       "SVG",
       "React Flow"
