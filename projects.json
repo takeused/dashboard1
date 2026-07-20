@@ -1134,22 +1134,6 @@
     ]
   },
   {
-    "date": "2026-07-12",
-    "group": "work",
-    "name": "R&D 신규사업 심의 시뮬레이터",
-    "desc": "국가 R&D 예산 심의를 LangGraph 멀티에이전트로 시뮬레이션 — 6인 분석가·심사 공방·기획처 3자 토론·최종 승인권자 구성, 예상 질의와 기획보고서 보완점을 사전 도출",
-    "cat": "ai",
-    "status": "done",
-    "url": "https://260713-r-d.pages.dev/",
-    "tags": [
-      "Python",
-      "LangGraph",
-      "멀티에이전트",
-      "R&D",
-      "예산심의"
-    ]
-  },
-  {
     "date": "2026-07-14",
     "group": "work",
     "name": "ScienceON / NTIS v5",
@@ -1184,9 +1168,10 @@
     "date": "2026-07-13",
     "group": "work",
     "name": "R&D 예산 심의 시뮬레이터",
-    "desc": "국가 R&D 신규사업 예산 심의를 LangGraph 멀티 에이전트로 시뮬레이션 — 6인 분석가, 심사위원 공방 2라운드, 기획처 3자 토론, 최종 승인권자 결정, 예상 질의·보완 권고 추출",
+    "desc": "국가 R&D 신규사업 예산 심의를 LangGraph 멀티 에이전트로 시뮬레이션 — 6인 분석가, 심사위원 공방 2라운드, 기획처 3자 토론, 최종 승인권자 결정, 예상 질의·기획보고서 보완 권고 사전 도출",
     "cat": "ai",
     "status": "done",
+    "url": "https://260713-r-d.pages.dev/",
     "tags": [
       "Python",
       "LangGraph",

@@ -148,8 +148,9 @@ a:focus-visible,
   color:var(--ink);margin-bottom:0;white-space:nowrap;
 }
 .hero-inner h1 em{font-style:normal;color:var(--primary)}
-#heroTitle{cursor:pointer}
+#heroTitle,#heroEyebrow{cursor:pointer}
 #heroTitle:hover em{opacity:0.75}
+#heroEyebrow:hover{color:var(--ink)}
 
 /* ── Timeline Section ────────────────────────────────────── */
 .timeline-section{background:var(--canvas);padding:16px 0 80px}
@@ -649,8 +650,8 @@ a:focus-visible,
 <!-- Hero -->
 <section class="hero-section">
   <div class="hero-inner container">
-    <span class="hero-eyebrow">Project Timeline</span>
-    <h1 id="heroTitle" role="button" tabindex="0" title="홈으로 — 필터 초기화 후 맨 위로">Claude, CODEX, GEMINI와 함께한 <em>작업 기록</em></h1>
+    <span class="hero-eyebrow" id="heroEyebrow" role="button" tabindex="0" title="홈으로 — 모든 설정 초기화">Project Timeline</span>
+    <h1 id="heroTitle" role="button" tabindex="0" title="홈으로 — 모든 설정 초기화">Claude, CODEX, GEMINI와 함께한 <em>작업 기록</em></h1>
   </div>
 </section>
 
@@ -876,10 +877,9 @@ const projects = [
   {"date":"2026-07-05","group":"home","name":"TradingAgents 멀티에이전트","desc":"TauricResearch/TradingAgents 로컬 구축 — 애널리스트→리서처(강세/약세 토론)→트레이더→리스크 관리 순으로 협업해 매매 판단(BUY/HOLD/SELL)을 내리는 LLM 멀티에이전트 프레임워크 (연구·교육용)","cat":"finance","status":"done","url":"https://trading-agents.takeused.workers.dev/","tags":["LLM","멀티에이전트","Python","트레이딩"]},
   {"date":"2026-07-05","group":"home","name":"TradingView MCP 리포트 v2","desc":"TradingView MCP 연동 고도화 — MSIX 패키지 런처로 CDP 디버깅 포트 연결 문제 해결, 차트 분석 리포트를 Cloudflare Workers로 배포","cat":"finance","status":"done","series":"tradingview","url":"https://tradingview-chart-report.takeused.workers.dev/","tags":["TradingView","MCP","Cloudflare Workers","PowerShell"]},
   {"date":"2026-07-11","group":"home","name":"Toss-Slack VCP 자동매매","desc":"토스증권 Open API 기반 자동매매 봇 — 로컬 일봉 DB에서 VCP(변동성 수축 패턴) 스캔 후 Slack 승인(휴먼-인-더-루프)을 거쳐야만 주문 집행, 기본값은 모의매매","cat":"finance","status":"done","tags":["Python","토스증권","Slack","자동매매","VCP"]},
-  {"date":"2026-07-12","group":"work","name":"R&D 신규사업 심의 시뮬레이터","desc":"국가 R&D 예산 심의를 LangGraph 멀티에이전트로 시뮬레이션 — 6인 분석가·심사 공방·기획처 3자 토론·최종 승인권자 구성, 예상 질의와 기획보고서 보완점을 사전 도출","cat":"ai","status":"done","url":"https://260713-r-d.pages.dev/","tags":["Python","LangGraph","멀티에이전트","R&D","예산심의"]},
   {"date":"2026-07-14","group":"work","name":"ScienceON / NTIS v5","desc":"등록 IP 제한이 있는 ScienceON·NTIS API를 Vercel 화면과 로컬 프록시·Cloudflare Tunnel로 연결해 외부에서도 검색·적정 연구개발비 산출·연구–IP 공백 분석을 실행하도록 고도화","cat":"data","status":"wip","series":"scienceon-ntis","url":"https://nits5.vercel.app/","tags":["ScienceON","NTIS","Vercel","Cloudflare Tunnel","프록시"]},
   {"date":"2026-07-14","group":"home","name":"GAMMA 프레젠테이션 실험","desc":"Gamma AI로 AI 주제 프레젠테이션(PPTX) 자동 생성 실험","cat":"doc","status":"done","tags":["Gamma","PowerPoint","프레젠테이션","AI"]},
-  {"date":"2026-07-13","group":"work","name":"R&D 예산 심의 시뮬레이터","desc":"국가 R&D 신규사업 예산 심의를 LangGraph 멀티 에이전트로 시뮬레이션 — 6인 분석가, 심사위원 공방 2라운드, 기획처 3자 토론, 최종 승인권자 결정, 예상 질의·보완 권고 추출","cat":"ai","status":"done","tags":["Python","LangGraph","멀티 에이전트","LLM","R&D 예산"]},
+  {"date":"2026-07-13","group":"work","name":"R&D 예산 심의 시뮬레이터","desc":"국가 R&D 신규사업 예산 심의를 LangGraph 멀티 에이전트로 시뮬레이션 — 6인 분석가, 심사위원 공방 2라운드, 기획처 3자 토론, 최종 승인권자 결정, 예상 질의·기획보고서 보완 권고 사전 도출","cat":"ai","status":"done","url":"https://260713-r-d.pages.dev/","tags":["Python","LangGraph","멀티 에이전트","LLM","R&D 예산"]},
   {"date":"2026-07-16","group":"work","name":"LLM API Lab","desc":"여러 OpenAI 호환 LLM API를 한 화면에서 비교 테스트하는 로컬 웹 도구 — NVIDIA Nemotron·Cerebras GPT OSS 120B·Z.AI GLM 5.2 지원, API 키는 로컬 Node 서버에서만 처리","cat":"ai","status":"done","tags":["Node.js","NVIDIA","LLM","API"]},
   {"date":"2026-07-15","group":"home","name":"Investment Guru Consensus 13","desc":"13개 투자 대가 스타일 스크린으로 종목 적합도·대가 합의·상승 트리거·하락 위험을 판정하는 프롬프트 + 결과를 시각화하는 웹 대시보드 (KOSPI·KOSDAQ 기본, 실데이터만 사용 규칙)","cat":"finance","status":"done","url":"https://13screen.vercel.app/","tags":["프롬프트 엔지니어링","JavaScript","HTML","주식","스크리닝"]},
   {"date":"2026-07-19","group":"home","name":"미 의회 매매 데이터 파이프라인","desc":"미국 하원 재무공시(PTR) 공식 배포 파일을 다운로드·파싱해 구조화 JSON을 만드는 파이프라인 — 스캔 PDF는 RapidOCR + 체크박스 픽셀 밀도로 거래유형 복원, yfinance 배치·병렬 인리치(12배 최적화), 자립형 HTML 대시보드 생성","cat":"data","status":"done","url":"https://us-congressional-trading-data.takeused.workers.dev/","tags":["Python","PDF 파싱","OCR","yfinance","데이터 파이프라인"]}
@@ -2034,9 +2034,12 @@ function resetFilters(){
   render();
 }
 
-// 제목 클릭 시 홈으로 — 필터 초기화 + 타임라인 뷰 + 맨 위로
+// 제목 클릭 시 홈으로 — 모든 필터·정렬·밀도·뷰를 초기 상태로 되돌리고 맨 위로
 function goHome(){
+  haltReplay();                    // 스토리 재생 중이면 중지
   currentGroup='all'; currentFilter='all'; currentSearch='';
+  currentSeries=null; currentMonth='all';
+  currentSort='desc'; currentDensity='comfortable';
   document.getElementById('searchInput').value = '';
   updateClearBtn();
   if(currentView !== 'timeline') setView('timeline');
@@ -2067,6 +2070,14 @@ function syncUIFromState(){
   });
   document.querySelectorAll('.tab-btn').forEach(b => {
     const on = b.dataset.filter === currentFilter;
+    b.classList.toggle('active', on); b.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+  document.querySelectorAll('.view-btn[data-density]').forEach(b => {
+    const on = b.dataset.density === currentDensity;
+    b.classList.toggle('active', on); b.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+  document.querySelectorAll('.view-btn[data-sort]').forEach(b => {
+    const on = b.dataset.sort === currentSort;
     b.classList.toggle('active', on); b.setAttribute('aria-pressed', on ? 'true':'false');
   });
 }
@@ -2243,11 +2254,13 @@ document.addEventListener('keydown', e => {
 
 /* ── 제목 클릭 → 홈 ─────────────────────────────────────── */
 (() => {
-  const t = document.getElementById('heroTitle');
-  if(!t) return;
-  t.addEventListener('click', goHome);
-  t.addEventListener('keydown', e => {
-    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); goHome(); }
+  ['heroTitle','heroEyebrow'].forEach(id => {
+    const t = document.getElementById(id);
+    if(!t) return;
+    t.addEventListener('click', goHome);
+    t.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); goHome(); }
+    });
   });
 })();
 
