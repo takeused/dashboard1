@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dashboard-static",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "dashboard1", "-l", "5891"],
+      "port": 5891
+    }
+  ]
+}
