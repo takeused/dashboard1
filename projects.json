@@ -39,19 +39,6 @@
     "url": "https://iamnotai.pages.dev"
   },
   {
-    "date": "2026-04-26",
-    "group": "work",
-    "name": "Slide-maker",
-    "desc": "AI 기반 슬라이드 자동 제작 도구",
-    "cat": "doc",
-    "status": "done",
-    "series": "slide-maker",
-    "tags": [
-      "JavaScript",
-      "HTML"
-    ]
-  },
-  {
     "date": "2026-04-29",
     "group": "work",
     "name": "Korean Law MCP",
@@ -92,20 +79,6 @@
   {
     "date": "2026-04-30",
     "group": "work",
-    "name": "KISTI MCP",
-    "desc": "KISTI 과학기술 정보 MCP 서버 구축",
-    "cat": "mcp",
-    "status": "done",
-    "series": "kisti-mcp",
-    "tags": [
-      "MCP",
-      "Python",
-      "KISTI"
-    ]
-  },
-  {
-    "date": "2026-04-30",
-    "group": "work",
     "name": "Matt Pocock Skills",
     "desc": "Claude Code 스킬 구조 분석 및 활용 방법 학습",
     "cat": "util",
@@ -122,7 +95,6 @@
     "desc": "슬라이드 제작 도구 개선 — 디자인 및 기능 업그레이드",
     "cat": "doc",
     "status": "done",
-    "series": "slide-maker",
     "tags": [
       "JavaScript",
       "HTML"
@@ -135,40 +107,10 @@
     "desc": "KISTI MCP 서버 개선 버전 — 기능 확장",
     "cat": "mcp",
     "status": "done",
-    "series": "kisti-mcp",
     "tags": [
       "MCP",
       "Python",
       "KISTI"
-    ]
-  },
-  {
-    "date": "2026-05-07",
-    "group": "work",
-    "name": "ScienceON / NTIS v2",
-    "desc": "과학기술 논문·국가R&D 과제 검색 도구 2차 개선 버전",
-    "cat": "data",
-    "status": "done",
-    "series": "scienceon-ntis",
-    "tags": [
-      "Web Scraping",
-      "JavaScript",
-      "API",
-      "NTIS"
-    ]
-  },
-  {
-    "date": "2026-05-07",
-    "group": "work",
-    "name": "ScienceON / NTIS",
-    "desc": "과학기술 논문 및 국가R&D 과제 검색 · 트렌드 분석 도구",
-    "cat": "data",
-    "status": "done",
-    "series": "scienceon-ntis",
-    "tags": [
-      "Web Scraping",
-      "JavaScript",
-      "API"
     ]
   },
   {
@@ -194,20 +136,6 @@
       "Python",
       "Web Scraping",
       "금융"
-    ]
-  },
-  {
-    "date": "2026-05-09",
-    "group": "work",
-    "name": "NVIDIA Nemotron",
-    "desc": "Nemotron Personas Korea 데이터셋 기반 가상 설문 시스템",
-    "cat": "ai",
-    "status": "wip",
-    "tags": [
-      "NVIDIA",
-      "LLM",
-      "HuggingFace",
-      "Ollama"
     ]
   },
   {
@@ -755,38 +683,6 @@
     ]
   },
   {
-    "date": "2026-06-03",
-    "group": "work",
-    "name": "Nemotron 페르소나 재난 설문",
-    "desc": "Nemotron-Personas-Korea 합성 페르소나가 재난안전 인식조사에 1인칭 응답 — Cerebras GLM 기반 실리콘 샘플링·사후층화 가중 집계",
-    "cat": "ai",
-    "status": "done",
-    "series": "nemotron-survey",
-    "tags": [
-      "LLM",
-      "Nemotron",
-      "Cerebras",
-      "설문",
-      "재난안전"
-    ]
-  },
-  {
-    "date": "2026-06-06",
-    "group": "home",
-    "name": "TradingView × Claude 자동화",
-    "desc": "TradingView와 Claude를 연동한 매매·대시보드 구현 가이드 + 대시보드 생성 스크립트",
-    "cat": "finance",
-    "status": "done",
-    "series": "tradingview",
-    "url": "https://tradingview-chart-report.takeused.workers.dev/",
-    "tags": [
-      "TradingView",
-      "Claude",
-      "Python",
-      "대시보드"
-    ]
-  },
-  {
     "date": "2026-06-07",
     "group": "home",
     "name": "graphify 지식그래프",
@@ -899,49 +795,21 @@
     ]
   },
   {
-    "date": "2026-06-04",
-    "group": "work",
-    "name": "ScienceON / NTIS v3",
-    "desc": "과학기술 논문·국가R&D 검색 3차 버전 — 웹앱 형태로 개선",
-    "cat": "data",
-    "status": "done",
-    "series": "scienceon-ntis",
-    "tags": [
-      "JavaScript",
-      "HTML",
-      "API",
-      "NTIS"
-    ],
-    "url": "http://172.30.24.141:3737/"
-  },
-  {
     "date": "2026-06-05",
     "group": "work",
     "name": "Nemotron 가상 설문 v2",
     "desc": "Nemotron-Personas-Korea 2,000명 합성 페르소나 × 재난안전 인식조사 — Cerebras GLM 응답 생성·사후층화 가중 집계",
     "cat": "ai",
     "status": "done",
-    "series": "nemotron-survey",
     "tags": [
       "LLM",
       "Nemotron",
       "Cerebras",
       "설문",
-      "재난안전"
-    ]
-  },
-  {
-    "date": "2026-06-07",
-    "group": "work",
-    "name": "국가R&D 예산 심의 도구",
-    "desc": "국가연구개발사업 예산 요구 심의를 위한 웹 기반 검토 도구",
-    "cat": "util",
-    "status": "done",
-    "tags": [
-      "HTML",
-      "JavaScript",
-      "R&D",
-      "예산"
+      "재난안전",
+      "NVIDIA",
+      "HuggingFace",
+      "Ollama"
     ]
   },
   {
@@ -1109,13 +977,15 @@
     "desc": "TradingView MCP 연동 고도화 — MSIX 패키지 런처로 CDP 디버깅 포트 연결 문제 해결, 차트 분석 리포트를 Cloudflare Workers로 배포",
     "cat": "finance",
     "status": "done",
-    "series": "tradingview",
     "url": "https://tradingview-chart-report.takeused.workers.dev/",
     "tags": [
       "TradingView",
       "MCP",
       "Cloudflare Workers",
-      "PowerShell"
+      "PowerShell",
+      "Claude",
+      "Python",
+      "대시보드"
     ]
   },
   {
@@ -1140,14 +1010,17 @@
     "desc": "등록 IP 제한이 있는 ScienceON·NTIS API를 Vercel 화면과 로컬 프록시·Cloudflare Tunnel로 연결해 외부에서도 검색·적정 연구개발비 산출·연구–IP 공백 분석을 실행하도록 고도화",
     "cat": "data",
     "status": "wip",
-    "series": "scienceon-ntis",
     "url": "https://nits5.vercel.app/",
     "tags": [
       "ScienceON",
       "NTIS",
       "Vercel",
       "Cloudflare Tunnel",
-      "프록시"
+      "프록시",
+      "Web Scraping",
+      "JavaScript",
+      "API",
+      "HTML"
     ]
   },
   {
@@ -1177,7 +1050,11 @@
       "LangGraph",
       "멀티 에이전트",
       "LLM",
-      "R&D 예산"
+      "R&D 예산",
+      "HTML",
+      "JavaScript",
+      "R&D",
+      "예산"
     ]
   },
   {
