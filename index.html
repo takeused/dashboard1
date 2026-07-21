@@ -400,9 +400,18 @@ a:focus-visible,
   border-radius:14px;padding:14px;
 }
 .ov-head{
-  display:flex;align-items:center;justify-content:flex-end;
+  display:flex;align-items:center;justify-content:space-between;
   gap:12px;margin-bottom:10px;flex-wrap:wrap;
 }
+.ov-mode{display:inline-flex;gap:2px;background:transparent}
+.ov-mode-btn{
+  border:none;background:transparent;border-radius:8px;
+  padding:6px 12px;cursor:pointer;
+  font-family:inherit;font-size:13px;color:var(--ink-subtle);
+  transition:background .12s,color .12s;
+}
+.ov-mode-btn:hover{color:var(--ink)}
+.ov-mode-btn.active{background:var(--canvas);color:var(--ink);font-weight:600}
 .ov-range{display:inline-flex;gap:2px;background:transparent}
 .ov-range-btn{
   border:none;background:transparent;border-radius:8px;
@@ -416,6 +425,7 @@ a:focus-visible,
   display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
   margin-bottom:12px;
 }
+.ov-grid[hidden],.ov-heat[hidden],.ov-category[hidden]{display:none}
 @media (max-width:760px){.ov-grid{grid-template-columns:repeat(2,1fr)}}
 .ov-tile{
   background:var(--canvas);border-radius:10px;padding:8px 12px;min-width:0;
@@ -443,6 +453,30 @@ a:focus-visible,
 }
 #heatmap svg{display:block;min-width:600px}
 .heatmap-cell-active{cursor:pointer}
+
+/* ── 카테고리 분포(누적 막대 + 범례) ─────────────────────── */
+.ov-cat-chart{
+  background:var(--canvas);border-radius:10px;padding:12px 12px 4px;
+  overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none;
+}
+.ov-cat-chart::-webkit-scrollbar{display:none}
+.ov-cat-chart svg{display:block;min-width:560px}
+.ov-cat-bar{cursor:pointer;transition:opacity .12s}
+.ov-cat-chart.has-focus .ov-cat-bar:not(.focus){opacity:0.25}
+.ov-cat-legend{
+  display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;
+}
+.ov-cat-legend-item{
+  display:flex;align-items:center;gap:8px;cursor:pointer;
+  padding:4px 6px;border-radius:8px;transition:background .12s,opacity .12s;
+  font-size:13px;color:var(--ink);
+}
+.ov-cat-legend-item:hover{background:var(--surface-1)}
+.ov-cat-legend.has-focus .ov-cat-legend-item:not(.focus){opacity:0.4}
+.ov-cat-swatch{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+.ov-cat-name{font-weight:500}
+.ov-cat-meta{color:var(--ink-subtle);font-variant-numeric:tabular-nums;margin-left:auto;padding-left:14px}
+.ov-cat-pct{color:var(--ink-muted);font-weight:600;font-variant-numeric:tabular-nums;min-width:44px;text-align:right}
 
 /* ── View Toolbar ────────────────────────────────────────── */
 .view-toolbar{
@@ -678,6 +712,10 @@ a:focus-visible,
   <div class="container">
     <div class="overview-panel">
       <div class="ov-head">
+        <div class="ov-mode" id="ovMode" role="group" aria-label="개요 표시 모드">
+          <button class="ov-mode-btn active" type="button" data-mode="overview" aria-pressed="true">개요</button>
+          <button class="ov-mode-btn" type="button" data-mode="category" aria-pressed="false">카테고리</button>
+        </div>
         <div class="ov-range" id="ovRange" role="group" aria-label="통계 기간 범위">
           <button class="ov-range-btn active" type="button" data-range="all" aria-pressed="true">전체</button>
           <button class="ov-range-btn" type="button" data-range="30d" aria-pressed="false">30d</button>
@@ -685,7 +723,8 @@ a:focus-visible,
         </div>
       </div>
       <div class="ov-grid" id="ovGrid"></div>
-      <div class="ov-heat"><div id="heatmap"></div></div>
+      <div class="ov-heat" id="ovHeat"><div id="heatmap"></div></div>
+      <div class="ov-category" id="ovCategory" hidden></div>
     </div>
   </div>
 </section>
@@ -1101,6 +1140,8 @@ function render(){
   syncURL();
   renderOverview(filtered);
   renderHeatmap(filtered);
+  renderCategoryChart(filtered);
+  applyOverviewMode();
   renderActiveChips();
 
   const tl  = document.getElementById('timeline');
@@ -1302,8 +1343,120 @@ function renderHeatmap(filtered){
 // 카테고리 키 순서 — Markdown 보고서 정렬에 사용
 const CAT_SHORT = {ai:'AI / LLM',data:'데이터',doc:'문서',mcp:'MCP',util:'유틸',finance:'재테크'};
 
+/* ── 카테고리 분포 — 주(週) 단위 누적 막대 + 범례 ─────────── */
+function renderCategoryChart(filtered){
+  const box = document.getElementById('ovCategory');
+  catFocus = null;   // 재렌더 시 강조 초기화
+  const items = overviewWindow(filtered);
+  if(items.length === 0){
+    box.innerHTML = '<p class="ov-empty" style="grid-column:auto">이 기간에 해당하는 프로젝트가 없습니다.</p>';
+    return;
+  }
+
+  // 주 단위 버킷(일요일 시작) — 히트맵과 동일 기준
+  const dts = items.map(p => new Date(p.date+'T00:00:00'));
+  const minDate = new Date(Math.min(...dts)), maxDate = new Date(Math.max(...dts));
+  const start = new Date(minDate); start.setDate(start.getDate() - start.getDay());
+  const weekIdx = d => Math.floor((new Date(d+'T00:00:00') - start) / (7*86400000));
+  const nWeeks = Math.max(...items.map(p => weekIdx(p.date))) + 1;
+
+  // buckets[week][cat] = count
+  const buckets = Array.from({length:nWeeks}, () => ({}));
+  const totals = {};
+  items.forEach(p => {
+    const w = weekIdx(p.date);
+    buckets[w][p.cat] = (buckets[w][p.cat]||0) + 1;
+    totals[p.cat] = (totals[p.cat]||0) + 1;
+  });
+  const cats = CAT_ORDER.filter(c => totals[c] > 0);
+  const grand = items.length;
+  const maxStack = Math.max(...buckets.map(b => Object.values(b).reduce((s,v)=>s+v,0)), 1);
+
+  // 레이아웃
+  const PADL=26, PADB=26, PADT=8, CH=170, gap=6;
+  const bw = Math.max(14, Math.min(46, Math.floor(720 / nWeeks) - gap));
+  const CW = PADL + nWeeks*(bw+gap) + 8;
+  const H = PADT + CH + PADB;
+  const yFor = v => PADT + CH - (v/maxStack)*CH;
+
+  // y 눈금(0 ~ max, 정수 4단계)
+  let grid = '';
+  const ticks = 4;
+  for(let i=0;i<=ticks;i++){
+    const v = Math.round(maxStack * i/ticks);
+    const y = yFor(v);
+    grid += `<line x1="${PADL}" y1="${y.toFixed(1)}" x2="${CW-4}" y2="${y.toFixed(1)}" stroke="var(--hairline)" stroke-width="0.6"/>`
+         +  `<text x="${PADL-6}" y="${(y+3).toFixed(1)}" text-anchor="end" font-size="9" fill="var(--ink-subtle)" font-family="IBM Plex Sans,sans-serif">${v}</text>`;
+  }
+
+  // 막대(누적) + x축 라벨
+  let bars = '', xlabels = '';
+  const labelEvery = Math.ceil(nWeeks / 8);
+  buckets.forEach((b, w) => {
+    const x = PADL + w*(bw+gap);
+    let acc = 0;
+    cats.forEach(c => {
+      const v = b[c]||0; if(!v) return;
+      const h = (v/maxStack)*CH;
+      const y = PADT + CH - acc - h;
+      const wkStart = new Date(start.getTime() + w*7*86400000);
+      const lbl = `${wkStart.getMonth()+1}/${wkStart.getDate()} 주 · ${CAT_LABELS[c]} ${v}개`;
+      bars += `<rect class="ov-cat-bar" data-cat="${c}" x="${x}" y="${y.toFixed(1)}" width="${bw}" height="${h.toFixed(1)}" `
+           +  `fill="var(--cat-${c})" rx="1.5"><title>${lbl}</title></rect>`;
+      acc += h;
+    });
+    if(w % labelEvery === 0){
+      const wkStart = new Date(start.getTime() + w*7*86400000);
+      xlabels += `<text x="${x + bw/2}" y="${H-9}" text-anchor="middle" font-size="9" fill="var(--ink-subtle)" `
+              +  `font-family="IBM Plex Sans,sans-serif">${wkStart.getMonth()+1}월 ${wkStart.getDate()}일</text>`;
+    }
+  });
+
+  const svg = `<div class="ov-cat-chart"><svg viewBox="0 0 ${CW} ${H}" style="width:${CW}px;height:${H}px">`
+            + grid + bars + xlabels + `</svg></div>`;
+
+  // 범례 — 카테고리별 합계·비율(내림차순)
+  const legend = cats.slice().sort((a,b)=>totals[b]-totals[a]).map(c => {
+    const pct = (totals[c]/grand*100).toFixed(1);
+    return `<div class="ov-cat-legend-item" data-cat="${c}" role="button" tabindex="0" title="${CAT_LABELS[c]}만 강조">
+      <span class="ov-cat-swatch" style="background:var(--cat-${c})"></span>
+      <span class="ov-cat-name">${CAT_LABELS[c]}</span>
+      <span class="ov-cat-meta">${totals[c]}건</span>
+      <span class="ov-cat-pct">${pct}%</span>
+    </div>`;
+  }).join('');
+
+  box.innerHTML = svg + `<div class="ov-cat-legend" id="ovCatLegend">${legend}</div>`;
+}
+
+// 카테고리 강조 토글 — 범례/막대 클릭 시 해당 카테고리만 부각
+let catFocus = null;
+function focusCategory(cat){
+  catFocus = (catFocus === cat) ? null : cat;
+  const chart  = document.querySelector('#ovCategory .ov-cat-chart');
+  const legend = document.getElementById('ovCatLegend');
+  if(chart){
+    chart.classList.toggle('has-focus', !!catFocus);
+    chart.querySelectorAll('.ov-cat-bar').forEach(b => b.classList.toggle('focus', b.dataset.cat === catFocus));
+  }
+  if(legend){
+    legend.classList.toggle('has-focus', !!catFocus);
+    legend.querySelectorAll('.ov-cat-legend-item').forEach(l => l.classList.toggle('focus', l.dataset.cat === catFocus));
+  }
+}
+
 /* ── 개요 패널 — 통계 8종을 타일로 압축, 기간 범위(전체/30d/7d) 대응 ── */
 let overviewRange = 'all';
+let overviewMode  = 'overview';  // 'overview'(타일+히트맵) | 'category'(카테고리 분포)
+const CAT_ORDER = ['ai','data','doc','mcp','util','finance'];
+
+// 개요/카테고리 모드에 따라 표시 영역 전환
+function applyOverviewMode(){
+  const isCat = overviewMode === 'category';
+  document.getElementById('ovGrid').hidden     = isCat;
+  document.getElementById('ovHeat').hidden      = isCat;
+  document.getElementById('ovCategory').hidden = !isCat;
+}
 
 // 기간 기준점은 오늘이 아니라 데이터의 최신 날짜 — 큐레이션 공백으로 "최근 0건"이 되는 것을 방지
 function overviewWindow(items){
@@ -2523,7 +2676,32 @@ document.getElementById('ovRange').addEventListener('click', e => {
     b.classList.toggle('active', on);
     b.setAttribute('aria-pressed', on ? 'true' : 'false');
   });
-  renderOverview(applyFilters());
+  const f = applyFilters();
+  renderOverview(f); renderCategoryChart(f);
+});
+
+// 개요 / 카테고리 모드 토글
+document.getElementById('ovMode').addEventListener('click', e => {
+  const btn = e.target.closest('.ov-mode-btn');
+  if(!btn || btn.dataset.mode === overviewMode) return;
+  overviewMode = btn.dataset.mode;
+  document.querySelectorAll('.ov-mode-btn').forEach(b => {
+    const on = b.dataset.mode === overviewMode;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  applyOverviewMode();
+});
+
+// 카테고리 강조 — 막대/범례 클릭
+document.getElementById('ovCategory').addEventListener('click', e => {
+  const el = e.target.closest('[data-cat]');
+  if(el) focusCategory(el.dataset.cat);
+});
+document.getElementById('ovCategory').addEventListener('keydown', e => {
+  if(e.key !== 'Enter' && e.key !== ' ') return;
+  const el = e.target.closest('.ov-cat-legend-item');
+  if(el){ e.preventDefault(); focusCategory(el.dataset.cat); }
 });
 document.getElementById('replayBtn').addEventListener('click', startReplay);
 document.getElementById('shareCardBtn').addEventListener('click', downloadShareCard);
