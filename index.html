@@ -305,16 +305,6 @@ a:focus-visible,
 .fav-btn:hover{opacity:1;transform:scale(1.18)}
 .fav-btn.active{color:#f5a623;opacity:1}
 #favOnlyBtn.active{background:#f5a623;color:#1d1d1f;border-color:#e0951a}
-.pinned-group{margin-bottom:20px}
-.pinned-header{
-  display:flex;align-items:center;gap:8px;
-  font-size:12px;font-weight:600;letter-spacing:0.32px;text-transform:uppercase;
-  color:#f5a623;margin:0 0 10px 2px;
-}
-.pinned-count{
-  font-size:11px;font-weight:600;color:#1d1d1f;background:#f5a623;
-  border-radius:999px;padding:1px 8px;
-}
 .card-title{
   font-size:18px;font-weight:400;line-height:1.33;color:var(--ink);
 }
@@ -402,6 +392,7 @@ a:focus-visible,
 .ov-head{
   display:flex;align-items:center;justify-content:space-between;
   gap:12px;margin-bottom:10px;flex-wrap:wrap;
+  max-width:var(--ov-w,none);
 }
 .ov-mode{display:inline-flex;gap:2px;background:transparent}
 .ov-mode-btn{
@@ -423,17 +414,17 @@ a:focus-visible,
 .ov-range-btn.active{background:var(--canvas);color:var(--ink);font-weight:600}
 .ov-grid{
   display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
-  margin-bottom:12px;
+  margin-bottom:12px;max-width:var(--ov-w,none);
 }
 .ov-grid[hidden],.ov-heat[hidden],.ov-category[hidden]{display:none}
 @media (max-width:760px){.ov-grid{grid-template-columns:repeat(2,1fr)}}
 .ov-tile{
-  background:var(--canvas);border-radius:10px;padding:8px 12px;min-width:0;
-  display:flex;align-items:baseline;gap:8px;
+  background:var(--canvas);border-radius:10px;padding:8px 10px;min-width:0;
+  display:flex;align-items:baseline;gap:6px;
 }
 .ov-label{
-  font-size:12px;color:var(--ink-subtle);
-  letter-spacing:0.16px;white-space:nowrap;flex:0 0 auto;
+  font-size:11.5px;color:var(--ink-subtle);
+  letter-spacing:0.1px;white-space:nowrap;flex:0 0 auto;
 }
 .ov-value{
   font-size:16px;font-weight:600;color:var(--ink);
@@ -443,7 +434,8 @@ a:focus-visible,
 }
 .ov-value.is-text{font-size:14px;font-weight:500}
 .ov-heat{
-  background:var(--canvas);border-radius:10px;padding:10px 12px;
+  background:var(--canvas);border-radius:10px;padding:10px 0;
+  width:fit-content;max-width:100%;
   overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none;
 }
 .ov-heat::-webkit-scrollbar{display:none}
@@ -451,7 +443,7 @@ a:focus-visible,
   grid-column:1 / -1;background:var(--canvas);border-radius:10px;
   padding:14px;font-size:13px;color:var(--ink-subtle);letter-spacing:0.16px;
 }
-#heatmap svg{display:block;min-width:600px}
+#heatmap svg{display:block}
 .heatmap-cell-active{cursor:pointer}
 
 /* ── 카테고리 분포(누적 막대 + 범례) ─────────────────────── */
@@ -756,9 +748,8 @@ a:focus-visible,
         </div>
       </div>
       <div class="switcher-group">
-        <span class="switcher-label" style="background:#f5a623">즐겨찾기</span>
         <div class="view-toggle">
-          <button id="favOnlyBtn" class="view-btn" type="button" aria-pressed="false" title="즐겨찾기한 프로젝트만 보기">★ 모아보기</button>
+          <button id="favOnlyBtn" class="view-btn" type="button" aria-pressed="false" title="즐겨찾기한 프로젝트만 보기">★ 즐겨찾기</button>
         </div>
       </div>
       <div class="switcher-group">
@@ -839,7 +830,6 @@ a:focus-visible,
 <!-- Footer -->
 <footer class="footer-slab">
   <h2>Built with Claude Code</h2>
-  <p>Anthropic Claude Sonnet 4.6 · Visual Design inspired by IBM Carbon Design System</p>
   <div class="footer-meta">© 2026 · takeused/dashboard1</div>
 </footer>
 
@@ -1187,25 +1177,7 @@ function renderTimeline(filtered){
     currentSort === 'asc' ? new Date(a) - new Date(b) : new Date(b) - new Date(a));
   const now = Date.now();
 
-  // 즐겨찾기 상단 고정 — favOnly가 아닐 때, 즐겨찾기 항목을 별도 섹션으로 맨 위에 모으고 본문에서는 제외
-  let mainKeys = dateKeys, pinned = [];
-  if(!favOnly){
-    pinned = filtered.filter(p => isFav(p.name))
-                     .sort((a,b) => currentSort === 'asc' ? new Date(a.date)-new Date(b.date) : new Date(b.date)-new Date(a.date));
-  }
-  if(pinned.length){
-    const pg = document.createElement('div');
-    pg.className = 'date-group pinned-group';
-    pg.innerHTML = `<div class="pinned-header">★ 즐겨찾기 <span class="pinned-count">${pinned.length}</span></div>`;
-    pinned.forEach(p => pg.appendChild(buildTlRow(p, now)));
-    tl.appendChild(pg);
-    // 본문에서는 즐겨찾기 제외 후 빈 날짜 그룹 정리
-    const pinnedNames = new Set(pinned.map(p => p.name));
-    mainKeys = dateKeys.filter(d => grouped[d].some(p => !pinnedNames.has(p.name)));
-    mainKeys.forEach(d => { grouped[d] = grouped[d].filter(p => !pinnedNames.has(p.name)); });
-  }
-
-  mainKeys.forEach(d => {
+  dateKeys.forEach(d => {
     const g  = document.createElement('div');
     g.className = 'date-group';
     g.dataset.date = d;
@@ -1283,7 +1255,7 @@ function renderHeatmap(filtered){
   const start = new Date(minDate);
   start.setDate(start.getDate() - start.getDay()); // 일요일 정렬
 
-  const CELL = 13, GAP = 3, LEFT = 32, TOP = 22;
+  const CELL = 10, GAP = 2, LEFT = 26, TOP = 20;
   const weeks = Math.ceil((maxDate - start) / (7*86400000)) + 1;
   const W = LEFT + weeks * (CELL+GAP) + 4;
   const H = TOP + 7 * (CELL+GAP) + 4;
@@ -1338,6 +1310,12 @@ function renderHeatmap(filtered){
             + `style="width:${W}px;height:${H}px;display:block">`
             + monthLabels + dayLabels + cells + `</svg>`;
   document.getElementById('heatmap').innerHTML = svg;
+  // 개요 패널 폭 기준을 히트맵 폭(W)으로 통일 — 타일·헤더·히트맵 박스 + 외곽 회색 패널까지 같은 가로폭으로 정렬
+  const panel = document.querySelector('.overview-panel');
+  if(panel){
+    panel.style.setProperty('--ov-w', W + 'px');
+    panel.style.maxWidth = (W + 28) + 'px';   // 내부 콘텐츠 폭 + 좌우 패딩(14×2)
+  }
 }
 
 // 카테고리 키 순서 — Markdown 보고서 정렬에 사용
