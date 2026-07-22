@@ -305,6 +305,7 @@ a:focus-visible,
 .fav-btn:hover{opacity:1;transform:scale(1.18)}
 .fav-btn.active{color:#f5a623;opacity:1}
 #favOnlyBtn.active{background:#f5a623;color:#1d1d1f;border-color:#e0951a}
+#urlOnlyBtn.active{background:var(--primary);color:var(--on-primary,#fff);border-color:var(--primary)}
 .card-title{
   font-size:18px;font-weight:400;line-height:1.33;color:var(--ink);
 }
@@ -745,11 +746,6 @@ a:focus-visible,
         </div>
       </div>
       <div class="switcher-group">
-        <div class="view-toggle">
-          <button id="favOnlyBtn" class="view-btn" type="button" aria-pressed="false" title="즐겨찾기한 프로젝트만 보기">★ 즐겨찾기</button>
-        </div>
-      </div>
-      <div class="switcher-group">
         <span class="switcher-label" style="background:#8a3ffc">뷰</span>
         <div class="view-toggle" role="group" aria-label="뷰 전환">
           <button class="view-btn active" data-view="timeline" aria-pressed="true">타임라인</button>
@@ -804,6 +800,16 @@ a:focus-visible,
           <button class="tab-btn" data-filter="finance" aria-pressed="false">
             <span class="cat-dot" style="background:var(--cat-finance)"></span>재테크 / 투자
           </button>
+        </div>
+      </div>
+      <div class="switcher-group">
+        <div class="view-toggle">
+          <button id="favOnlyBtn" class="view-btn" type="button" aria-pressed="false" title="즐겨찾기한 프로젝트만 보기">★ 즐겨찾기</button>
+        </div>
+      </div>
+      <div class="switcher-group">
+        <div class="view-toggle">
+          <button id="urlOnlyBtn" class="view-btn" type="button" aria-pressed="false" title="결과 열기 링크가 있는 프로젝트만 보기">↗ 결과 열기</button>
         </div>
       </div>
     </div>
@@ -942,6 +948,7 @@ let net           = null;  // 네트워크 뷰 팬/줌/드래그 공유 상태
 
 // 즐겨찾기 — 프로젝트명(name)을 키로 localStorage에 영속 저장
 let favOnly = false;   // '즐겨찾기만 보기' 토글
+let urlOnly = false;   // '결과 열기 있는 것만' 토글
 let favorites = new Set();
 try { favorites = new Set(JSON.parse(localStorage.getItem('favorites') || '[]')); } catch { favorites = new Set(); }
 function isFav(name){ return favorites.has(name); }
@@ -1076,6 +1083,7 @@ function applyFilters(){
   const q = currentSearch.trim().toLowerCase();
   return projects.filter(p => {
     if(favOnly && !isFav(p.name)) return false;
+    if(urlOnly && !p.url) return false;
     if(currentGroup  !== 'all' && p.group  !== currentGroup)  return false;
     if(currentFilter !== 'all' && p.cat    !== currentFilter) return false;
     if(currentSeries && p.series !== currentSeries) return false;
@@ -2149,7 +2157,7 @@ function goHome(){
   haltReplay();                    // 스토리 재생 중이면 중지
   currentGroup='all'; currentFilter='all'; currentSearch='';
   currentSeries=null; currentMonth='all';
-  currentSort='desc'; currentDensity='comfortable'; favOnly=false;
+  currentSort='desc'; currentDensity='comfortable'; favOnly=false; urlOnly=false;
   document.getElementById('searchInput').value = '';
   updateClearBtn();
   if(currentView !== 'timeline') setView('timeline');
@@ -2192,6 +2200,8 @@ function syncUIFromState(){
   });
   const fob = document.getElementById('favOnlyBtn');
   if(fob){ fob.classList.toggle('active', favOnly); fob.setAttribute('aria-pressed', favOnly ? 'true':'false'); }
+  const uob = document.getElementById('urlOnlyBtn');
+  if(uob){ uob.classList.toggle('active', urlOnly); uob.setAttribute('aria-pressed', urlOnly ? 'true':'false'); }
 }
 
 function openPalette(){
@@ -2386,6 +2396,18 @@ document.addEventListener('keydown', e => {
     favOnly = !favOnly;
     btn.classList.toggle('active', favOnly);
     btn.setAttribute('aria-pressed', favOnly ? 'true' : 'false');
+    render();
+  });
+})();
+
+/* ── 결과 열기 있는 것만 보기 토글 ──────────────────────── */
+(() => {
+  const btn = document.getElementById('urlOnlyBtn');
+  if(!btn) return;
+  btn.addEventListener('click', () => {
+    urlOnly = !urlOnly;
+    btn.classList.toggle('active', urlOnly);
+    btn.setAttribute('aria-pressed', urlOnly ? 'true' : 'false');
     render();
   });
 })();
