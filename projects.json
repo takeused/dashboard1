@@ -801,6 +801,7 @@
     "desc": "Nemotron-Personas-Korea 2,000명 합성 페르소나 × 재난안전 인식조사 — Cerebras GLM 응답 생성·사후층화 가중 집계",
     "cat": "ai",
     "status": "done",
+    "url": "https://nemotron-persona-korea-virtual-survey3.takeused.workers.dev/",
     "tags": [
       "LLM",
       "Nemotron",
