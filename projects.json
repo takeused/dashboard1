@@ -1162,6 +1162,7 @@
     "desc": "KEIT가 2013년 공개한 NEPSA 방법론을 재현한 R&D 과제 포트폴리오 평가 웹앱 — 기대성과·위험 12개 지표 입력 → 100점 환산 → 12영역 매트릭스(S~D) 등급·우선순위. 정량지표 자동 채점, 시나리오·이력·과제 비교, JSON 백업·CSV 내보내기·인쇄 보고서",
     "cat": "ai",
     "status": "wip",
+    "url": "https://nepsa.takeused.workers.dev/",
     "tags": [
       "Next.js",
       "TypeScript",
