@@ -544,6 +544,46 @@
   {
     "date": "2026-05-07",
     "group": "work",
+    "name": "ScienceON / NTIS v1",
+    "desc": "과학기술 논문 및 국가R&D 과제 검색 웹앱 초기 버전",
+    "cat": "data",
+    "status": "done",
+    "tags": [
+      "HTML",
+      "JavaScript",
+      "NTIS",
+      "ScienceON"
+    ],
+    "tools": [
+      "Claude Code"
+    ],
+    "artifact": "정적 웹앱",
+    "localPath": "D:\\01 WORK\\260507 scienceon-ntis1",
+    "nextAction": "v2로 개선 완료"
+  },
+  {
+    "date": "2026-05-07",
+    "group": "work",
+    "name": "ScienceON / NTIS v2",
+    "desc": "과학기술 논문 및 국가R&D 과제 검색·트렌드 분석 도구 v2 — 핵심 기능 경량화",
+    "cat": "data",
+    "status": "done",
+    "tags": [
+      "HTML",
+      "JavaScript",
+      "NTIS",
+      "ScienceON"
+    ],
+    "tools": [
+      "Claude Code"
+    ],
+    "artifact": "정적 웹앱",
+    "localPath": "D:\\01 WORK\\260507 scienceon_ntis2",
+    "nextAction": "v3 Cerebras 벤치마크 버전으로 개선 완료"
+  },
+  {
+    "date": "2026-05-07",
+    "group": "work",
     "name": "교육이수현황",
     "desc": "교육 이수 현황 관리 및 조회 도구",
     "cat": "util",
