@@ -1,4 +1,4 @@
-[
+window.PROJECTS = [
   {
     "date": "2026-09-18",
     "group": "work",
@@ -1554,4 +1554,4 @@
       "Vite"
     ]
   }
-]
+];
