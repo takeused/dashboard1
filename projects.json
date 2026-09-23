@@ -1,688 +1,68 @@
 [
   {
-    "date": "2026-09-18",
+    "date": "2026-04-24",
     "group": "work",
-    "name": "대한민국 상권분석앱",
-    "desc": "공공데이터 API와 Groq LLM을 결합한 지도 기반 상권분석 웹앱",
-    "cat": "data",
-    "status": "wip",
-    "tags": [
-      "React",
-      "Vite",
-      "공공데이터",
-      "LLM",
-      "지도"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "웹앱",
-    "localPath": "D:\\01 WORK\\260918 대한민국 상권분석앱",
-    "nextAction": "실데이터 연동 및 LLM 분석 정확도 개선"
-  },
-  {
-    "date": "2026-09-17",
-    "group": "work",
-    "name": "공무원연금공단 재해예방 공모전",
-    "desc": "공무원연금공단 재해예방 아이디어 공모전 응모 자료 작성",
+    "name": "RHWP Studio Windows 패치",
+    "desc": "HWP Studio(master-of-hwp) Windows 환경 패치 및 설치 자동화 — macOS/Linux 전용 코드의 Windows 호환성 문제 해결",
     "cat": "util",
-    "status": "wip",
+    "status": "done",
     "tags": [
+      "Python",
       "HWP",
-      "공모전",
-      "Python"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "공모전 응모 문서",
-    "localPath": "D:\\01 WORK\\260917 공무원연금공단 재해예방 공모전",
-    "nextAction": "최종 제출 전 내용 검토"
-  },
-  {
-    "date": "2026-09-07",
-    "group": "work",
-    "name": "R&D 과제 우선순위 Decision Studio",
-    "desc": "NEPSA와 AHP 방법론 기반 R&D 과제 우선순위 결정 React 웹앱",
-    "cat": "ai",
-    "status": "wip",
-    "tags": [
-      "React",
-      "TypeScript",
-      "AHP",
-      "NEPSA",
-      "R&D"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "웹앱",
-    "localPath": "D:\\01 WORK\\260907 R&D 과제 우선순위",
-    "nextAction": "실제 과제 데이터 입력 후 결과 검증"
-  },
-  {
-    "date": "2026-09-05",
-    "group": "work",
-    "name": "NEPSA 워크벤치",
-    "desc": "KEIT가 2013년 공개한 NEPSA 방법론을 재현한 R&D 과제 포트폴리오 평가 웹앱 — 기대성과·위험 12개 지표 입력 → 100점 환산 → 12영역 매트릭스(S~D) 등급·우선순위. 정량지표 자동 채점, 시나리오·이력·과제 비교, JSON 백업·CSV 내보내기·인쇄 보고서",
-    "cat": "ai",
-    "status": "wip",
-    "url": "https://nepsa.takeused.workers.dev/",
-    "tags": [
-      "Next.js",
-      "TypeScript",
-      "R&D 기획",
-      "평가모델",
-      "데이터 시각화",
-      "KEIT"
+      "Windows",
+      "패치"
     ]
   },
   {
-    "date": "2026-09-04",
+    "date": "2026-04-24",
     "group": "work",
-    "name": "PDF to MD 변환기",
-    "desc": "NTIS 중장기 계획 PDF 문서를 구조화된 Markdown으로 일괄 변환",
-    "cat": "util",
-    "status": "done",
-    "tags": [
-      "Python",
-      "PDF",
-      "Markdown",
-      "PyMuPDF"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "변환 스크립트",
-    "localPath": "D:\\01 WORK\\260904 PDF to MD",
-    "nextAction": "표·수식 파싱 품질 개선"
-  },
-  {
-    "date": "2026-09-01",
-    "group": "work",
-    "name": "AI 캐릭터 동영상",
-    "desc": "고정 캐릭터 스펙 기반 AI 이미지 일괄 생성 및 영상 클립 합성 자동화",
-    "cat": "ai",
-    "status": "done",
-    "tags": [
-      "Python",
-      "PowerShell",
-      "AI Image",
-      "Video"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "자동화 스크립트",
-    "localPath": "D:\\01 WORK\\260901 캐릭터 동영상",
-    "nextAction": "클립 순서와 음성 싱크 정밀도 개선"
-  },
-  {
-    "date": "2026-08-25",
-    "group": "work",
-    "name": "종합계획 정책동향 분석",
-    "desc": "NTIS 중장기 계획 PDF 멀티에이전트 분석 — 정책 트렌드와 키워드 추출",
-    "cat": "ai",
-    "status": "wip",
-    "tags": [
-      "Python",
-      "LLM",
-      "PDF",
-      "Multi-Agent",
-      "NTIS"
-    ],
-    "tools": [
-      "Claude Code",
-      "Claude"
-    ],
-    "artifact": "분석 리포트",
-    "localPath": "D:\\01 WORK\\260825 종합계획-정책동향",
-    "nextAction": "계획 간 비교 시각화 추가"
-  },
-  {
-    "date": "2026-08-25",
-    "group": "work",
-    "name": "중장기 종합계획 정책동향",
-    "desc": "제5차 재난안전 기술개발 종합계획(2028~2032) 사전준비 — NTIS 과학기술분야 중장기계획 원문을 전수 수집해 계보·만료·중복을 분석하고, 국외 중장기계획까지 대조. NotebookLM MCP로 PDF 업로드·요약 자동화",
-    "cat": "doc",
-    "status": "wip",
-    "tags": [
-      "NTIS",
-      "정책분석",
-      "PDF 파싱",
-      "NotebookLM",
-      "MCP",
-      "Python",
-      "종합계획"
-    ]
-  },
-  {
-    "date": "2026-07-27",
-    "group": "work",
-    "name": "R&D 심의 시뮬레이션 v2",
-    "desc": "R&D 과제 심의 프로세스 시뮬레이션 v2 — 웹 UI와 Python 백엔드 통합",
-    "cat": "ai",
-    "status": "done",
-    "tags": [
-      "Python",
-      "HTML",
-      "LangGraph",
-      "R&D"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "시뮬레이션 웹앱",
-    "localPath": "D:\\01 WORK\\260727 R&D 심의 리뮬레이션2",
-    "nextAction": "실제 심의 데이터셋 적용 테스트"
-  },
-  {
-    "date": "2026-07-23",
-    "group": "work",
-    "name": "Nemotron 문서·프레젠테이션 생성 테스트",
-    "desc": "Nemotron 페르소나 설문 결과를 Word 문서(python-docx)와 HTML 프레젠테이션으로 자동 변환하는 실험",
+    "name": "RHWP Studio",
+    "desc": "HWP 문서 작업용 AI 스튜디오 — GUI 설치, GitHub 연동 및 LLM 응답 에러 수정",
     "cat": "doc",
     "status": "done",
     "tags": [
       "Python",
-      "python-docx",
-      "HTML",
-      "Nemotron"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "문서 생성 스크립트",
-    "localPath": "D:\\01 WORK\\260723 TEMP_TEST",
-    "nextAction": "검증 후 본 프로젝트 리포트 파이프라인에 통합"
-  },
-  {
-    "date": "2026-07-16",
-    "group": "work",
-    "name": "NVIDIA / LLM API Lab",
-    "desc": "NVIDIA Nemotron·Cerebras GPT 120B·GLM 5.2 등 다양한 LLM API 비교 테스트 Node.js 서버",
-    "cat": "ai",
-    "status": "done",
-    "tags": [
-      "Node.js",
-      "NVIDIA",
-      "Cerebras",
-      "GLM",
-      "API"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "API 테스트 서버",
-    "localPath": "D:\\01 WORK\\260716 NVIDIA API test",
-    "nextAction": "모델별 응답 품질 벤치마크 결과 정리"
-  },
-  {
-    "date": "2026-07-16",
-    "group": "work",
-    "name": "LLM API Lab",
-    "desc": "여러 OpenAI 호환 LLM API를 한 화면에서 비교 테스트하는 로컬 웹 도구 — NVIDIA Nemotron·Cerebras GPT OSS 120B·Z.AI GLM 5.2 지원, API 키는 로컬 Node 서버에서만 처리",
-    "cat": "ai",
-    "status": "done",
-    "tags": [
-      "Node.js",
-      "NVIDIA",
-      "LLM",
-      "API"
+      "HWP",
+      "AI Studio"
     ]
   },
   {
-    "date": "2026-07-14",
+    "date": "2026-04-26",
     "group": "work",
-    "name": "ScienceON / NTIS v4",
-    "desc": "ScienceON·NTIS v4 — Cloudflare Pages 배포 및 Cerebras 헤더 수정",
-    "cat": "data",
-    "status": "done",
-    "tags": [
-      "HTML",
-      "JavaScript",
-      "NTIS",
-      "Cloudflare"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "정적 웹앱",
-    "localPath": "D:\\01 WORK\\260714 scienceon_ntis4_web",
-    "nextAction": "배포 파이프라인 자동화"
-  },
-  {
-    "date": "2026-07-14",
-    "group": "work",
-    "name": "ScienceON / NTIS v5",
-    "desc": "등록 IP 제한이 있는 ScienceON·NTIS API를 Vercel 화면과 로컬 프록시·Cloudflare Tunnel로 연결해 외부에서도 검색·적정 연구개발비 산출·연구–IP 공백 분석을 실행하도록 고도화",
-    "cat": "data",
-    "status": "wip",
-    "url": "https://nits5.vercel.app/",
-    "tags": [
-      "ScienceON",
-      "NTIS",
-      "Vercel",
-      "Cloudflare Tunnel",
-      "프록시",
-      "Web Scraping",
-      "JavaScript",
-      "API",
-      "HTML"
-    ]
-  },
-  {
-    "date": "2026-07-13",
-    "group": "work",
-    "name": "R&D 심의 시뮬레이션",
-    "desc": "LangGraph 기반 멀티에이전트로 국가R&D 과제 실제 심의 프로세스 시뮬레이션",
-    "cat": "ai",
-    "status": "done",
-    "tags": [
-      "Python",
-      "LangGraph",
-      "Multi-Agent",
-      "R&D"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "AI 에이전트 파이프라인",
-    "localPath": "D:\\01 WORK\\260713 R&D 심의 시뮬레이션",
-    "nextAction": "실제 심의 결과와 비교 검증"
-  },
-  {
-    "date": "2026-07-13",
-    "group": "work",
-    "name": "R&D 예산 심의 시뮬레이터",
-    "desc": "국가 R&D 신규사업 예산 심의를 LangGraph 멀티 에이전트로 시뮬레이션 — 6인 분석가, 심사위원 공방 2라운드, 기획처 3자 토론, 최종 승인권자 결정, 예상 질의·기획보고서 보완 권고 사전 도출",
-    "cat": "ai",
-    "status": "done",
-    "url": "https://260713-r-d.pages.dev/",
-    "url2": "https://20260726-rnd-deliberation.takeused.workers.dev/",
-    "tags": [
-      "Python",
-      "LangGraph",
-      "멀티 에이전트",
-      "LLM",
-      "R&D 예산",
-      "HTML",
-      "JavaScript",
-      "R&D",
-      "예산"
-    ]
-  },
-  {
-    "date": "2026-06-26",
-    "group": "work",
-    "name": "Antigravity 프레젠테이션 실험",
-    "desc": "Google Antigravity로 AI 주식투자·R&D 기획전환·가상설문 등 다양한 주제의 HTML 프레젠테이션 시제작",
-    "cat": "doc",
-    "status": "done",
-    "tags": [
-      "HTML",
-      "CSS",
-      "Antigravity",
-      "Design"
-    ],
-    "tools": [
-      "Antigravity"
-    ],
-    "artifact": "프레젠테이션 프로토타입",
-    "localPath": "D:\\01 WORK\\260626 test-antigravity",
-    "nextAction": "괜찮은 패턴을 실제 프레젠테이션에 재사용"
-  },
-  {
-    "date": "2026-06-26",
-    "group": "work",
-    "name": "Antigravity 세미나 발표자료",
-    "desc": "Antigravity IDE로 제작한 HTML 세미나 프레젠테이션 3종 — AI 주식투자 전략, AX 전환시대 R&D 기획 대전환, 합성 페르소나 가상설문 활용",
-    "cat": "doc",
-    "status": "done",
-    "tags": [
-      "HTML",
-      "프레젠테이션",
-      "Antigravity",
-      "세미나"
-    ]
-  },
-  {
-    "date": "2026-06-25",
-    "group": "work",
-    "name": "Insane Search",
-    "desc": "Notion MD 빌더·Gigavis·Festa 등 멀티소스 리서치 데이터 수집·가공 도구",
-    "cat": "data",
-    "status": "done",
-    "tags": [
-      "Python",
-      "Web Scraping",
-      "Notion",
-      "데이터 수집"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "크롤링 스크립트",
-    "localPath": "D:\\01 WORK\\260625 insane-search",
-    "nextAction": "수집 스케줄러 자동화"
-  },
-  {
-    "date": "2026-06-22",
-    "group": "work",
-    "name": "Dashboard v2",
-    "desc": "프로젝트 타임라인 대시보드 업그레이드 — JSON 데이터 분리·필터·상세 패널 추가",
+    "name": "I am not AI",
+    "desc": "im-not-ai 리포지토리 초기 설정 및 구성",
     "cat": "util",
     "status": "done",
     "tags": [
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "Dashboard"
+      "GitHub"
     ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "웹 대시보드",
-    "localPath": "D:\\01 WORK\\260622 dashboard",
-    "nextAction": "현재 대시보드로 통합 완료"
+    "url": "https://iamnotai.pages.dev"
   },
   {
-    "date": "2026-06-22",
+    "date": "2026-04-29",
     "group": "work",
-    "name": "Dashboard",
-    "desc": "작업 결과 정리 타임라인 대시보드 — 1차 버전(2026-05) 이후 GitHub 이전·대확장, 네트워크 뷰 팬/줌/드래그, React Flow 분리, 차트·인사이트·스토리 재생, GitHub Pages 배포 (현재 프로젝트)",
-    "cat": "util",
-    "status": "wip",
-    "tags": [
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "SVG",
-      "React Flow"
-    ],
-    "url": "https://takeused.github.io/dashboard1/"
-  },
-  {
-    "date": "2026-06-20",
-    "group": "work",
-    "name": "Cowork HWPX 스킬",
-    "desc": "기획보고서 작성용 HWPX Claude Code 스킬 패키지 + 양식 샘플",
-    "cat": "ai",
-    "status": "done",
-    "tags": [
-      "Claude Code",
-      "Skills",
-      "HWPX",
-      "보고서"
-    ]
-  },
-  {
-    "date": "2026-06-18",
-    "group": "work",
-    "name": "Dots TTS",
-    "desc": "로컬 TTS(Text-to-Speech) 엔진 설치·설정 및 연동 테스트",
-    "cat": "ai",
-    "status": "done",
-    "tags": [
-      "Python",
-      "TTS",
-      "음성합성"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "TTS 설치 환경",
-    "localPath": "D:\\01 WORK\\260618 dots.tts",
-    "nextAction": "품질 비교 후 최적 엔진 고정"
-  },
-  {
-    "date": "2026-06-07",
-    "group": "work",
-    "name": "국가R&D 예산 요구 심의",
-    "desc": "국가연구개발사업 예산 요구 심의 체크리스트 및 검토 도구 HTML 단일 파일",
-    "cat": "util",
-    "status": "done",
-    "tags": [
-      "HTML",
-      "R&D",
-      "예산",
-      "심의"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "웹 도구",
-    "localPath": "D:\\01 WORK\\260607 국가연구개발사업 예산 요구 심의",
-    "nextAction": "실제 심의 흐름에 맞게 항목 보완"
-  },
-  {
-    "date": "2026-06-05",
-    "group": "work",
-    "name": "Nemotron 가상설문 v2",
-    "desc": "NVIDIA Nemotron Personas Korea 데이터셋 기반 가상설문 파이프라인 v2 — 체크포인트 재개 지원",
-    "cat": "ai",
-    "status": "done",
-    "tags": [
-      "NVIDIA",
-      "LLM",
-      "Python",
-      "가상설문",
-      "HuggingFace"
-    ],
-    "tools": [
-      "Codex",
-      "Claude Code"
-    ],
-    "artifact": "데이터 파이프라인",
-    "localPath": "D:\\01 WORK\\260605 nemotron virtual survey2",
-    "nextAction": "생성 결과 통계 분석 자동화"
-  },
-  {
-    "date": "2026-06-05",
-    "group": "work",
-    "name": "Nemotron 가상 설문 v2",
-    "desc": "Nemotron-Personas-Korea 2,000명 합성 페르소나 × 재난안전 인식조사 — Cerebras GLM 응답 생성·사후층화 가중 집계",
-    "cat": "ai",
-    "status": "done",
-    "url": "https://nemotron-persona-korea-virtual-survey3.takeused.workers.dev/",
-    "tags": [
-      "LLM",
-      "Nemotron",
-      "Cerebras",
-      "설문",
-      "재난안전",
-      "NVIDIA",
-      "HuggingFace",
-      "Ollama"
-    ]
-  },
-  {
-    "date": "2026-06-04",
-    "group": "work",
-    "name": "ScienceON / NTIS v3",
-    "desc": "ScienceON·NTIS v3 — Cerebras 모델 벤치마크 결과 내장 및 동적 컬럼 UI",
-    "cat": "data",
-    "status": "done",
-    "tags": [
-      "HTML",
-      "JavaScript",
-      "NTIS",
-      "Cerebras"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "정적 웹앱",
-    "localPath": "D:\\01 WORK\\260604 scienceon_ntis3",
-    "nextAction": "벤치마크 데이터 업데이트 자동화"
-  },
-  {
-    "date": "2026-05-27",
-    "group": "work",
-    "name": "네이버 증권 리포트 크롤러",
-    "desc": "네이버 금융 증권사 리서치 리포트 크롤링 및 수집 도구",
-    "cat": "data",
-    "status": "done",
-    "tags": [
-      "Python",
-      "Web Scraping",
-      "금융",
-      "증권"
-    ]
-  },
-  {
-    "date": "2026-05-12",
-    "group": "work",
-    "name": "HP Style PPT",
-    "desc": "HP 디자인 시스템 기반 프레젠테이션 제작",
-    "cat": "doc",
-    "status": "wip",
-    "tags": [
-      "PowerPoint",
-      "디자인"
-    ]
-  },
-  {
-    "date": "2026-05-11",
-    "group": "work",
-    "name": "MiroFish",
-    "desc": "온톨로지 그래프 자동 생성 백엔드 서비스 — 네트워크 에러 수정",
-    "cat": "ai",
-    "status": "wip",
-    "tags": [
-      "Python",
-      "FastAPI",
-      "그래프 DB"
-    ]
-  },
-  {
-    "date": "2026-05-11",
-    "group": "work",
-    "name": "Ollama Gemma API",
-    "desc": "Ollama + Gemma4:26b 로컬 LLM API 설정 및 테스트",
-    "cat": "ai",
-    "status": "done",
-    "tags": [
-      "Ollama",
-      "Gemma",
-      "Python"
-    ]
-  },
-  {
-    "date": "2026-05-09",
-    "group": "work",
-    "name": "네이버 주식 크롤러",
-    "desc": "네이버 금융 크롤링 — 증권사별 매매 동향 분석",
-    "cat": "data",
-    "status": "done",
-    "tags": [
-      "Python",
-      "Web Scraping",
-      "금융"
-    ]
-  },
-  {
-    "date": "2026-05-07",
-    "group": "work",
-    "name": "ScienceON / NTIS v1",
-    "desc": "과학기술 논문 및 국가R&D 과제 검색 웹앱 초기 버전",
-    "cat": "data",
-    "status": "done",
-    "tags": [
-      "HTML",
-      "JavaScript",
-      "NTIS",
-      "ScienceON"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "정적 웹앱",
-    "localPath": "D:\\01 WORK\\260507 scienceon-ntis1",
-    "nextAction": "v2로 개선 완료"
-  },
-  {
-    "date": "2026-05-07",
-    "group": "work",
-    "name": "ScienceON / NTIS v2",
-    "desc": "과학기술 논문 및 국가R&D 과제 검색·트렌드 분석 도구 v2 — 핵심 기능 경량화",
-    "cat": "data",
-    "status": "done",
-    "tags": [
-      "HTML",
-      "JavaScript",
-      "NTIS",
-      "ScienceON"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "정적 웹앱",
-    "localPath": "D:\\01 WORK\\260507 scienceon_ntis2",
-    "nextAction": "v3 Cerebras 벤치마크 버전으로 개선 완료"
-  },
-  {
-    "date": "2026-05-07",
-    "group": "work",
-    "name": "교육이수현황",
-    "desc": "교육 이수 현황 관리 및 조회 도구",
-    "cat": "util",
-    "status": "done",
-    "tags": [
-      "HTML",
-      "데이터 관리"
-    ]
-  },
-  {
-    "date": "2026-05-03",
-    "group": "work",
-    "name": "KISTI MCP v2",
-    "desc": "KISTI MCP 서버 개선 버전 — 기능 확장",
+    "name": "Korean Law MCP",
+    "desc": "한국 법률 정보 조회를 위한 MCP 서버 설정",
     "cat": "mcp",
     "status": "done",
     "tags": [
       "MCP",
       "Python",
-      "KISTI"
+      "법률 API"
     ]
   },
   {
-    "date": "2026-04-30",
+    "date": "2026-04-29",
     "group": "work",
-    "name": "Matt Pocock Skills 분석",
-    "desc": "Matt Pocock TypeScript 스킬 저장소 구조 분석 및 학습",
+    "name": "수학경시대회",
+    "desc": "초등 4학년 수학경시대회 모의고사 웹페이지 — PDF 기반 문제 / 해설",
     "cat": "util",
     "status": "done",
     "tags": [
-      "TypeScript",
-      "Claude Code",
-      "Skills"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "학습 노트",
-    "localPath": "D:\\01 WORK\\260430 mattpocock_skills",
-    "nextAction": "타입스크립트 패턴 정리"
-  },
-  {
-    "date": "2026-04-30",
-    "group": "work",
-    "name": "KISTI MCP",
-    "desc": "KISTI 과학기술 정보 MCP 서버 초기 구축",
-    "cat": "mcp",
-    "status": "done",
-    "tags": [
-      "MCP",
-      "Python",
-      "KISTI"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "MCP 서버",
-    "localPath": "D:\\01 WORK\\260430 kisti-mcp",
-    "nextAction": "KISTI MCP v2로 개선 완료"
+      "HTML",
+      "JavaScript",
+      "PDF"
+    ]
   },
   {
     "date": "2026-04-30",
@@ -721,198 +101,121 @@
     ]
   },
   {
-    "date": "2026-04-29",
+    "date": "2026-05-03",
     "group": "work",
-    "name": "Korean Law MCP",
-    "desc": "한국 법률 정보 조회를 위한 MCP 서버 설정",
+    "name": "KISTI MCP v2",
+    "desc": "KISTI MCP 서버 개선 버전 — 기능 확장",
     "cat": "mcp",
     "status": "done",
     "tags": [
       "MCP",
       "Python",
-      "법률 API"
+      "KISTI"
     ]
   },
   {
-    "date": "2026-04-29",
+    "date": "2026-05-07",
     "group": "work",
-    "name": "수학경시대회",
-    "desc": "초등 4학년 수학경시대회 모의고사 웹페이지 — PDF 기반 문제 / 해설",
+    "name": "교육이수현황",
+    "desc": "교육 이수 현황 관리 및 조회 도구",
     "cat": "util",
     "status": "done",
     "tags": [
       "HTML",
-      "JavaScript",
-      "PDF"
+      "데이터 관리"
     ]
   },
   {
-    "date": "2026-04-26",
+    "date": "2026-05-09",
     "group": "work",
-    "name": "Slide-maker",
-    "desc": "AI 기반 슬라이드 자동 제작 도구 초기 버전",
-    "cat": "doc",
-    "status": "done",
-    "tags": [
-      "JavaScript",
-      "HTML",
-      "슬라이드"
-    ],
-    "tools": [
-      "Claude Code"
-    ],
-    "artifact": "웹앱",
-    "localPath": "D:\\01 WORK\\260426 Slide-maker",
-    "nextAction": "Slide-maker v2로 개선 완료"
-  },
-  {
-    "date": "2026-04-26",
-    "group": "work",
-    "name": "I am not AI",
-    "desc": "im-not-ai 리포지토리 초기 설정 및 구성",
-    "cat": "util",
-    "status": "done",
-    "tags": [
-      "GitHub"
-    ],
-    "url": "https://iamnotai.pages.dev"
-  },
-  {
-    "date": "2026-04-24",
-    "group": "work",
-    "name": "RHWP Studio Windows 패치",
-    "desc": "HWP Studio(master-of-hwp) Windows 환경 패치 및 설치 자동화 — macOS/Linux 전용 코드의 Windows 호환성 문제 해결",
-    "cat": "util",
-    "status": "done",
-    "tags": [
-      "Python",
-      "HWP",
-      "Windows",
-      "패치"
-    ]
-  },
-  {
-    "date": "2026-04-24",
-    "group": "work",
-    "name": "RHWP Studio",
-    "desc": "HWP 문서 작업용 AI 스튜디오 — GUI 설치, GitHub 연동 및 LLM 응답 에러 수정",
-    "cat": "doc",
-    "status": "done",
-    "tags": [
-      "Python",
-      "HWP",
-      "AI Studio"
-    ]
-  },
-  {
-    "date": "2026-04-23",
-    "group": "work",
-    "name": "발표자료 자동화",
-    "desc": "AI 공간정보·AX·투자 분야 HTML 프레젠테이션 자동 생성",
-    "cat": "doc",
-    "status": "done",
-    "tags": [
-      "HTML",
-      "JavaScript",
-      "발표",
-      "자동화"
-    ]
-  },
-  {
-    "date": "2026-04-04",
-    "group": "work",
-    "name": "하네스 엔지니어링 도구",
-    "desc": "Excel 기반 업무 자동화 하네스 엔지니어링 도구 (한국어 버전 포함)",
-    "cat": "util",
-    "status": "done",
-    "tags": [
-      "Excel",
-      "자동화"
-    ]
-  },
-  {
-    "date": "2026-03-24",
-    "group": "work",
-    "name": "회의 AI 요약 시스템",
-    "desc": "FastAPI + MCP + Notion 연동으로 회의록 자동 요약 — SQLite DB 포함",
-    "cat": "mcp",
-    "status": "done",
-    "tags": [
-      "Python",
-      "FastAPI",
-      "MCP",
-      "Notion"
-    ]
-  },
-  {
-    "date": "2026-03-17",
-    "group": "work",
-    "name": "정부과제 공고 자동화",
-    "desc": "Flutter + NTIS API 기반 정부 R&D 공고 자동 수집·분류 앱",
-    "cat": "mcp",
-    "status": "done",
-    "tags": [
-      "Flutter",
-      "Python",
-      "NTIS",
-      "API"
-    ]
-  },
-  {
-    "date": "2026-03-09",
-    "group": "work",
-    "name": "재난안전 C4I 시스템",
-    "desc": "Flutter 기반 재난안전 지휘통제통신컴퓨터정보(C4I) 시스템 — NTIS 연동",
-    "cat": "data",
-    "status": "done",
-    "tags": [
-      "Flutter",
-      "Dart",
-      "NTIS",
-      "재난안전"
-    ]
-  },
-  {
-    "date": "2026-02-20",
-    "group": "work",
-    "name": "재난 피난 시뮬레이터",
-    "desc": "ABM 기반 지하철 화재 피난 시뮬레이션 + Docker·Celery 고도화 — RSET 분석 및 GIF 출력",
+    "name": "네이버 주식 크롤러",
+    "desc": "네이버 금융 크롤링 — 증권사별 매매 동향 분석",
     "cat": "data",
     "status": "done",
     "tags": [
       "Python",
-      "ABM",
-      "FastAPI",
-      "Docker",
-      "재난안전"
+      "Web Scraping",
+      "금융"
     ]
   },
   {
-    "date": "2026-02-17",
+    "date": "2026-05-11",
     "group": "work",
-    "name": "HWP 공공기관 보고서 스킬",
-    "desc": "공공기관 보고서 양식 기반 Claude Code 스킬 패키지 (gonggong_hwpxskills)",
+    "name": "MiroFish",
+    "desc": "온톨로지 그래프 자동 생성 백엔드 서비스 — 네트워크 에러 수정",
+    "cat": "ai",
+    "status": "wip",
+    "tags": [
+      "Python",
+      "FastAPI",
+      "그래프 DB"
+    ]
+  },
+  {
+    "date": "2026-05-11",
+    "group": "work",
+    "name": "Ollama Gemma API",
+    "desc": "Ollama + Gemma4:26b 로컬 LLM API 설정 및 테스트",
     "cat": "ai",
     "status": "done",
     "tags": [
-      "Claude Code",
-      "HWP",
-      "Skills",
-      "공공기관"
+      "Ollama",
+      "Gemma",
+      "Python"
     ]
   },
   {
-    "date": "2026-02-16",
+    "date": "2026-05-12",
     "group": "work",
-    "name": "원격탐사 NDVI 분석",
-    "desc": "Google Earth Engine + Sentinel-2 위성영상 기반 NDVI 산정 및 재난안전 공간정보 분석",
-    "cat": "data",
+    "name": "HP Style PPT",
+    "desc": "HP 디자인 시스템 기반 프레젠테이션 제작",
+    "cat": "doc",
+    "status": "wip",
+    "tags": [
+      "PowerPoint",
+      "디자인"
+    ]
+  },
+  {
+    "date": "2025-08-29",
+    "group": "work",
+    "name": "행안부 R&D 예타 공모전",
+    "desc": "재난안전 R&D 예비타당성조사 기획 및 서비스혁신 내부공모전 자료 작성",
+    "cat": "doc",
+    "status": "done",
+    "tags": [
+      "HWP",
+      "보고서",
+      "행안부",
+      "예타"
+    ]
+  },
+  {
+    "date": "2025-11-02",
+    "group": "work",
+    "name": "올포랜드 재난안전 자문",
+    "desc": "군중밀집·화재 시나리오 기반 재난안전관리 시스템 자문 — 역전지하상가 센서 시나리오 포함",
+    "cat": "doc",
+    "status": "done",
+    "tags": [
+      "HWP",
+      "PowerPoint",
+      "재난안전",
+      "시나리오"
+    ]
+  },
+  {
+    "date": "2026-01-11",
+    "group": "work",
+    "name": "KR-SBERT 과제 분류",
+    "desc": "한국어 SBERT로 연구과제·논문 4단계 자동 유사도 분류 파이프라인",
+    "cat": "ai",
     "status": "done",
     "tags": [
       "Python",
-      "GEE",
-      "Sentinel-2",
-      "공간정보"
+      "KR-SBERT",
+      "NLP",
+      "Excel"
     ]
   },
   {
@@ -931,314 +234,409 @@
     ]
   },
   {
-    "date": "2026-01-11",
+    "date": "2026-02-16",
     "group": "work",
-    "name": "KR-SBERT 과제 분류",
-    "desc": "한국어 SBERT로 연구과제·논문 4단계 자동 유사도 분류 파이프라인",
+    "name": "원격탐사 NDVI 분석",
+    "desc": "Google Earth Engine + Sentinel-2 위성영상 기반 NDVI 산정 및 재난안전 공간정보 분석",
+    "cat": "data",
+    "status": "done",
+    "tags": [
+      "Python",
+      "GEE",
+      "Sentinel-2",
+      "공간정보"
+    ]
+  },
+  {
+    "date": "2026-02-17",
+    "group": "work",
+    "name": "HWP 공공기관 보고서 스킬",
+    "desc": "공공기관 보고서 양식 기반 Claude Code 스킬 패키지 (gonggong_hwpxskills)",
     "cat": "ai",
     "status": "done",
     "tags": [
-      "Python",
-      "KR-SBERT",
-      "NLP",
-      "Excel"
-    ]
-  },
-  {
-    "date": "2025-11-02",
-    "group": "work",
-    "name": "올포랜드 재난안전 자문",
-    "desc": "군중밀집·화재 시나리오 기반 재난안전관리 시스템 자문 — 역전지하상가 센서 시나리오 포함",
-    "cat": "doc",
-    "status": "done",
-    "tags": [
+      "Claude Code",
       "HWP",
-      "PowerPoint",
-      "재난안전",
-      "시나리오"
+      "Skills",
+      "공공기관"
     ]
   },
   {
-    "date": "2025-08-29",
+    "date": "2026-02-20",
     "group": "work",
-    "name": "행안부 R&D 예타 공모전",
-    "desc": "재난안전 R&D 예비타당성조사 기획 및 서비스혁신 내부공모전 자료 작성",
-    "cat": "doc",
-    "status": "done",
-    "tags": [
-      "HWP",
-      "보고서",
-      "행안부",
-      "예타"
-    ]
-  },
-  {
-    "date": "2026-08-30",
-    "group": "home",
-    "name": "키움 REST API 트레이딩",
-    "desc": "키움 REST API 348개 TR 명세를 기반으로 인증·시세·주문 클라이언트를 얇게 구현하고, 주도주 스크리닝·VB 백테스트·레짐 판별·추천 파이프라인을 붙인 자동매매 실험. 실전 주문은 ALLOW_REAL_ORDER 가드로 차단하고 모의 도메인에서만 검증",
-    "cat": "finance",
-    "status": "wip",
-    "tags": [
-      "Python",
-      "키움증권",
-      "REST API",
-      "자동매매",
-      "백테스트",
-      "스크리닝"
-    ]
-  },
-  {
-    "date": "2026-07-28",
-    "group": "home",
-    "name": "Scroll World 시네마틱",
-    "desc": "위성·공간정보 재난안전 플랫폼(GEOSAFE)을 스크롤로 훑는 6씬 연속 카메라 랜딩 — Higgsfield MCP로 씬 렌더(프레임 락으로 이음매 제거), scrub-engine.js가 스크롤 위치를 클립 재생 시점에 매핑. 프롬프트·엔진·QA까지 완료, 실렌더는 크레딧 대기",
-    "cat": "util",
-    "status": "wip",
-    "tags": [
-      "Higgsfield",
-      "MCP",
-      "스크롤 인터랙션",
-      "ffmpeg",
-      "PowerShell",
-      "JavaScript",
-      "랜딩페이지"
-    ]
-  },
-  {
-    "date": "2026-07-19",
-    "group": "home",
-    "name": "미 의회 매매 데이터 파이프라인",
-    "desc": "미국 하원 재무공시(PTR) 공식 배포 파일을 다운로드·파싱해 구조화 JSON을 만드는 파이프라인 — 스캔 PDF는 RapidOCR + 체크박스 픽셀 밀도로 거래유형 복원, yfinance 배치·병렬 인리치(12배 최적화), 자립형 HTML 대시보드 생성",
+    "name": "재난 피난 시뮬레이터",
+    "desc": "ABM 기반 지하철 화재 피난 시뮬레이션 + Docker·Celery 고도화 — RSET 분석 및 GIF 출력",
     "cat": "data",
     "status": "done",
-    "url": "https://us-congressional-trading-data.takeused.workers.dev/",
     "tags": [
       "Python",
-      "PDF 파싱",
-      "OCR",
-      "yfinance",
-      "데이터 파이프라인"
+      "ABM",
+      "FastAPI",
+      "Docker",
+      "재난안전"
     ]
   },
   {
-    "date": "2026-07-15",
-    "group": "home",
-    "name": "Investment Guru Consensus 13",
-    "desc": "13개 투자 대가 스타일 스크린으로 종목 적합도·대가 합의·상승 트리거·하락 위험을 판정하는 프롬프트 + 결과를 시각화하는 웹 대시보드 (KOSPI·KOSDAQ 기본, 실데이터만 사용 규칙)",
-    "cat": "finance",
+    "date": "2026-03-09",
+    "group": "work",
+    "name": "재난안전 C4I 시스템",
+    "desc": "Flutter 기반 재난안전 지휘통제통신컴퓨터정보(C4I) 시스템 — NTIS 연동",
+    "cat": "data",
     "status": "done",
-    "url": "https://13screen.vercel.app/",
     "tags": [
-      "프롬프트 엔지니어링",
-      "JavaScript",
-      "HTML",
-      "주식",
-      "스크리닝"
+      "Flutter",
+      "Dart",
+      "NTIS",
+      "재난안전"
     ]
   },
   {
-    "date": "2026-07-14",
-    "group": "home",
-    "name": "GAMMA 프레젠테이션 실험",
-    "desc": "Gamma AI로 AI 주제 프레젠테이션(PPTX) 자동 생성 실험",
+    "date": "2026-03-17",
+    "group": "work",
+    "name": "정부과제 공고 자동화",
+    "desc": "Flutter + NTIS API 기반 정부 R&D 공고 자동 수집·분류 앱",
+    "cat": "mcp",
+    "status": "done",
+    "tags": [
+      "Flutter",
+      "Python",
+      "NTIS",
+      "API"
+    ]
+  },
+  {
+    "date": "2026-03-24",
+    "group": "work",
+    "name": "회의 AI 요약 시스템",
+    "desc": "FastAPI + MCP + Notion 연동으로 회의록 자동 요약 — SQLite DB 포함",
+    "cat": "mcp",
+    "status": "done",
+    "tags": [
+      "Python",
+      "FastAPI",
+      "MCP",
+      "Notion"
+    ]
+  },
+  {
+    "date": "2026-04-04",
+    "group": "work",
+    "name": "하네스 엔지니어링 도구",
+    "desc": "Excel 기반 업무 자동화 하네스 엔지니어링 도구 (한국어 버전 포함)",
+    "cat": "util",
+    "status": "done",
+    "tags": [
+      "Excel",
+      "자동화"
+    ]
+  },
+  {
+    "date": "2026-04-23",
+    "group": "work",
+    "name": "발표자료 자동화",
+    "desc": "AI 공간정보·AX·투자 분야 HTML 프레젠테이션 자동 생성",
     "cat": "doc",
     "status": "done",
     "tags": [
-      "Gamma",
-      "PowerPoint",
-      "프레젠테이션",
+      "HTML",
+      "JavaScript",
+      "발표",
+      "자동화"
+    ]
+  },
+  {
+    "date": "2026-01-25",
+    "group": "home",
+    "name": "Antigravity 웹앱",
+    "desc": "Vite+React 기반 랜딩·여행 일정·식단 계획·풀스택 웹앱 + kStartup 크롤러까지 다양한 실험",
+    "cat": "util",
+    "status": "done",
+    "tags": [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Expo",
+      "Vite"
+    ]
+  },
+  {
+    "date": "2026-04-26",
+    "group": "home",
+    "name": "NotebookLM MCP",
+    "desc": "Chrome 확장·CLI·Next.js 앱 등 NotebookLM 연동 MCP 서버 다양한 방식으로 반복 구현 (v1~v6)",
+    "cat": "mcp",
+    "status": "done",
+    "tags": [
+      "MCP",
+      "Next.js",
+      "Chrome Extension",
+      "CLI",
+      "Obsidian"
+    ]
+  },
+  {
+    "date": "2026-02-01",
+    "group": "home",
+    "name": "직장인 AI 오피스 어시스턴트",
+    "desc": "Vite+Tailwind 기반 직장인 대상 AI 오피스 어시스턴트 웹앱",
+    "cat": "util",
+    "status": "done",
+    "tags": [
+      "Vite",
+      "Tailwind",
+      "HTML",
       "AI"
     ]
   },
   {
-    "date": "2026-07-11",
+    "date": "2026-02-08",
     "group": "home",
-    "name": "Toss-Slack VCP 자동매매",
-    "desc": "토스증권 Open API 기반 자동매매 봇 — 로컬 일봉 DB에서 VCP(변동성 수축 패턴) 스캔 후 Slack 승인(휴먼-인-더-루프)을 거쳐야만 주문 집행, 기본값은 모의매매",
-    "cat": "finance",
-    "status": "done",
-    "tags": [
-      "Python",
-      "토스증권",
-      "Slack",
-      "자동매매",
-      "VCP"
-    ]
-  },
-  {
-    "date": "2026-07-05",
-    "group": "home",
-    "name": "TradingAgents 멀티에이전트",
-    "desc": "TauricResearch/TradingAgents 로컬 구축 — 애널리스트→리서처(강세/약세 토론)→트레이더→리스크 관리 순으로 협업해 매매 판단(BUY/HOLD/SELL)을 내리는 LLM 멀티에이전트 프레임워크 (연구·교육용)",
-    "cat": "finance",
-    "status": "done",
-    "url": "https://trading-agents.takeused.workers.dev/",
-    "tags": [
-      "LLM",
-      "멀티에이전트",
-      "Python",
-      "트레이딩"
-    ]
-  },
-  {
-    "date": "2026-07-05",
-    "group": "home",
-    "name": "TradingView MCP 리포트 v2",
-    "desc": "TradingView MCP 연동 고도화 — MSIX 패키지 런처로 CDP 디버깅 포트 연결 문제 해결, 차트 분석 리포트를 Cloudflare Workers로 배포",
-    "cat": "finance",
-    "status": "done",
-    "url": "https://tradingview-chart-report.takeused.workers.dev/",
-    "tags": [
-      "TradingView",
-      "MCP",
-      "Cloudflare Workers",
-      "PowerShell",
-      "Claude",
-      "Python",
-      "대시보드"
-    ]
-  },
-  {
-    "date": "2026-06-25",
-    "group": "home",
-    "name": "HTML 프레젠테이션 스킬화",
-    "desc": "beautiful-html-templates(34종 슬라이드 템플릿) 라이브러리를 클론해 Claude Code 스킬로 재구성 — 에이전트가 자동으로 어울리는 템플릿을 골라 덱 제작",
-    "cat": "doc",
-    "status": "done",
-    "url": "https://html-presentation.takeused.workers.dev/",
-    "tags": [
-      "HTML",
-      "프레젠테이션",
-      "Skills",
-      "템플릿"
-    ]
-  },
-  {
-    "date": "2026-06-25",
-    "group": "home",
-    "name": "Insane Search 스킬",
-    "desc": "차단된 웹사이트(X/Twitter, Reddit, YouTube 등) 우회 접근 스킬 — yt-dlp·Jina Reader·curl_cffi TLS 위장 체인으로 자동 폴백",
+    "name": "N8N 자동화 워크플로우",
+    "desc": "N8N으로 GeekNews·주식뉴스 구독 → Gmail 자동 발송 파이프라인 구축",
     "cat": "util",
     "status": "done",
     "tags": [
-      "Claude Code",
-      "Skills",
-      "웹 스크래핑",
-      "우회"
+      "N8N",
+      "Gmail",
+      "Google OAuth",
+      "자동화"
     ]
   },
   {
-    "date": "2026-06-23",
+    "date": "2026-02-19",
     "group": "home",
-    "name": "Claude Design MCP 실험",
-    "desc": "claude.ai/design 연동 MCP 실험 — React+Vite+TypeScript 스캐폴딩으로 디자인 시스템 프로젝트 동기화 테스트",
-    "cat": "mcp",
-    "status": "wip",
+    "name": "Healify 수면 관리 앱",
+    "desc": "Vite+React 기반 개인 수면 건강 관리 웹앱",
+    "cat": "util",
+    "status": "done",
     "tags": [
-      "MCP",
       "React",
       "Vite",
-      "디자인"
+      "건강",
+      "수면"
     ]
   },
   {
-    "date": "2026-06-20",
+    "date": "2026-02-25",
     "group": "home",
-    "name": "나의 Claude 스킬 맵",
-    "desc": "보유한 Claude Code 스킬 생태계를 한눈에 보는 단일 HTML 시각화",
+    "name": "Blender MCP 연동",
+    "desc": "Blender Python addon으로 MCP 서버 연동 — 3D 렌더링 자동화",
+    "cat": "mcp",
+    "status": "done",
+    "tags": [
+      "Blender",
+      "Python",
+      "MCP",
+      "3D"
+    ]
+  },
+  {
+    "date": "2026-03-09",
+    "group": "home",
+    "name": "경제적 자유 시뮬레이션",
+    "desc": "개인 자산·투자 수익 기반 경제적 자유 달성 시뮬레이터 (단일 HTML)",
+    "cat": "finance",
+    "status": "done",
+    "tags": [
+      "JavaScript",
+      "HTML",
+      "투자",
+      "FIRE"
+    ]
+  },
+  {
+    "date": "2026-03-15",
+    "group": "home",
+    "name": "NotebookLM + Claude PPT",
+    "desc": "Apple 환경보고서·OECD AI 보고서 PDF를 NotebookLM+Claude로 PPT 자동 변환",
+    "cat": "doc",
+    "status": "done",
+    "tags": [
+      "NotebookLM",
+      "Claude",
+      "PowerPoint",
+      "PDF"
+    ]
+  },
+  {
+    "date": "2026-03-20",
+    "group": "home",
+    "name": "Kiwoom 자동매매 봇",
+    "desc": "Kiwoom Open API+ 챕터별 학습부터 텔레그램 명령어 기반 실전 자동매매 봇 완성",
+    "cat": "finance",
+    "status": "done",
+    "tags": [
+      "Python",
+      "Kiwoom",
+      "텔레그램",
+      "자동매매"
+    ]
+  },
+  {
+    "date": "2026-04-26",
+    "group": "home",
+    "name": "Humanize KR 랜딩페이지",
+    "desc": "한국어 AI 텍스트 인간화(humanize) 서비스 랜딩페이지",
     "cat": "util",
     "status": "done",
     "tags": [
       "HTML",
-      "시각화",
-      "Claude Code",
-      "Skills"
+      "CSS",
+      "랜딩페이지"
     ]
   },
   {
-    "date": "2026-06-18",
+    "date": "2026-05-01",
     "group": "home",
-    "name": "dots.tts 로컬 TTS",
-    "desc": "rednote-hilab/dots.tts 2B 모델 Windows CPU 환경 설치·설정 — 사내 TLS 프록시 우회 및 Python 3.12 호환성 해결",
+    "name": "Karpathy LLM 학습",
+    "desc": "Andrej Karpathy 강의 기반 LLM·딥러닝 개인 학습 + Remotion 강의 영상 제작",
+    "cat": "ai",
+    "status": "done",
+    "tags": [
+      "LLM",
+      "딥러닝",
+      "Remotion",
+      "학습"
+    ]
+  },
+  {
+    "date": "2026-05-01",
+    "group": "home",
+    "name": "Claude Code 영상 자동화",
+    "desc": "Claude Code + Remotion으로 영상·나레이션·자막 자동 생성 파이프라인",
+    "cat": "ai",
+    "status": "done",
+    "tags": [
+      "Remotion",
+      "Claude Code",
+      "영상",
+      "자막"
+    ]
+  },
+  {
+    "date": "2026-05-01",
+    "group": "home",
+    "name": "혜윤 사진 자동 찾기",
+    "desc": "OpenCV YuNet+SFace 얼굴인식으로 특정 인물 사진 자동 검색 도구",
     "cat": "ai",
     "status": "done",
     "tags": [
       "Python",
-      "TTS",
-      "AI",
-      "로컬"
+      "OpenCV",
+      "얼굴인식",
+      "ONNX"
     ]
   },
   {
-    "date": "2026-06-14",
+    "date": "2026-05-02",
     "group": "home",
-    "name": "Narrative Momentum 전략",
-    "desc": "뉴스·시장 내러티브의 강도·방향·가속도를 점수화해 연결 종목으로 분배하는 단기 모멘텀 전략 + 대시보드",
+    "name": "Claude PPT 자동화",
+    "desc": "pptxgenjs로 Physical AI Trends PPT 자동 생성 (Apple 스타일)",
+    "cat": "doc",
+    "status": "done",
+    "tags": [
+      "JavaScript",
+      "pptxgenjs",
+      "PowerPoint"
+    ]
+  },
+  {
+    "date": "2026-05-05",
+    "group": "home",
+    "name": "Investment Test",
+    "desc": "Claude로 국내외 종목 공시자료(PDF) 분석 — 웨이비스·휴메딕스·TSLA",
     "cat": "finance",
     "status": "done",
-    "url": "https://takeused.github.io/Narrative-Momentum/",
     "tags": [
-      "Python",
-      "모멘텀",
-      "뉴스분석",
-      "투자전략"
+      "Claude",
+      "투자분석",
+      "PDF",
+      "공시"
     ]
   },
   {
-    "date": "2026-06-13",
+    "date": "2026-05-09",
     "group": "home",
-    "name": "한국 공개 API 디렉터리",
-    "desc": "국내 270여 종·글로벌 780여 종 공개 API를 분류 정리한 큐레이션 목록 (링크 헬스체크 CI 포함)",
+    "name": "힉스필드 웹페이지",
+    "desc": "힉스필드 서비스 웹페이지 제작",
     "cat": "util",
     "status": "done",
     "tags": [
-      "API",
-      "문서",
-      "큐레이션",
-      "GitHub"
+      "HTML",
+      "CSS",
+      "웹사이트"
     ]
   },
   {
-    "date": "2026-06-13",
+    "date": "2026-05-10",
     "group": "home",
-    "name": "논문·보고서 오디오뷰",
-    "desc": "Elsevier 논문·네이버 금융 자료를 검색·요약해 오디오뷰로 만드는 파이프라인",
-    "cat": "ai",
-    "status": "done",
-    "tags": [
-      "Python",
-      "논문검색",
-      "요약",
-      "오디오"
-    ]
-  },
-  {
-    "date": "2026-06-08",
-    "group": "home",
-    "name": "K-Skill 생태계 구축",
-    "desc": "한국 특화 Claude Code 스킬 수십 종(공공데이터·금융·부동산·교통 등) 설치·관리 인프라 — 스킬 락파일(skills-lock.json) 기반 버전 관리",
-    "cat": "util",
-    "status": "done",
+    "name": "Claude Trading Skills",
+    "desc": "Claude Code 기반 포지션 사이징·매매 전략 스킬 패키지",
+    "cat": "finance",
+    "status": "wip",
     "tags": [
       "Claude Code",
       "Skills",
-      "스킬 관리",
-      "한국 공공데이터"
+      "트레이딩",
+      "주식"
     ]
   },
   {
-    "date": "2026-06-07",
+    "date": "2026-05-11",
     "group": "home",
-    "name": "graphify 지식그래프",
-    "desc": "코드베이스를 AST 기반 지식 그래프로 변환해 질의·경로·설명을 제공하는 개발 도구",
-    "cat": "util",
+    "name": "Flutter Skills 패키지",
+    "desc": "Flutter 아키텍처 스킬 모음 — MVI·Go Router·GetIt DI·테스팅 등 8종",
+    "cat": "ai",
     "status": "done",
     "tags": [
-      "AST",
-      "지식그래프",
-      "CLI",
-      "개발도구"
+      "Flutter",
+      "Dart",
+      "Skills",
+      "MVI"
+    ]
+  },
+  {
+    "date": "2026-05-14",
+    "group": "home",
+    "name": "오빠두엑셀 Claude 디자인",
+    "desc": "Claude 디자인 실습 — 포트폴리오·리조트·레스토랑·청첩장·PPT 등 7종",
+    "cat": "doc",
+    "status": "done",
+    "tags": [
+      "HTML",
+      "CSS",
+      "디자인",
+      "실습"
+    ]
+  },
+  {
+    "date": "2026-05-19",
+    "group": "home",
+    "name": "한글소리 AI (HwpVoice)",
+    "desc": "HWP/HWPX 문서를 브리핑 대본·공유 HTML·음성으로 변환하는 Next.js MVP — Gemini 구조화 출력 + Gemini/ElevenLabs TTS, Firebase 저장·공유 링크",
+    "cat": "ai",
+    "status": "done",
+    "tags": [
+      "Next.js",
+      "TypeScript",
+      "Gemini",
+      "Firebase",
+      "TTS",
+      "HWP"
+    ]
+  },
+  {
+    "date": "2026-05-21",
+    "group": "home",
+    "name": "공모주 IPO 모니터",
+    "desc": "공모주 청약 일정·정보를 수집·모니터링하는 Python 도구",
+    "cat": "finance",
+    "status": "done",
+    "tags": [
+      "Python",
+      "공모주",
+      "IPO",
+      "모니터링"
     ]
   },
   {
@@ -1285,17 +683,88 @@
     ]
   },
   {
-    "date": "2026-05-26",
+    "date": "2026-06-07",
     "group": "home",
-    "name": "K-Swing 트레이딩 시그널",
-    "desc": "국내 주식 스윙 트레이딩 시그널 생성 및 백테스트 스크립트 — Windows 작업 스케줄러 자동 등록",
-    "cat": "finance",
+    "name": "graphify 지식그래프",
+    "desc": "코드베이스를 AST 기반 지식 그래프로 변환해 질의·경로·설명을 제공하는 개발 도구",
+    "cat": "util",
+    "status": "done",
+    "tags": [
+      "AST",
+      "지식그래프",
+      "CLI",
+      "개발도구"
+    ]
+  },
+  {
+    "date": "2026-06-13",
+    "group": "home",
+    "name": "한국 공개 API 디렉터리",
+    "desc": "국내 270여 종·글로벌 780여 종 공개 API를 분류 정리한 큐레이션 목록 (링크 헬스체크 CI 포함)",
+    "cat": "util",
+    "status": "done",
+    "tags": [
+      "API",
+      "문서",
+      "큐레이션",
+      "GitHub"
+    ]
+  },
+  {
+    "date": "2026-06-13",
+    "group": "home",
+    "name": "논문·보고서 오디오뷰",
+    "desc": "Elsevier 논문·네이버 금융 자료를 검색·요약해 오디오뷰로 만드는 파이프라인",
+    "cat": "ai",
     "status": "done",
     "tags": [
       "Python",
-      "주식",
-      "백테스트",
-      "스케줄러"
+      "논문검색",
+      "요약",
+      "오디오"
+    ]
+  },
+  {
+    "date": "2026-06-14",
+    "group": "home",
+    "name": "Narrative Momentum 전략",
+    "desc": "뉴스·시장 내러티브의 강도·방향·가속도를 점수화해 연결 종목으로 분배하는 단기 모멘텀 전략 + 대시보드",
+    "cat": "finance",
+    "status": "done",
+    "url": "https://takeused.github.io/Narrative-Momentum/",
+    "tags": [
+      "Python",
+      "모멘텀",
+      "뉴스분석",
+      "투자전략"
+    ]
+  },
+  {
+    "date": "2026-06-20",
+    "group": "work",
+    "name": "Cowork HWPX 스킬",
+    "desc": "기획보고서 작성용 HWPX Claude Code 스킬 패키지 + 양식 샘플",
+    "cat": "ai",
+    "status": "done",
+    "tags": [
+      "Claude Code",
+      "Skills",
+      "HWPX",
+      "보고서"
+    ]
+  },
+  {
+    "date": "2026-06-20",
+    "group": "home",
+    "name": "나의 Claude 스킬 맵",
+    "desc": "보유한 Claude Code 스킬 생태계를 한눈에 보는 단일 HTML 시각화",
+    "cat": "util",
+    "status": "done",
+    "tags": [
+      "HTML",
+      "시각화",
+      "Claude Code",
+      "Skills"
     ]
   },
   {
@@ -1312,75 +781,50 @@
     ]
   },
   {
-    "date": "2026-05-21",
-    "group": "home",
-    "name": "공모주 IPO 모니터",
-    "desc": "공모주 청약 일정·정보를 수집·모니터링하는 Python 도구",
-    "cat": "finance",
+    "date": "2026-05-27",
+    "group": "work",
+    "name": "네이버 증권 리포트 크롤러",
+    "desc": "네이버 금융 증권사 리서치 리포트 크롤링 및 수집 도구",
+    "cat": "data",
     "status": "done",
     "tags": [
       "Python",
-      "공모주",
-      "IPO",
-      "모니터링"
+      "Web Scraping",
+      "금융",
+      "증권"
     ]
   },
   {
-    "date": "2026-05-19",
+    "date": "2026-06-05",
+    "group": "work",
+    "name": "Nemotron 가상 설문 v2",
+    "desc": "Nemotron-Personas-Korea 2,000명 합성 페르소나 × 재난안전 인식조사 — Cerebras GLM 응답 생성·사후층화 가중 집계",
+    "cat": "ai",
+    "status": "done",
+    "url": "https://nemotron-persona-korea-virtual-survey3.takeused.workers.dev/",
+    "tags": [
+      "LLM",
+      "Nemotron",
+      "Cerebras",
+      "설문",
+      "재난안전",
+      "NVIDIA",
+      "HuggingFace",
+      "Ollama"
+    ]
+  },
+  {
+    "date": "2026-06-18",
     "group": "home",
-    "name": "한글소리 AI (HwpVoice)",
-    "desc": "HWP/HWPX 문서를 브리핑 대본·공유 HTML·음성으로 변환하는 Next.js MVP — Gemini 구조화 출력 + Gemini/ElevenLabs TTS, Firebase 저장·공유 링크",
+    "name": "dots.tts 로컬 TTS",
+    "desc": "rednote-hilab/dots.tts 2B 모델 Windows CPU 환경 설치·설정 — 사내 TLS 프록시 우회 및 Python 3.12 호환성 해결",
     "cat": "ai",
     "status": "done",
     "tags": [
-      "Next.js",
-      "TypeScript",
-      "Gemini",
-      "Firebase",
+      "Python",
       "TTS",
-      "HWP"
-    ]
-  },
-  {
-    "date": "2026-05-14",
-    "group": "home",
-    "name": "오빠두엑셀 Claude 디자인",
-    "desc": "Claude 디자인 실습 — 포트폴리오·리조트·레스토랑·청첩장·PPT 등 7종",
-    "cat": "doc",
-    "status": "done",
-    "tags": [
-      "HTML",
-      "CSS",
-      "디자인",
-      "실습"
-    ]
-  },
-  {
-    "date": "2026-05-11",
-    "group": "home",
-    "name": "Flutter Skills 패키지",
-    "desc": "Flutter 아키텍처 스킬 모음 — MVI·Go Router·GetIt DI·테스팅 등 8종",
-    "cat": "ai",
-    "status": "done",
-    "tags": [
-      "Flutter",
-      "Dart",
-      "Skills",
-      "MVI"
-    ]
-  },
-  {
-    "date": "2026-05-10",
-    "group": "home",
-    "name": "Claude Trading Skills",
-    "desc": "Claude Code 기반 포지션 사이징·매매 전략 스킬 패키지",
-    "cat": "finance",
-    "status": "wip",
-    "tags": [
-      "Claude Code",
-      "Skills",
-      "트레이딩",
-      "주식"
+      "AI",
+      "로컬"
     ]
   },
   {
@@ -1398,113 +842,104 @@
     ]
   },
   {
-    "date": "2026-05-09",
+    "date": "2026-05-26",
     "group": "home",
-    "name": "힉스필드 웹페이지",
-    "desc": "힉스필드 서비스 웹페이지 제작",
-    "cat": "util",
-    "status": "done",
-    "tags": [
-      "HTML",
-      "CSS",
-      "웹사이트"
-    ]
-  },
-  {
-    "date": "2026-05-05",
-    "group": "home",
-    "name": "Investment Test",
-    "desc": "Claude로 국내외 종목 공시자료(PDF) 분석 — 웨이비스·휴메딕스·TSLA",
+    "name": "K-Swing 트레이딩 시그널",
+    "desc": "국내 주식 스윙 트레이딩 시그널 생성 및 백테스트 스크립트 — Windows 작업 스케줄러 자동 등록",
     "cat": "finance",
     "status": "done",
     "tags": [
-      "Claude",
-      "투자분석",
-      "PDF",
-      "공시"
-    ]
-  },
-  {
-    "date": "2026-05-02",
-    "group": "home",
-    "name": "Claude PPT 자동화",
-    "desc": "pptxgenjs로 Physical AI Trends PPT 자동 생성 (Apple 스타일)",
-    "cat": "doc",
-    "status": "done",
-    "tags": [
-      "JavaScript",
-      "pptxgenjs",
-      "PowerPoint"
-    ]
-  },
-  {
-    "date": "2026-05-01",
-    "group": "home",
-    "name": "Karpathy LLM 학습",
-    "desc": "Andrej Karpathy 강의 기반 LLM·딥러닝 개인 학습 + Remotion 강의 영상 제작",
-    "cat": "ai",
-    "status": "done",
-    "tags": [
-      "LLM",
-      "딥러닝",
-      "Remotion",
-      "학습"
-    ]
-  },
-  {
-    "date": "2026-05-01",
-    "group": "home",
-    "name": "Claude Code 영상 자동화",
-    "desc": "Claude Code + Remotion으로 영상·나레이션·자막 자동 생성 파이프라인",
-    "cat": "ai",
-    "status": "done",
-    "tags": [
-      "Remotion",
-      "Claude Code",
-      "영상",
-      "자막"
-    ]
-  },
-  {
-    "date": "2026-05-01",
-    "group": "home",
-    "name": "혜윤 사진 자동 찾기",
-    "desc": "OpenCV YuNet+SFace 얼굴인식으로 특정 인물 사진 자동 검색 도구",
-    "cat": "ai",
-    "status": "done",
-    "tags": [
       "Python",
-      "OpenCV",
-      "얼굴인식",
-      "ONNX"
+      "주식",
+      "백테스트",
+      "스케줄러"
     ]
   },
   {
-    "date": "2026-04-26",
+    "date": "2026-06-08",
     "group": "home",
-    "name": "NotebookLM MCP",
-    "desc": "Chrome 확장·CLI·Next.js 앱 등 NotebookLM 연동 MCP 서버 다양한 방식으로 반복 구현 (v1~v6)",
-    "cat": "mcp",
-    "status": "done",
-    "tags": [
-      "MCP",
-      "Next.js",
-      "Chrome Extension",
-      "CLI",
-      "Obsidian"
-    ]
-  },
-  {
-    "date": "2026-04-26",
-    "group": "home",
-    "name": "Humanize KR 랜딩페이지",
-    "desc": "한국어 AI 텍스트 인간화(humanize) 서비스 랜딩페이지",
+    "name": "K-Skill 생태계 구축",
+    "desc": "한국 특화 Claude Code 스킬 수십 종(공공데이터·금융·부동산·교통 등) 설치·관리 인프라 — 스킬 락파일(skills-lock.json) 기반 버전 관리",
     "cat": "util",
     "status": "done",
     "tags": [
+      "Claude Code",
+      "Skills",
+      "스킬 관리",
+      "한국 공공데이터"
+    ]
+  },
+  {
+    "date": "2026-06-23",
+    "group": "home",
+    "name": "Claude Design MCP 실험",
+    "desc": "claude.ai/design 연동 MCP 실험 — React+Vite+TypeScript 스캐폴딩으로 디자인 시스템 프로젝트 동기화 테스트",
+    "cat": "mcp",
+    "status": "wip",
+    "tags": [
+      "MCP",
+      "React",
+      "Vite",
+      "디자인"
+    ]
+  },
+  {
+    "date": "2026-06-25",
+    "group": "home",
+    "name": "HTML 프레젠테이션 스킬화",
+    "desc": "beautiful-html-templates(34종 슬라이드 템플릿) 라이브러리를 클론해 Claude Code 스킬로 재구성 — 에이전트가 자동으로 어울리는 템플릿을 골라 덱 제작",
+    "cat": "doc",
+    "status": "done",
+    "url": "https://html-presentation.takeused.workers.dev/",
+    "tags": [
+      "HTML",
+      "프레젠테이션",
+      "Skills",
+      "템플릿"
+    ]
+  },
+  {
+    "date": "2026-06-25",
+    "group": "home",
+    "name": "Insane Search 스킬",
+    "desc": "차단된 웹사이트(X/Twitter, Reddit, YouTube 등) 우회 접근 스킬 — yt-dlp·Jina Reader·curl_cffi TLS 위장 체인으로 자동 폴백",
+    "cat": "util",
+    "status": "done",
+    "tags": [
+      "Claude Code",
+      "Skills",
+      "웹 스크래핑",
+      "우회"
+    ]
+  },
+  {
+    "date": "2026-06-22",
+    "group": "work",
+    "name": "Dashboard",
+    "desc": "작업 결과 정리 타임라인 대시보드 — 1차 버전(2026-05) 이후 GitHub 이전·대확장, 네트워크 뷰 팬/줌/드래그, React Flow 분리, 차트·인사이트·스토리 재생, GitHub Pages 배포 (현재 프로젝트)",
+    "cat": "util",
+    "status": "wip",
+    "tags": [
       "HTML",
       "CSS",
-      "랜딩페이지"
+      "JavaScript",
+      "SVG",
+      "React Flow"
+    ],
+    "url": "https://takeused.github.io/dashboard1/"
+  },
+  {
+    "date": "2026-06-26",
+    "group": "work",
+    "name": "Antigravity 세미나 발표자료",
+    "desc": "Antigravity IDE로 제작한 HTML 세미나 프레젠테이션 3종 — AI 주식투자 전략, AX 전환시대 R&D 기획 대전환, 합성 페르소나 가상설문 활용",
+    "cat": "doc",
+    "status": "done",
+    "tags": [
+      "HTML",
+      "프레젠테이션",
+      "Antigravity",
+      "세미나"
     ]
   },
   {
@@ -1522,116 +957,275 @@
     ]
   },
   {
-    "date": "2026-03-20",
+    "date": "2026-07-05",
     "group": "home",
-    "name": "Kiwoom 자동매매 봇",
-    "desc": "Kiwoom Open API+ 챕터별 학습부터 텔레그램 명령어 기반 실전 자동매매 봇 완성",
+    "name": "TradingAgents 멀티에이전트",
+    "desc": "TauricResearch/TradingAgents 로컬 구축 — 애널리스트→리서처(강세/약세 토론)→트레이더→리스크 관리 순으로 협업해 매매 판단(BUY/HOLD/SELL)을 내리는 LLM 멀티에이전트 프레임워크 (연구·교육용)",
+    "cat": "finance",
+    "status": "done",
+    "url": "https://trading-agents.takeused.workers.dev/",
+    "tags": [
+      "LLM",
+      "멀티에이전트",
+      "Python",
+      "트레이딩"
+    ]
+  },
+  {
+    "date": "2026-07-05",
+    "group": "home",
+    "name": "TradingView MCP 리포트 v2",
+    "desc": "TradingView MCP 연동 고도화 — MSIX 패키지 런처로 CDP 디버깅 포트 연결 문제 해결, 차트 분석 리포트를 Cloudflare Workers로 배포",
+    "cat": "finance",
+    "status": "done",
+    "url": "https://tradingview-chart-report.takeused.workers.dev/",
+    "tags": [
+      "TradingView",
+      "MCP",
+      "Cloudflare Workers",
+      "PowerShell",
+      "Claude",
+      "Python",
+      "대시보드"
+    ]
+  },
+  {
+    "date": "2026-07-11",
+    "group": "home",
+    "name": "Toss-Slack VCP 자동매매",
+    "desc": "토스증권 Open API 기반 자동매매 봇 — 로컬 일봉 DB에서 VCP(변동성 수축 패턴) 스캔 후 Slack 승인(휴먼-인-더-루프)을 거쳐야만 주문 집행, 기본값은 모의매매",
     "cat": "finance",
     "status": "done",
     "tags": [
       "Python",
-      "Kiwoom",
-      "텔레그램",
-      "자동매매"
+      "토스증권",
+      "Slack",
+      "자동매매",
+      "VCP"
     ]
   },
   {
-    "date": "2026-03-15",
+    "date": "2026-07-14",
+    "group": "work",
+    "name": "ScienceON / NTIS v5",
+    "desc": "등록 IP 제한이 있는 ScienceON·NTIS API를 Vercel 화면과 로컬 프록시·Cloudflare Tunnel로 연결해 외부에서도 검색·적정 연구개발비 산출·연구–IP 공백 분석을 실행하도록 고도화",
+    "cat": "data",
+    "status": "wip",
+    "url": "https://nits5.vercel.app/",
+    "tags": [
+      "ScienceON",
+      "NTIS",
+      "Vercel",
+      "Cloudflare Tunnel",
+      "프록시",
+      "Web Scraping",
+      "JavaScript",
+      "API",
+      "HTML"
+    ]
+  },
+  {
+    "date": "2026-07-14",
     "group": "home",
-    "name": "NotebookLM + Claude PPT",
-    "desc": "Apple 환경보고서·OECD AI 보고서 PDF를 NotebookLM+Claude로 PPT 자동 변환",
+    "name": "GAMMA 프레젠테이션 실험",
+    "desc": "Gamma AI로 AI 주제 프레젠테이션(PPTX) 자동 생성 실험",
     "cat": "doc",
     "status": "done",
     "tags": [
-      "NotebookLM",
-      "Claude",
+      "Gamma",
       "PowerPoint",
-      "PDF"
-    ]
-  },
-  {
-    "date": "2026-03-09",
-    "group": "home",
-    "name": "경제적 자유 시뮬레이션",
-    "desc": "개인 자산·투자 수익 기반 경제적 자유 달성 시뮬레이터 (단일 HTML)",
-    "cat": "finance",
-    "status": "done",
-    "tags": [
-      "JavaScript",
-      "HTML",
-      "투자",
-      "FIRE"
-    ]
-  },
-  {
-    "date": "2026-02-25",
-    "group": "home",
-    "name": "Blender MCP 연동",
-    "desc": "Blender Python addon으로 MCP 서버 연동 — 3D 렌더링 자동화",
-    "cat": "mcp",
-    "status": "done",
-    "tags": [
-      "Blender",
-      "Python",
-      "MCP",
-      "3D"
-    ]
-  },
-  {
-    "date": "2026-02-19",
-    "group": "home",
-    "name": "Healify 수면 관리 앱",
-    "desc": "Vite+React 기반 개인 수면 건강 관리 웹앱",
-    "cat": "util",
-    "status": "done",
-    "tags": [
-      "React",
-      "Vite",
-      "건강",
-      "수면"
-    ]
-  },
-  {
-    "date": "2026-02-08",
-    "group": "home",
-    "name": "N8N 자동화 워크플로우",
-    "desc": "N8N으로 GeekNews·주식뉴스 구독 → Gmail 자동 발송 파이프라인 구축",
-    "cat": "util",
-    "status": "done",
-    "tags": [
-      "N8N",
-      "Gmail",
-      "Google OAuth",
-      "자동화"
-    ]
-  },
-  {
-    "date": "2026-02-01",
-    "group": "home",
-    "name": "직장인 AI 오피스 어시스턴트",
-    "desc": "Vite+Tailwind 기반 직장인 대상 AI 오피스 어시스턴트 웹앱",
-    "cat": "util",
-    "status": "done",
-    "tags": [
-      "Vite",
-      "Tailwind",
-      "HTML",
+      "프레젠테이션",
       "AI"
     ]
   },
   {
-    "date": "2026-01-25",
+    "date": "2026-07-13",
+    "group": "work",
+    "name": "R&D 예산 심의 시뮬레이터",
+    "desc": "국가 R&D 신규사업 예산 심의를 LangGraph 멀티 에이전트로 시뮬레이션 — 6인 분석가, 심사위원 공방 2라운드, 기획처 3자 토론, 최종 승인권자 결정, 예상 질의·기획보고서 보완 권고 사전 도출",
+    "cat": "ai",
+    "status": "done",
+    "url": "https://260713-r-d.pages.dev/",
+    "url2": "https://20260726-rnd-deliberation.takeused.workers.dev/",
+    "tags": [
+      "Python",
+      "LangGraph",
+      "멀티 에이전트",
+      "LLM",
+      "R&D 예산",
+      "HTML",
+      "JavaScript",
+      "R&D",
+      "예산"
+    ]
+  },
+  {
+    "date": "2026-07-16",
+    "group": "work",
+    "name": "LLM API Lab",
+    "desc": "여러 OpenAI 호환 LLM API를 한 화면에서 비교 테스트하는 로컬 웹 도구 — NVIDIA Nemotron·Cerebras GPT OSS 120B·Z.AI GLM 5.2 지원, API 키는 로컬 Node 서버에서만 처리",
+    "cat": "ai",
+    "status": "done",
+    "tags": [
+      "Node.js",
+      "NVIDIA",
+      "LLM",
+      "API"
+    ]
+  },
+  {
+    "date": "2026-07-15",
     "group": "home",
-    "name": "Antigravity 웹앱",
-    "desc": "Vite+React 기반 랜딩·여행 일정·식단 계획·풀스택 웹앱 + kStartup 크롤러까지 다양한 실험",
+    "name": "Investment Guru Consensus 13",
+    "desc": "13개 투자 대가 스타일 스크린으로 종목 적합도·대가 합의·상승 트리거·하락 위험을 판정하는 프롬프트 + 결과를 시각화하는 웹 대시보드 (KOSPI·KOSDAQ 기본, 실데이터만 사용 규칙)",
+    "cat": "finance",
+    "status": "done",
+    "url": "https://13screen.vercel.app/",
+    "tags": [
+      "프롬프트 엔지니어링",
+      "JavaScript",
+      "HTML",
+      "주식",
+      "스크리닝"
+    ]
+  },
+  {
+    "date": "2026-07-19",
+    "group": "home",
+    "name": "미 의회 매매 데이터 파이프라인",
+    "desc": "미국 하원 재무공시(PTR) 공식 배포 파일을 다운로드·파싱해 구조화 JSON을 만드는 파이프라인 — 스캔 PDF는 RapidOCR + 체크박스 픽셀 밀도로 거래유형 복원, yfinance 배치·병렬 인리치(12배 최적화), 자립형 HTML 대시보드 생성",
+    "cat": "data",
+    "status": "done",
+    "url": "https://us-congressional-trading-data.takeused.workers.dev/",
+    "tags": [
+      "Python",
+      "PDF 파싱",
+      "OCR",
+      "yfinance",
+      "데이터 파이프라인"
+    ]
+  },
+  {
+    "date": "2026-07-28",
+    "group": "home",
+    "name": "Scroll World 시네마틱",
+    "desc": "위성·공간정보 재난안전 플랫폼(GEOSAFE)을 스크롤로 훑는 6씬 연속 카메라 랜딩 — Higgsfield MCP로 씬 렌더(프레임 락으로 이음매 제거), scrub-engine.js가 스크롤 위치를 클립 재생 시점에 매핑. 프롬프트·엔진·QA까지 완료, 실렌더는 크레딧 대기",
+    "cat": "util",
+    "status": "wip",
+    "tags": [
+      "Higgsfield",
+      "MCP",
+      "스크롤 인터랙션",
+      "ffmpeg",
+      "PowerShell",
+      "JavaScript",
+      "랜딩페이지"
+    ]
+  },
+  {
+    "date": "2026-08-25",
+    "group": "work",
+    "name": "중장기 종합계획 정책동향",
+    "desc": "제5차 재난안전 기술개발 종합계획(2028~2032) 사전준비 — NTIS 과학기술분야 중장기계획 원문을 전수 수집해 계보·만료·중복을 분석하고, 국외 중장기계획까지 대조. NotebookLM MCP로 PDF 업로드·요약 자동화",
+    "cat": "doc",
+    "status": "wip",
+    "tags": [
+      "NTIS",
+      "정책분석",
+      "PDF 파싱",
+      "NotebookLM",
+      "MCP",
+      "Python",
+      "종합계획"
+    ]
+  },
+  {
+    "date": "2026-08-30",
+    "group": "home",
+    "name": "키움 REST API 트레이딩",
+    "desc": "키움 REST API 348개 TR 명세를 기반으로 인증·시세·주문 클라이언트를 얇게 구현하고, 주도주 스크리닝·VB 백테스트·레짐 판별·추천 파이프라인을 붙인 자동매매 실험. 실전 주문은 ALLOW_REAL_ORDER 가드로 차단하고 모의 도메인에서만 검증",
+    "cat": "finance",
+    "status": "wip",
+    "tags": [
+      "Python",
+      "키움증권",
+      "REST API",
+      "자동매매",
+      "백테스트",
+      "스크리닝"
+    ]
+  },
+  {
+    "date": "2026-09-05",
+    "group": "work",
+    "name": "NEPSA 워크벤치",
+    "desc": "KEIT가 2013년 공개한 NEPSA 방법론을 재현한 R&D 과제 포트폴리오 평가 웹앱 — 기대성과·위험 12개 지표 입력 → 100점 환산 → 12영역 매트릭스(S~D) 등급·우선순위. 정량지표 자동 채점, 시나리오·이력·과제 비교, JSON 백업·CSV 내보내기·인쇄 보고서",
+    "cat": "ai",
+    "status": "wip",
+    "url": "https://nepsa.takeused.workers.dev/",
+    "tags": [
+      "Next.js",
+      "TypeScript",
+      "R&D 기획",
+      "평가모델",
+      "데이터 시각화",
+      "KEIT"
+    ]
+  },
+  {
+    "date": "2026-06-07",
+    "group": "work",
+    "name": "국가R&D 예산 요구 심의",
+    "desc": "국가연구개발사업 예산 요구 심의 체크리스트 및 검토 도구 HTML 단일 파일",
     "cat": "util",
     "status": "done",
     "tags": [
+      "HTML",
+      "R&D",
+      "예산",
+      "심의"
+    ]
+  },
+  {
+    "date": "2026-09-01",
+    "group": "work",
+    "name": "AI 캐릭터 동영상",
+    "desc": "고정 캐릭터 스펙 기반 AI 이미지 일괄 생성 및 영상 클립 합성 자동화",
+    "cat": "ai",
+    "status": "done",
+    "tags": [
+      "Python",
+      "PowerShell",
+      "AI Image",
+      "Video"
+    ]
+  },
+  {
+    "date": "2026-09-17",
+    "group": "work",
+    "name": "공무원연금공단 재해예방 공모전",
+    "desc": "공무원연금공단 재해예방 아이디어 공모전 응모 자료 작성",
+    "cat": "util",
+    "status": "wip",
+    "tags": [
+      "HWP",
+      "공모전",
+      "Python"
+    ]
+  },
+  {
+    "date": "2026-09-18",
+    "group": "work",
+    "name": "대한민국 상권분석앱",
+    "desc": "공공데이터 API와 Groq LLM을 결합한 지도 기반 상권분석 웹앱",
+    "cat": "data",
+    "status": "wip",
+    "tags": [
       "React",
-      "Next.js",
-      "TypeScript",
-      "Expo",
-      "Vite"
+      "Vite",
+      "공공데이터",
+      "LLM",
+      "지도"
     ]
   }
 ]
