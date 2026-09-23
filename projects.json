@@ -177,6 +177,26 @@
     "nextAction": "실제 심의 데이터셋 적용 테스트"
   },
   {
+    "date": "2026-07-23",
+    "group": "work",
+    "name": "Nemotron 문서·프레젠테이션 생성 테스트",
+    "desc": "Nemotron 페르소나 설문 결과를 Word 문서(python-docx)와 HTML 프레젠테이션으로 자동 변환하는 실험",
+    "cat": "doc",
+    "status": "done",
+    "tags": [
+      "Python",
+      "python-docx",
+      "HTML",
+      "Nemotron"
+    ],
+    "tools": [
+      "Claude Code"
+    ],
+    "artifact": "문서 생성 스크립트",
+    "localPath": "D:\\01 WORK\\260723 TEMP_TEST",
+    "nextAction": "검증 후 본 프로젝트 리포트 파이프라인에 통합"
+  },
+  {
     "date": "2026-07-16",
     "group": "work",
     "name": "NVIDIA / LLM API Lab",
@@ -291,6 +311,26 @@
       "R&D",
       "예산"
     ]
+  },
+  {
+    "date": "2026-06-26",
+    "group": "work",
+    "name": "Antigravity 프레젠테이션 실험",
+    "desc": "Google Antigravity로 AI 주식투자·R&D 기획전환·가상설문 등 다양한 주제의 HTML 프레젠테이션 시제작",
+    "cat": "doc",
+    "status": "done",
+    "tags": [
+      "HTML",
+      "CSS",
+      "Antigravity",
+      "Design"
+    ],
+    "tools": [
+      "Antigravity"
+    ],
+    "artifact": "프레젠테이션 프로토타입",
+    "localPath": "D:\\01 WORK\\260626 test-antigravity",
+    "nextAction": "괜찮은 패턴을 실제 프레젠테이션에 재사용"
   },
   {
     "date": "2026-06-26",
