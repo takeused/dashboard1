@@ -514,6 +514,7 @@ a:focus-visible,
   position:relative;height:600px;overflow:hidden;
 }
 #networkSvg{display:block;width:100%;height:100%;cursor:grab}
+#tagMapSvg{display:block;width:100%;height:100%;cursor:grab}
 .network-edge{stroke:var(--hairline);stroke-width:1;pointer-events:none;transition:stroke .18s,stroke-opacity .18s,stroke-width .18s,opacity .3s}
 .network-edge.dim{stroke-opacity:0.05 !important}
 .network-edge.highlight{stroke:var(--primary) !important;stroke-opacity:0.85 !important;stroke-width:2}
@@ -957,6 +958,7 @@ let currentMonth  = 'all';       // 월 필터 — URL(?month=YYYY-MM) 딥링크
 let paletteActive = 0;
 let paletteItems  = [];
 let net           = null;  // 네트워크 뷰 팬/줌/드래그 공유 상태
+let tagVB         = { x:0, y:0, w:1100, h:600 };  // 기술 지도 팬/줌 viewBox (필터 재렌더에도 유지)
 
 // 즐겨찾기 — 프로젝트명(name)을 키로 localStorage에 영속 저장
 let favOnly = false;   // '즐겨찾기만 보기' 토글
@@ -1995,7 +1997,8 @@ function renderTagMap(filtered){
   const svgEl  = document.getElementById('tagMapSvg');
   const legend = document.getElementById('tagMapLegend');
   const W = NET_W, H = NET_H;
-  svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svgEl.setAttribute('viewBox', filtered.length === 0
+    ? `0 0 ${W} ${H}` : `${tagVB.x} ${tagVB.y} ${tagVB.w} ${tagVB.h}`);
   svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 
   if(filtered.length === 0){
@@ -2598,6 +2601,55 @@ document.getElementById('paletteOverlay').addEventListener('click', e => {
   svgEl.addEventListener('dblclick', () => {
     if(!net) return;
     net.vb = { x:0, y:0, w:net.W, h:net.H };
+    applyVB();
+  });
+})();
+
+/* ── 기술 지도 팬/줌 (viewBox 조작) — 1회 등록. 노드 클릭은 기존 .tag-filter 위임 유지 ── */
+(function initTagMapInteractions(){
+  const svgEl = document.getElementById('tagMapSvg');
+  const toSVG = (cx, cy) => {
+    const r = svgEl.getBoundingClientRect();
+    return {
+      x: tagVB.x + (cx - r.left) / r.width  * tagVB.w,
+      y: tagVB.y + (cy - r.top)  / r.height * tagVB.h,
+    };
+  };
+  const applyVB = () => svgEl.setAttribute('viewBox',
+    `${tagVB.x} ${tagVB.y} ${tagVB.w} ${tagVB.h}`);
+  let pan = null;
+
+  svgEl.addEventListener('wheel', e => {
+    e.preventDefault();
+    const p = toSVG(e.clientX, e.clientY);
+    const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? NET_H : 1;
+    const step = Math.min(Math.abs(e.deltaY) * unit / 100, 3);
+    const f  = e.deltaY < 0 ? Math.pow(0.95, step) : Math.pow(1.0526, step);
+    const nw = Math.min(Math.max(tagVB.w * f, 220), NET_W * 4);
+    const nh = nw * (NET_H / NET_W);
+    tagVB.x = p.x - (p.x - tagVB.x) * (nw / tagVB.w);
+    tagVB.y = p.y - (p.y - tagVB.y) * (nh / tagVB.h);
+    tagVB.w = nw; tagVB.h = nh;
+    applyVB();
+  }, { passive:false });
+
+  svgEl.addEventListener('mousedown', e => {
+    if(e.target.closest('.network-node')) return;   // 노드는 클릭(검색) 전용
+    pan = { mx:e.clientX, my:e.clientY, vx:tagVB.x, vy:tagVB.y };
+    svgEl.style.cursor = 'grabbing';
+  });
+  window.addEventListener('mousemove', e => {
+    if(!pan) return;
+    const r = svgEl.getBoundingClientRect();
+    tagVB.x = pan.vx - (e.clientX - pan.mx) / r.width  * tagVB.w;
+    tagVB.y = pan.vy - (e.clientY - pan.my) / r.height * tagVB.h;
+    applyVB();
+  });
+  window.addEventListener('mouseup', () => { pan = null; svgEl.style.cursor = ''; });
+
+  // 더블클릭 → 뷰 리셋
+  svgEl.addEventListener('dblclick', () => {
+    tagVB = { x:0, y:0, w:NET_W, h:NET_H };
     applyVB();
   });
 })();
