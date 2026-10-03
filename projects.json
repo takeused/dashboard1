@@ -1284,6 +1284,7 @@
     "desc": "카카오톡 메시지를 Jev(TypeSafe)로 분석해 상대방 호감도를 수치화하는 웹앱 — 정적 페이지 + Python 서버리스 API, Vercel 배포",
     "cat": "ai",
     "status": "wip",
+    "url": "https://some-meter.vercel.app/",
     "tags": [
       "JEV",
       "TypeSafe",
