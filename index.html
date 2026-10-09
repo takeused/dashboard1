@@ -328,6 +328,11 @@ a:focus-visible,
 .badge.done{color:#166534;border-color:#166534;background:rgba(22,101,52,.06)}
 .badge.wip{color:#92400e;border-color:#92400e;background:rgba(146,64,14,.06)}
 .badge.new-badge{color:#fff;border-color:var(--primary);background:var(--primary)}
+.badge.age-badge{color:var(--ink-muted);border-color:var(--hairline);background:var(--surface-1)}
+.badge.age-badge.old{color:var(--cat-mcp);border-color:var(--cat-mcp);background:color-mix(in srgb, var(--cat-mcp) 8%, transparent)}
+.wip-summary{margin:0 0 16px -24px;padding:0 0 0 24px;font-size:14px;letter-spacing:0.16px;color:var(--ink-muted)}
+.wip-summary strong{color:var(--ink);font-weight:600}
+.month-header .wip-hint{font-weight:400;color:var(--ink-subtle);font-size:12px}
 .badge.series-badge{color:var(--ink-muted);border-color:var(--hairline);background:var(--surface-1);cursor:pointer;transition:border-color .12s,color .12s}
 .badge.series-badge:hover{color:var(--ink);border-color:var(--ink)}
 .copy-link-btn{
@@ -752,6 +757,7 @@ a:focus-visible,
           <button class="view-btn active" data-view="timeline" aria-pressed="true">타임라인</button>
           <button class="view-btn" data-view="network" aria-pressed="false">네트워크</button>
           <button class="view-btn" data-view="tagmap" aria-pressed="false">기술 지도</button>
+          <button class="view-btn" data-view="wip" aria-pressed="false">진행 중 보드</button>
         </div>
       </div>
       <div class="switcher-group">
@@ -818,6 +824,7 @@ a:focus-visible,
     <div class="active-chips" id="activeChips"></div>
 
     <div class="timeline" id="timeline"></div>
+    <div class="timeline" id="wipBoard" hidden></div>
     <div class="network-view" id="networkView" hidden>
       <svg id="networkSvg" xmlns="http://www.w3.org/2000/svg"></svg>
       <div class="network-info" id="networkInfo"></div>
@@ -949,7 +956,7 @@ const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>
 let currentGroup  = 'all';
 let currentFilter = 'all';
 let currentSearch = '';
-let currentView   = 'timeline';  // 'timeline' | 'network' | 'tagmap'
+let currentView   = 'timeline';  // 'timeline' | 'network' | 'tagmap' | 'wip'
 let currentDensity= 'comfortable';  // 'comfortable' | 'compact'
 let currentSort   = 'desc';      // 'desc'(최신순) | 'asc'(오래된순)
 let currentSeries = null;        // 시리즈 필터 (series 키) — null이면 미적용
@@ -1155,7 +1162,9 @@ function render(){
   const tl  = document.getElementById('timeline');
   const nv  = document.getElementById('networkView');
   const tm  = document.getElementById('tagMapView');
+  const wb  = document.getElementById('wipBoard');
   const dt  = document.getElementById('densityToggle');
+  wb.hidden = currentView !== 'wip';
 
   if(currentView === 'network'){
     tl.hidden = true; nv.hidden = false; tm.hidden = true; dt.hidden = true;
@@ -1163,6 +1172,9 @@ function render(){
   } else if(currentView === 'tagmap'){
     tl.hidden = true; nv.hidden = true; tm.hidden = false; dt.hidden = true;
     renderTagMap(filtered);
+  } else if(currentView === 'wip'){
+    tl.hidden = true; nv.hidden = true; tm.hidden = true; dt.hidden = true;
+    renderWipBoard(filtered);
   } else {
     tl.hidden = false; nv.hidden = true; tm.hidden = true; dt.hidden = false;
     renderTimeline(filtered);
@@ -1201,6 +1213,53 @@ function renderTimeline(filtered){
     g.dataset.date = d;
     grouped[d].forEach(p => g.appendChild(buildTlRow(p, now)));
     tl.appendChild(g);
+  });
+}
+
+/* ── 진행 중 보드 ───────────────────────────────────────── */
+// 진행 중(wip) 항목을 등록일 기준 경과일로 나눠 오래된 것부터 보여 준다 (실제 오늘 기준).
+const WIP_TIERS = [
+  { key:'old',    min:61, label:'2개월 이상',  hint:'정리하거나 마무리할 후보' },
+  { key:'mid',    min:15, label:'2주 ~ 2개월', hint:'' },
+  { key:'recent', min:0,  label:'최근 2주',    hint:'' },
+];
+function renderWipBoard(filtered){
+  const wb  = document.getElementById('wipBoard');
+  const now = Date.now();
+  const wip = filtered.filter(p => p.status === 'wip');
+  wb.innerHTML = '';
+
+  if(wip.length === 0){
+    wb.innerHTML = `<p style="color:var(--ink-muted);padding:32px 0;font-size:14px;letter-spacing:0.16px">
+      현재 필터에 해당하는 진행 중 프로젝트가 없습니다.</p>`;
+    return;
+  }
+
+  const ageOf = p => Math.max(0, Math.floor((now - new Date(p.date + 'T00:00:00').getTime()) / 86400000));
+  const sorted = wip.slice().sort((a,b) => ageOf(b) - ageOf(a));
+  const oldCount = sorted.filter(p => ageOf(p) >= WIP_TIERS[0].min).length;
+
+  const sum = document.createElement('div');
+  sum.className = 'wip-summary';
+  sum.innerHTML = `진행 중 <strong>${wip.length}건</strong> · 2개월 이상 지난 항목 <strong>${oldCount}건</strong> `
+    + `· 등록일 기준 경과일, 오래된 순`;
+  wb.appendChild(sum);
+
+  WIP_TIERS.forEach(tier => {
+    const items = sorted.filter(p => WIP_TIERS.find(t => ageOf(p) >= t.min) === tier);
+    if(!items.length) return;
+    const g = document.createElement('div');
+    g.className = 'date-group';
+    g.innerHTML = `<div class="month-header">${tier.label}<span>${items.length}건</span>`
+      + (tier.hint ? `<span class="wip-hint">${tier.hint}</span>` : '') + `</div>`;
+    items.forEach(p => {
+      const row = buildTlRow(p, now);
+      const a = ageOf(p);
+      row.querySelector('.card-badges').insertAdjacentHTML('afterbegin',
+        `<span class="badge age-badge${a >= WIP_TIERS[0].min ? ' old' : ''}">${a}일 경과</span>`);
+      g.appendChild(row);
+    });
+    wb.appendChild(g);
   });
 }
 
@@ -2126,6 +2185,7 @@ function buildPaletteAll(){
   items.push({icon:ICONS.view,   section:'view',   cmd:true, label:'타임라인 보기',  meta:'View',   fn:()=>setView('timeline')});
   items.push({icon:ICONS.view,   section:'view',   cmd:true, label:'네트워크 보기',  meta:'View',   fn:()=>setView('network')});
   items.push({icon:ICONS.view,   section:'view',   cmd:true, label:'기술 지도 보기', meta:'View',   fn:()=>setView('tagmap')});
+  items.push({icon:ICONS.view,   section:'view',   cmd:true, label:'진행 중 보드 보기', meta:'View', fn:()=>setView('wip')});
   items.push({icon:ICONS.reset,  section:'action', cmd:true, label:'필터 초기화',    meta:'Action', fn:resetFilters});
   items.push({icon:ICONS.view,   section:'action', cmd:true, label:'스토리 재생 — 기록이 쌓이는 과정', meta:'Action', fn:startReplay});
   items.push({icon:ICONS.project,section:'action', cmd:true, label:'Markdown 보고서 내보내기', meta:'Action', fn:exportMarkdownReport});
