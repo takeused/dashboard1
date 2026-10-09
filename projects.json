@@ -749,7 +749,7 @@
     "tags": [
       "Claude Code",
       "Skills",
-      "HWPX",
+      "HWP",
       "보고서"
     ]
   },
@@ -762,7 +762,7 @@
     "status": "done",
     "tags": [
       "HTML",
-      "시각화",
+      "데이터 시각화",
       "Claude Code",
       "Skills"
     ]
@@ -837,8 +837,7 @@
     "tags": [
       "Ollama",
       "Gemma",
-      "파인튜닝",
-      "Fine-tuning"
+      "파인튜닝"
     ]
   },
   {
@@ -865,8 +864,7 @@
     "tags": [
       "Claude Code",
       "Skills",
-      "스킬 관리",
-      "한국 공공데이터"
+      "공공데이터"
     ]
   },
   {
@@ -908,7 +906,7 @@
     "tags": [
       "Claude Code",
       "Skills",
-      "웹 스크래핑",
+      "Web Scraping",
       "우회"
     ]
   },
@@ -1050,7 +1048,7 @@
     "tags": [
       "Python",
       "LangGraph",
-      "멀티 에이전트",
+      "멀티에이전트",
       "LLM",
       "R&D 예산",
       "HTML",
@@ -1166,7 +1164,7 @@
     "tags": [
       "Next.js",
       "TypeScript",
-      "R&D 기획",
+      "R&D",
       "평가모델",
       "데이터 시각화",
       "KEIT"
