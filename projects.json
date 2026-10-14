@@ -1285,6 +1285,7 @@
     "desc": "LangGraph 멀티에이전트로 국가 R&D 신규사업 예산 심의를 재현 — 6인 분석가·심사 공방·기획처 3자 토론·최종 승인, 예상 질의와 보완 권고 도출",
     "cat": "ai",
     "status": "wip",
+    "url": "https://20260726-rnd-deliberation.takeused.workers.dev/",
     "tags": [
       "LangGraph",
       "멀티에이전트",
