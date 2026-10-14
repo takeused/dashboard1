@@ -1107,7 +1107,7 @@
     "date": "2026-07-28",
     "group": "home",
     "name": "Scroll World 시네마틱",
-    "desc": "위성·공간정보 재난안전 플랫폼(GEOSAFE)을 스크롤로 훑는 6씬 연속 카메라 랜딩 — Higgsfield MCP로 씬 렌더(프레임 락으로 이음매 제거), scrub-engine.js가 스크롤 위치를 클립 재생 시점에 매핑. 프롬프트·엔진·QA까지 완료, 실렌더는 크레딧 대기",
+    "desc": "위성·공간정보 재난안전 플랫폼(GEOSAFE)을 스크롤로 훑는 6씬 연속 카메라 랜딩 — Higgsfield MCP 렌더(프레임 락으로 이음매 제거), scrub-engine.js가 스크롤 위치를 클립 재생 시점에 매핑. 프롬프트·엔진·QA 완료, 실렌더는 크레딧 대기",
     "cat": "util",
     "status": "wip",
     "tags": [
@@ -1157,7 +1157,7 @@
     "date": "2026-09-05",
     "group": "work",
     "name": "NEPSA 워크벤치",
-    "desc": "KEIT가 2013년 공개한 NEPSA 방법론을 재현한 R&D 과제 포트폴리오 평가 웹앱 — 기대성과·위험 12개 지표 입력 → 100점 환산 → 12영역 매트릭스(S~D) 등급·우선순위. 정량지표 자동 채점, 시나리오·이력·과제 비교, JSON 백업·CSV 내보내기·인쇄 보고서",
+    "desc": "KEIT가 2013년 공개한 NEPSA 방법론을 재현한 R&D 과제 포트폴리오 평가 웹앱 — 기대성과·위험 12개 지표 입력 → 100점 환산 → 12영역 매트릭스(S~D) 등급·우선순위. 정량지표 자동 채점, 시나리오·이력·과제 비교, JSON 백업·CSV 내보내기",
     "cat": "ai",
     "status": "wip",
     "url": "https://nepsa.takeused.workers.dev/",
