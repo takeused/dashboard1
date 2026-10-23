@@ -1341,5 +1341,51 @@
       "Claude Code",
       "3D"
     ]
+  },
+  {
+    "date": "2026-10-13",
+    "group": "home",
+    "name": "EmbeddingGemma 2 멀티모달 검색",
+    "desc": "google/embeddinggemma-2(740M)로 텍스트·코드·이미지를 한 벡터 공간에서 검색하는 로컬 실험 — MRL 차원 축소 벤치마크, 멀티모달 RAG, 브라우저 웹 스튜디오, Ollama 연동",
+    "cat": "ai",
+    "status": "done",
+    "tags": [
+      "Python",
+      "임베딩",
+      "RAG",
+      "Gemma",
+      "Ollama",
+      "멀티모달"
+    ]
+  },
+  {
+    "date": "2026-10-13",
+    "group": "home",
+    "name": "REA 리버스 엔지니어링 실습",
+    "desc": "REA(rea-agents)와 Ghidra로 whoami.exe의 인자 처리 로직을 분석하고 실행으로 검증한 기록 — 함수 341개·문자열 308개 대상 정적 분석 워크플로 정리",
+    "cat": "util",
+    "status": "done",
+    "tags": [
+      "REA",
+      "Ghidra",
+      "리버스 엔지니어링",
+      "MCP",
+      "Windows"
+    ]
+  },
+  {
+    "date": "2026-10-14",
+    "group": "home",
+    "name": "ASTRA 인터랙티브 소개 사이트",
+    "desc": "GPT-6 Astra가 만든 한국어 3D 입자 모델 소개 사이트 — 6가지 형태 모핑, 포인터 상호작용, HDR 후처리, 충전·방출 인터랙션 (Neural Field와 같은 프롬프트 비교용)",
+    "cat": "util",
+    "status": "done",
+    "tags": [
+      "Three.js",
+      "WebGL",
+      "3D",
+      "Node.js",
+      "모델 비교"
+    ]
   }
 ]
