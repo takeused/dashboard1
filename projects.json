@@ -1214,23 +1214,6 @@
     ]
   },
   {
-    "date": "2026-09-19",
-    "group": "work",
-    "name": "울진 산불 위성영상 분석",
-    "desc": "2022년 울진 산불 지역 Sentinel-2 원제품 기반 변화 후보 분석과 품질 검토 — 213개 고정 검증표본, Landsat 교차 센서 진단, 행정경계 민감도 점검 (피해면적 확정이 아닌 후보 분석)",
-    "cat": "data",
-    "status": "wip",
-    "tags": [
-      "Sentinel-2",
-      "Landsat",
-      "위성영상",
-      "원격탐사",
-      "Python",
-      "산불",
-      "재난안전"
-    ]
-  },
-  {
     "date": "2026-10-03",
     "group": "work",
     "name": "Claude Code 모드 (cache-guard · win-bash-guard)",

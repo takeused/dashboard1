@@ -11,6 +11,12 @@ const SKIP_NAMES = new Set(['node_modules', '.git', '.claude']);
 // 큐레이션 대상이 아니라고 확정된 폴더 (context-notes.md "영구 제외 확정" 참고)
 const EXCLUDED = new Set(['260628 insight']);
 
+// 비공개 프로젝트 폴더명은 공개 저장소에 남기지 않도록 gitignore된 로컬 파일(한 줄당 폴더명)에서 읽는다.
+const localExclude = path.join(__dirname, '..', '.scan-exclude.local');
+if (fs.existsSync(localExclude)) {
+  fs.readFileSync(localExclude, 'utf8').split(/\r?\n/).map(s => s.trim()).filter(Boolean).forEach(n => EXCLUDED.add(n));
+}
+
 // "260622 dashboard" → "2026-06-22" (폴더명 앞 6자리 YYMMDD 관례)
 function parseFolderDate(name) {
   const m = name.match(/^(\d{2})(\d{2})(\d{2})/);
