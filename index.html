@@ -333,8 +333,6 @@ a:focus-visible,
 .wip-summary{margin:0 0 16px -24px;padding:0 0 0 24px;font-size:14px;letter-spacing:0.16px;color:var(--ink-muted)}
 .wip-summary strong{color:var(--ink);font-weight:600}
 .month-header .wip-hint{font-weight:400;color:var(--ink-subtle);font-size:12px}
-.badge.series-badge{color:var(--ink-muted);border-color:var(--hairline);background:var(--surface-1);cursor:pointer;transition:border-color .12s,color .12s}
-.badge.series-badge:hover{color:var(--ink);border-color:var(--ink)}
 .lineage{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:var(--ink-muted)}
 .lin-chip{padding:1px 8px;border:1px solid var(--hairline);border-radius:999px;background:var(--surface-1);white-space:nowrap;cursor:default}
 .lin-chip i{font-style:normal;color:var(--ink-subtle);margin-left:2px}
@@ -972,7 +970,6 @@ let currentSearch = '';
 let currentView   = 'timeline';  // 'timeline' | 'network' | 'tagmap' | 'wip'
 let currentDensity= 'comfortable';  // 'comfortable' | 'compact'
 let currentSort   = 'desc';      // 'desc'(최신순) | 'asc'(오래된순)
-let currentSeries = null;        // 시리즈 필터 (series 키) — null이면 미적용
 let currentMonth  = 'all';       // 월 필터 — URL(?month=YYYY-MM) 딥링크로 진입, 칩으로 해제
 let paletteActive = 0;
 let paletteItems  = [];
@@ -997,15 +994,6 @@ function toggleFav(name, btn){
   if(currentView === 'timeline') render();
 }
 
-// 프로젝트를 series 키로 묶은 맵 — 2건 이상인 시리즈만 UI에 노출
-const SERIES_MAP = (() => {
-  const m = {};
-  projects.forEach(p => { if(p.series) (m[p.series] = m[p.series] || []).push(p); });
-  Object.keys(m).forEach(k => m[k].sort((a,b) => a.date < b.date ? -1 : 1));
-  return m;
-})();
-const SERIES_LABELS = { 'slide-maker':'Slide-maker', 'kisti-mcp':'KISTI MCP', 'scienceon-ntis':'ScienceON / NTIS', 'nemotron-survey':'Nemotron 설문', 'dashboard':'Dashboard' };
-
 /* ── URL 동기화 ─────────────────────────────────────────── */
 function syncURL(){
   const p = new URLSearchParams();
@@ -1015,7 +1003,6 @@ function syncURL(){
   if(currentView !== 'timeline')   p.set('view',   currentView);
   if(currentDensity !== 'comfortable') p.set('density', currentDensity);
   if(currentSort !== 'desc')       p.set('sort',   currentSort);
-  if(currentSeries)                p.set('series', currentSeries);
   if(currentMonth !== 'all')       p.set('month',  currentMonth);
   const qs = p.toString();
   history.replaceState(null, '', qs ? '?' + qs : location.pathname);
@@ -1029,7 +1016,6 @@ function loadURL(){
   currentView   = p.get('view')   || 'timeline';
   currentDensity= p.get('density')|| 'comfortable';
   currentSort   = p.get('sort')   || 'desc';
-  currentSeries = p.get('series') || null;
   currentMonth  = p.get('month')  || 'all';
   document.querySelectorAll('.view-btn[data-view]').forEach(b => {
     const on = b.dataset.view === currentView;
@@ -1119,7 +1105,6 @@ function applyFilters(){
     if(urlOnly && !p.url) return false;
     if(currentGroup  !== 'all' && p.group  !== currentGroup)  return false;
     if(currentFilter !== 'all' && p.cat    !== currentFilter) return false;
-    if(currentSeries && p.series !== currentSeries) return false;
     if(currentMonth !== 'all' && p.date.slice(0,7) !== currentMonth) return false;
     if(q){
       const hay = [p.name, p.desc, ...p.tags].join(' ').toLowerCase();
@@ -1129,24 +1114,12 @@ function applyFilters(){
   });
 }
 
-/* ── 시리즈 / 월 필터 (칩으로 해제) ──────────────────────── */
-function filterBySeries(key){
-  currentSeries = key; currentGroup='all'; currentFilter='all'; currentMonth='all'; currentSearch='';
-  document.getElementById('searchInput').value = '';
-  updateClearBtn();
-  syncUIFromState();
-  if(currentView !== 'timeline') setView('timeline'); else render();
-}
-function clearSeries(){ currentSeries = null; render(); }
+/* ── 월 필터 (칩으로 해제) ───────────────────────────────── */
 function clearMonth(){ currentMonth = 'all'; render(); }
 
 function renderActiveChips(){
   const box = document.getElementById('activeChips');
   const chips = [];
-  if(currentSeries){
-    chips.push(`<span class="active-chip">시리즈: ${esc(SERIES_LABELS[currentSeries] || currentSeries)}
-      <button type="button" data-clear-chip="series" aria-label="시리즈 필터 해제">×</button></span>`);
-  }
   if(currentMonth !== 'all'){
     chips.push(`<span class="active-chip">${currentMonth.replace('-','.')}월만 보기
       <button type="button" data-clear-chip="month" aria-label="월 필터 해제">×</button></span>`);
@@ -1156,8 +1129,7 @@ function renderActiveChips(){
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-clear-chip]');
   if(!b) return;
-  if(b.dataset.clearChip === 'series') clearSeries();
-  else if(b.dataset.clearChip === 'month') clearMonth();
+  if(b.dataset.clearChip === 'month') clearMonth();
 });
 
 /* ── 메인 render dispatcher ─────────────────────────────── */
@@ -1312,10 +1284,6 @@ function buildTlRow(p, now){
     : '';
   const ageMs = now - dt.getTime();
   const newBadge = (ageMs >= 0 && ageMs <= 7*86400000) ? `<span class="badge new-badge">NEW</span>` : '';
-  const seriesList = p.series ? SERIES_MAP[p.series] : null;
-  const seriesBadge = (seriesList && seriesList.length > 1)
-    ? `<span class="badge series-badge" data-series-jump="${esc(p.series)}" role="button" tabindex="0" title="이 시리즈만 보기">시리즈 ${seriesList.length}건</span>`
-    : '';
 
   c.innerHTML = `
     <div class="card-header">
@@ -1328,7 +1296,6 @@ function buildTlRow(p, now){
         ${newBadge}
         <span class="group-indicator ${esc(p.group)}">${p.group === 'work' ? '회사' : '집'}</span>
         <span class="badge ${esc(p.status)}">${p.status === 'done' ? '완료' : '진행중'}</span>
-        ${seriesBadge}
         ${urlBtn}
         <button type="button" class="copy-link-btn" data-copy-link="${esc(p.name)}" title="이 프로젝트 링크 복사" aria-label="링크 복사">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6.5 9.5l3-3M7 4.5l.7-.7a2.5 2.5 0 0 1 3.5 3.5l-.7.7M9 11.5l-.7.7a2.5 2.5 0 0 1-3.5-3.5l.7-.7"/></svg>
@@ -1342,7 +1309,7 @@ function buildTlRow(p, now){
   if(p.url){
     c.setAttribute('tabindex', '0');
     c.setAttribute('aria-label', esc(p.name) + ' — 결과 열기');
-    const isInteractive = e => e.target.closest('.open-btn, .copy-link-btn, .tag-filter, .series-badge, .fav-btn');
+    const isInteractive = e => e.target.closest('.open-btn, .copy-link-btn, .tag-filter, .fav-btn');
     c.addEventListener('click', e => { if(!isInteractive(e)) window.open(p.url,'_blank','noopener'); });
     c.addEventListener('keydown', e => { if((e.key==='Enter'||e.key===' ') && !isInteractive(e)){ e.preventDefault(); window.open(p.url,'_blank','noopener'); }});
   }
@@ -2259,7 +2226,7 @@ function resetFilters(){
 function goHome(){
   haltReplay();                    // 스토리 재생 중이면 중지
   currentGroup='all'; currentFilter='all'; currentSearch='';
-  currentSeries=null; currentMonth='all';
+  currentMonth='all';
   currentSort='desc'; currentDensity='comfortable'; favOnly=false; urlOnly=false;
   document.getElementById('searchInput').value = '';
   updateClearBtn();
@@ -2463,8 +2430,6 @@ document.addEventListener('click', e => {
   if(t){ e.stopPropagation(); applyTagSearch(t.dataset.tag); return; }
   const h = e.target.closest('[data-jump-date]');           // 히트맵 셀 → 날짜 점프
   if(h){ jumpToDate(h.dataset.jumpDate); return; }
-  const s = e.target.closest('[data-series-jump]');         // 시리즈 뱃지 → 시리즈만 보기
-  if(s){ e.stopPropagation(); filterBySeries(s.dataset.seriesJump); return; }
   const cl = e.target.closest('[data-copy-link]');          // 프로젝트 딥링크 복사
   if(cl){ e.stopPropagation(); copyProjectLink(cl.dataset.copyLink, cl); return; }
   const fv = e.target.closest('.fav-btn');                  // 즐겨찾기 토글
@@ -2474,9 +2439,7 @@ document.addEventListener('keydown', e => {
   if(e.key !== 'Enter' && e.key !== ' ') return;
   if(!e.target.closest) return;
   const t = e.target.closest('.tag-filter');
-  if(t){ e.preventDefault(); applyTagSearch(t.dataset.tag); return; }
-  const s = e.target.closest('[data-series-jump]');
-  if(s){ e.preventDefault(); filterBySeries(s.dataset.seriesJump); }
+  if(t){ e.preventDefault(); applyTagSearch(t.dataset.tag); }
 });
 
 /* ── 제목 클릭 → 홈 ─────────────────────────────────────── */
