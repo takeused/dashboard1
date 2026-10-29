@@ -335,6 +335,12 @@ a:focus-visible,
 .month-header .wip-hint{font-weight:400;color:var(--ink-subtle);font-size:12px}
 .badge.series-badge{color:var(--ink-muted);border-color:var(--hairline);background:var(--surface-1);cursor:pointer;transition:border-color .12s,color .12s}
 .badge.series-badge:hover{color:var(--ink);border-color:var(--ink)}
+.lineage{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:var(--ink-muted)}
+.lin-chip{padding:1px 8px;border:1px solid var(--hairline);border-radius:999px;background:var(--surface-1);white-space:nowrap;cursor:default}
+.lin-chip i{font-style:normal;color:var(--ink-subtle);margin-left:2px}
+.lin-chip.current{border-color:var(--primary);color:var(--primary);font-weight:600}
+.lin-chip.current i{color:inherit;font-weight:400}
+.lin-arrow{color:var(--ink-subtle)}
 .copy-link-btn{
   display:inline-flex;align-items:center;justify-content:center;
   width:22px;height:22px;border:none;background:transparent;cursor:pointer;
@@ -867,8 +873,8 @@ const projects = [
   {"date":"2026-04-29","group":"work","name":"수학경시대회","desc":"초등 4학년 수학경시대회 모의고사 웹페이지 — PDF 기반 문제 / 해설","cat":"util","status":"done","tags":["HTML","JavaScript","PDF"]},
   {"date":"2026-04-30","group":"work","name":"ChatGPT PPT","desc":"ChatGPT를 활용한 PPT 자동 생성 도구","cat":"doc","status":"done","tags":["ChatGPT","PowerPoint"]},
   {"date":"2026-04-30","group":"work","name":"Matt Pocock Skills","desc":"Claude Code 스킬 구조 분석 및 활용 방법 학습","cat":"util","status":"done","tags":["Claude Code","Skills"]},
-  {"date":"2026-04-30","group":"work","name":"Slide-maker v2","desc":"슬라이드 제작 도구 개선 — 디자인 및 기능 업그레이드","cat":"doc","status":"done","tags":["JavaScript","HTML"]},
-  {"date":"2026-05-03","group":"work","name":"KISTI MCP v2","desc":"KISTI MCP 서버 개선 버전 — 기능 확장","cat":"mcp","status":"done","tags":["MCP","Python","KISTI"]},
+  {"date":"2026-04-30","group":"work","name":"Slide-maker v2","desc":"슬라이드 제작 도구 개선 — 디자인 및 기능 업그레이드","cat":"doc","status":"done","tags":["JavaScript","HTML"],"lineage":[{"label":"v1","date":"2026-04-26","note":"AI 기반 슬라이드 자동 제작 도구"}]},
+  {"date":"2026-05-03","group":"work","name":"KISTI MCP v2","desc":"KISTI MCP 서버 개선 버전 — 기능 확장","cat":"mcp","status":"done","tags":["MCP","Python","KISTI"],"lineage":[{"label":"v1","date":"2026-04-30","note":"KISTI 과학기술 정보 MCP 서버 구축"}]},
   {"date":"2026-05-07","group":"work","name":"교육이수현황","desc":"교육 이수 현황 관리 및 조회 도구","cat":"util","status":"done","tags":["HTML","데이터 관리"]},
   {"date":"2026-05-09","group":"work","name":"네이버 주식 크롤러","desc":"네이버 금융 크롤링 — 증권사별 매매 동향 분석","cat":"data","status":"done","tags":["Python","Web Scraping","금융"]},
   {"date":"2026-05-11","group":"work","name":"MiroFish","desc":"온톨로지 그래프 자동 생성 백엔드 서비스 — 네트워크 에러 수정","cat":"ai","status":"wip","tags":["Python","FastAPI","그래프 DB"]},
@@ -918,7 +924,7 @@ const projects = [
   {"date":"2026-06-20","group":"home","name":"나의 Claude 스킬 맵","desc":"보유한 Claude Code 스킬 생태계를 한눈에 보는 단일 HTML 시각화","cat":"util","status":"done","tags":["HTML","데이터 시각화","Claude Code","Skills"]},
   {"date":"2026-05-24","group":"home","name":"Awesome Claude Skills","desc":"Claude Code 스킬 생태계 큐레이션 학습 — 공개 저장소 분석 및 Antigravity 2.0 + Gemini CLI 핵심 정리","cat":"util","status":"done","tags":["Claude Code","Skills","학습"]},
   {"date":"2026-05-27","group":"work","name":"네이버 증권 리포트 크롤러","desc":"네이버 금융 증권사 리서치 리포트 크롤링 및 수집 도구","cat":"data","status":"done","tags":["Python","Web Scraping","금융","증권"]},
-  {"date":"2026-06-05","group":"work","name":"Nemotron 가상 설문 v2","desc":"Nemotron-Personas-Korea 2,000명 합성 페르소나 × 재난안전 인식조사 — Cerebras GLM 응답 생성·사후층화 가중 집계","cat":"ai","status":"done","url":"https://nemotron-persona-korea-virtual-survey3.takeused.workers.dev/","tags":["LLM","Nemotron","Cerebras","설문","재난안전","NVIDIA","HuggingFace","Ollama"]},
+  {"date":"2026-06-05","group":"work","name":"Nemotron 가상 설문 v2","desc":"Nemotron-Personas-Korea 2,000명 합성 페르소나 × 재난안전 인식조사 — Cerebras GLM 응답 생성·사후층화 가중 집계","cat":"ai","status":"done","url":"https://nemotron-persona-korea-virtual-survey3.takeused.workers.dev/","tags":["LLM","Nemotron","Cerebras","설문","재난안전","NVIDIA","HuggingFace","Ollama"],"lineage":[{"label":"v1","date":"2026-06-03","note":"합성 페르소나가 재난안전 인식조사에 1인칭 응답"}]},
   {"date":"2026-06-18","group":"home","name":"dots.tts 로컬 TTS","desc":"rednote-hilab/dots.tts 2B 모델 Windows CPU 환경 설치·설정 — 사내 TLS 프록시 우회 및 Python 3.12 호환성 해결","cat":"ai","status":"done","tags":["Python","TTS","AI","로컬"]},
   {"date":"2026-05-10","group":"home","name":"Gemma4 파인튜닝 실험","desc":"Ollama Modelfile 기반 Gemma4 로컬 파인튜닝 — 철학 데이터셋(philo_dataset)으로 커스텀 모델 학습","cat":"ai","status":"done","tags":["Ollama","Gemma","파인튜닝"]},
   {"date":"2026-05-26","group":"home","name":"K-Swing 트레이딩 시그널","desc":"국내 주식 스윙 트레이딩 시그널 생성 및 백테스트 스크립트 — Windows 작업 스케줄러 자동 등록","cat":"finance","status":"done","tags":["Python","주식","백테스트","스케줄러"]},
@@ -930,9 +936,9 @@ const projects = [
   {"date":"2026-06-26","group":"work","name":"Antigravity 세미나 발표자료","desc":"Antigravity IDE로 제작한 HTML 세미나 프레젠테이션 3종 — AI 주식투자 전략, AX 전환시대 R&D 기획 대전환, 합성 페르소나 가상설문 활용","cat":"doc","status":"done","tags":["HTML","프레젠테이션","Antigravity","세미나"]},
   {"date":"2026-04-12","group":"home","name":"R&D 지식 위키 (Obsidian+Claude)","desc":"R&D 신규사업 기획·학습 지식을 축적하는 개인 위키 — CLAUDE.md 운영 스키마로 자료 투입(raw)→분류→위키화→양방향 교차참조까지 Claude가 자동 관리","cat":"ai","status":"done","tags":["Obsidian","Claude Code","지식관리","위키"]},
   {"date":"2026-07-05","group":"home","name":"TradingAgents 멀티에이전트","desc":"TauricResearch/TradingAgents 로컬 구축 — 애널리스트→리서처(강세/약세 토론)→트레이더→리스크 관리 순으로 협업해 매매 판단(BUY/HOLD/SELL)을 내리는 LLM 멀티에이전트 프레임워크 (연구·교육용)","cat":"finance","status":"done","url":"https://trading-agents.takeused.workers.dev/","tags":["LLM","멀티에이전트","Python","트레이딩"]},
-  {"date":"2026-07-05","group":"home","name":"TradingView MCP 리포트 v2","desc":"TradingView MCP 연동 고도화 — MSIX 패키지 런처로 CDP 디버깅 포트 연결 문제 해결, 차트 분석 리포트를 Cloudflare Workers로 배포","cat":"finance","status":"done","url":"https://tradingview-chart-report.takeused.workers.dev/","tags":["TradingView","MCP","Cloudflare Workers","PowerShell","Claude","Python","대시보드"]},
+  {"date":"2026-07-05","group":"home","name":"TradingView MCP 리포트 v2","desc":"TradingView MCP 연동 고도화 — MSIX 패키지 런처로 CDP 디버깅 포트 연결 문제 해결, 차트 분석 리포트를 Cloudflare Workers로 배포","cat":"finance","status":"done","url":"https://tradingview-chart-report.takeused.workers.dev/","tags":["TradingView","MCP","Cloudflare Workers","PowerShell","Claude","Python","대시보드"],"lineage":[{"label":"v1","date":"2026-06-06","note":"TradingView × Claude 매매·대시보드 구현 가이드"}]},
   {"date":"2026-07-11","group":"home","name":"Toss-Slack VCP 자동매매","desc":"토스증권 Open API 기반 자동매매 봇 — 로컬 일봉 DB에서 VCP(변동성 수축 패턴) 스캔 후 Slack 승인(휴먼-인-더-루프)을 거쳐야만 주문 집행, 기본값은 모의매매","cat":"finance","status":"done","tags":["Python","토스증권","Slack","자동매매","VCP"]},
-  {"date":"2026-07-14","group":"work","name":"ScienceON / NTIS v5","desc":"등록 IP 제한이 있는 ScienceON·NTIS API를 Vercel 화면과 로컬 프록시·Cloudflare Tunnel로 연결해 외부에서도 검색·적정 연구개발비 산출·연구–IP 공백 분석을 실행하도록 고도화","cat":"data","status":"wip","url":"https://nits5.vercel.app/","tags":["ScienceON","NTIS","Vercel","Cloudflare Tunnel","프록시","Web Scraping","JavaScript","API","HTML"]},
+  {"date":"2026-07-14","group":"work","name":"ScienceON / NTIS v5","desc":"등록 IP 제한이 있는 ScienceON·NTIS API를 Vercel 화면과 로컬 프록시·Cloudflare Tunnel로 연결해 외부에서도 검색·적정 연구개발비 산출·연구–IP 공백 분석을 실행하도록 고도화","cat":"data","status":"wip","url":"https://nits5.vercel.app/","tags":["ScienceON","NTIS","Vercel","Cloudflare Tunnel","프록시","Web Scraping","JavaScript","API","HTML"],"lineage":[{"label":"v1","date":"2026-05-07","note":"논문·국가R&D 과제 검색 및 트렌드 분석 도구"},{"label":"v2","date":"2026-05-07","note":"2차 개선 버전"},{"label":"v3","date":"2026-06-04","note":"웹앱 형태로 개선"}]},
   {"date":"2026-07-14","group":"home","name":"GAMMA 프레젠테이션 실험","desc":"Gamma AI로 AI 주제 프레젠테이션(PPTX) 자동 생성 실험","cat":"doc","status":"done","tags":["Gamma","PowerPoint","프레젠테이션","AI"]},
   {"date":"2026-07-13","group":"work","name":"R&D 예산 심의 시뮬레이터","desc":"국가 R&D 신규사업 예산 심의를 LangGraph 멀티 에이전트로 시뮬레이션 — 6인 분석가, 심사위원 공방 2라운드, 기획처 3자 토론, 최종 승인권자 결정, 예상 질의·기획보고서 보완 권고 사전 도출","cat":"ai","status":"done","url":"https://260713-r-d.pages.dev/","url2":"https://20260726-rnd-deliberation.takeused.workers.dev/","tags":["Python","LangGraph","멀티에이전트","LLM","R&D 예산","HTML","JavaScript","R&D","예산"]},
   {"date":"2026-07-16","group":"work","name":"LLM API Lab","desc":"여러 OpenAI 호환 LLM API를 한 화면에서 비교 테스트하는 로컬 웹 도구 — NVIDIA Nemotron·Cerebras GPT OSS 120B·Z.AI GLM 5.2 지원, API 키는 로컬 Node 서버에서만 처리","cat":"ai","status":"done","tags":["Node.js","NVIDIA","LLM","API"]},
@@ -1270,6 +1276,17 @@ function renderWipBoard(filtered){
   });
 }
 
+// 이전 버전 목록(lineage) → "v1 · 4.26 → v2 · 4.30 → 현재" 스트립. 현재 라벨은 이름 끝의 vN에서 가져온다.
+function lineageHTML(p){
+  if(!p.lineage || !p.lineage.length) return '';
+  const md = s => { const d = new Date(s + 'T00:00:00'); return `${d.getMonth()+1}.${d.getDate()}`; };
+  const cur = (p.name.match(/v\d+$/) || ['최신'])[0];
+  const chips = p.lineage.map(v =>
+    `<span class="lin-chip" title="${esc(v.note || '')}">${esc(v.label)} <i>${md(v.date)}</i></span>`);
+  chips.push(`<span class="lin-chip current">${esc(cur)} <i>${md(p.date)}</i></span>`);
+  return `<div class="lineage" aria-label="버전 계보">${chips.join('<span class="lin-arrow" aria-hidden="true">→</span>')}</div>`;
+}
+
 // 타임라인 카드 한 줄(.tl-row) 생성 — 상단 고정 섹션과 날짜 그룹에서 공용
 function buildTlRow(p, now){
   const dt  = new Date(p.date + 'T00:00:00');
@@ -1319,6 +1336,7 @@ function buildTlRow(p, now){
       </div>
     </div>
     <div class="card-desc">${esc(p.desc)}</div>
+    ${lineageHTML(p)}
     <div class="tags">${p.tags.map(t => `<span class="tag tag-filter" data-tag="${esc(t)}" role="button" tabindex="0" title="이 태그로 검색">${esc(t)}</span>`).join('')}</div>`;
 
   if(p.url){
